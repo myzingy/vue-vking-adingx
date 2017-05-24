@@ -39,8 +39,13 @@
   </main>
 </template>
 
-<style lang="stylus">
+<style lang="stylus" rel="stylesheet/scss">
 @import "./assets/style/main.scss";
+.header {
+  .logo {
+    margin: 0 auto;
+  }
+}
 </style>
 
 <script>
@@ -99,19 +104,7 @@ export default {
     }
   },
   computed: {
-    // scoreRadar () {
-    //   return this.$store.getters.scoreRadar
-    // },
-    // metrics () {
-    //   return this.$store.state.scores.map(({name}) => name)
-    // },
-    // isMax () {
-    //   let {value, max} = this.$store.state.scores[this.metricIndex]
-    //   return value === max
-    // },
-    // isMin () {
-    //   return this.$store.state.scores[this.metricIndex].value === 0
-    // }
+
   },
   methods: {
     load () {
@@ -121,36 +114,10 @@ export default {
         etime:(this.form.date[1]?this.form.date[1].getTime():"").toString().substr(0,10),
         group_id:this.form.group_selected
       },this.then);
-      // simulating async data from server
-      // this.seconds = 3
-      // let bar = this.$refs.ticket_day_response
-      // bar.showLoading({
-      //   text: '正在加载',
-      //   color: '#4ea397',
-      //   maskColor: 'rgba(255, 255, 255, 0.4)'
-      // })
-      // let timer = setInterval(() => {
-      //   this.seconds--
-      //   if (this.seconds === 0) {
-      //     clearTimeout(timer)
-      //     bar.hideLoading()
-      //     bar.mergeOptions(barAsync)
-      //   }
-      // }, 0)
     },
     convert () {
-      let map = this.$refs.map
-      let src = map.getDataURL({
-        pixelRatio: window.devicePixelRatio || 1
-      })
-      window.open(`data:text/html,<img src="${src}" width="${map.width}" height="${map.height}">`)
     },
     increase (amount) {
-      // if (!this.asyncCount) {
-      //   this.$store.commit('increment', {amount, index: this.metricIndex})
-      // } else {
-      //   this.$store.dispatch('asyncIncrement', {amount, index: this.metricIndex, delay: 500})
-      // }
     },
     then(data,code){
       console.log("demo...res",data);
@@ -190,7 +157,7 @@ export default {
     }
   },
   mounted(){
-    this.load();
+    //this.load();
   }
 }
 </script>
