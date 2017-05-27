@@ -20,12 +20,13 @@ class lib{
         $this->implement();
     }
     function implement(){
-        $where = ' status='.self::CRON_STATUS_DEF;
-        $where .= ' or (status='.self::CRON_STATUS_RUN.' and runtime<'.(NOW_TIME-180).') ';
-        $where .= ' and retry<'.self::CRON_RETRY_COUNT;
+        $where = ' `status`='.self::CRON_STATUS_DEF;
+        $where .= ' or (`status`='.self::CRON_STATUS_RUN.' and `runtime`<'.(NOW_TIME-180).') ';
+        $where .= ' and `retry`<'.self::CRON_RETRY_COUNT;
+        $where .= ' and `crontime` <'.NOW_TIME;
         $cron=M('x_cron');
         $cron->where($where)
-            ->order('addtime asc')->limit(1)
+            ->order('`addtime` asc')->limit(1)
             ->find();
         if($cron->id){
             $param=@json_decode($cron->param,true);

@@ -89,6 +89,11 @@ class lib{
             }
             array_push($campaigns_data,$_campaigns_data);
             $adsets->next();
+            if(ArchivableCrudObjectEffectiveStatuses::ACTIVE==$_campaigns_data[AdFields::EFFECTIVE_STATUS]) {
+                asyn('apido/asyn.flushAdsInsights', array(
+                    'ad_id' => $_campaigns_data['id']
+                ));
+            }
         }
 
         if(count($campaigns_data)>0){
