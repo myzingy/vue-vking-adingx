@@ -8,6 +8,7 @@ import components from './components/' //加载公共组件
 
 Object.keys(components).forEach((key) => {
     var name = key.replace(/(\w)/, (v) => v.toUpperCase()) //首字母大写
+    console.log(key,name);
     Vue.component(`v${name}`, components[key])
 })
 

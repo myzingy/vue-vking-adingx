@@ -1,2 +1,4 @@
-import header from './header.vue'
-export default { header }
+import header from './header.vue';
+import leftMenu from './leftMenu.vue';
+
+export default {header,leftMenu}

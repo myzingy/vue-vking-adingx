@@ -14,7 +14,6 @@ class ApidoController extends Controller {
 		$info=array(
 			'request'=>I('request.',null,'trim')
 		);
-		\Modules\common\common_lib::console(__CLASS__."::$action",I('request.',null,'trim'));
 		$this->api_lib->status($info,10000);
 		//$action=preg_replace("#.*/#", "", array_shift(array_keys(I('get.'))));
 		/*
@@ -30,7 +29,10 @@ class ApidoController extends Controller {
 				$this->ajaxReturn($info,I('request.callback','')?'jsonp':'');
 			}
 		}
-
+        if('asyn'==$check){
+            set_time_limit(0);
+            ignore_user_abort(true);
+        }
 		$run_action=str_replace('.', '__', $action);
 		if(method_exists($this->api_lib,$run_action)){
 			$info=call_user_func_array(array(&$this->api_lib, $run_action), $prarm);
@@ -52,6 +54,10 @@ class ApidoController extends Controller {
 		
 		//如果非正常返回就,附带错误信息
 		if($info['code']!=0 && !$info['message'])$this->api_lib->status($info,$info['code']);
+		//cron sync
+        if('asyn'==$check){
+            cronResult();
+        }
 		$this->ajaxReturn($info,I('request.callback','')?'jsonp':'');
 	}
 }
