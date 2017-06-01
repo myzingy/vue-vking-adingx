@@ -61,7 +61,18 @@ class AppLogic {
     ############################################################
     # public api 公开，无任何权限认证结束
     ############################################################
-
+    function user__getCampaignsInsightsData(){
+        $lib = new \Modules\campaigns\insights\lib();
+        return $lib -> getCampaignsInsightsData();
+    }
+    function user__getAdsetsInsightsData(){
+        $lib = new \Modules\adsets\insights\lib();
+        return $lib -> getAdsetsInsightsData();
+    }
+    function user__getAdsInsightsData(){
+        $lib = new \Modules\ads\insights\lib();
+        return $lib -> getAdsInsightsData();
+    }
 	############################################################
 	# 一些异步接口开始
 	############################################################

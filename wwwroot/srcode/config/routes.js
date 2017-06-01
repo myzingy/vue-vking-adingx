@@ -27,13 +27,18 @@ export default [
                 component: resolve => require(['../pages/index/index.vue'], resolve)
             },
             {
-                path: '*', //其他页面，强制跳转到登录页面
-                redirect: '/login'
+                path: 'adsList*', //广告列表
+                meta: { auth: false },
+                component: resolve => require(['../pages/home/index.vue?adsList'], resolve)
             },
             {
-                path: '/ads/list/*', //广告列表
+                path: 'rulesList*', //规则列表
                 meta: { auth: false },
-                component: resolve => require(['../pages/ads/list.vue'], resolve)
+                component: resolve => require(['../pages/home/index.vue?rulesList'], resolve)
+            },
+            {
+                path: '*', //其他页面，强制跳转到登录页面
+                redirect: '/login'
             },
         ]
     }

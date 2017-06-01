@@ -147,4 +147,12 @@ END;
         }
         return $campaigns_data;
     }
+    function getAdsInsightsData(){
+        $data=$this->model->relation(array('ads_insights_action_types','ads'))
+            ->where('1=1')
+            ->order('ad_id asc,date_stop asc')
+            ->select();
+        $formatData=formatInsightsData($data,'ad');
+        return array('data'=>$formatData);
+    }
 }

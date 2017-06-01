@@ -127,4 +127,13 @@ END;
         }
         return $campaigns_data;
     }
+
+    function getCampaignsInsightsData(){
+        $data=$this->model->relation(array('campaigns_insights_action_types','campaigns'))
+            ->where('1=1')
+            ->order('campaign_id asc,date_stop asc')
+            ->select();
+        $formatData=formatInsightsData($data);
+        return array('data'=>$formatData);
+    }
 }

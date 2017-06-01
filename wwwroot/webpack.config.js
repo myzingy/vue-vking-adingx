@@ -72,8 +72,8 @@ module.exports = {
     //hot: true,
     //inline: true,
     proxy:{
-      '/report': {
-        target: 'http://www.vking.com/livezilla/report_xxx.php',
+      '/apido': {
+        target: 'http://www.vking.com/facebook_ads/wwwroot/',
         //secure: false
       }
     }

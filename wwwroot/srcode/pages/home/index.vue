@@ -1,5 +1,5 @@
 <style lang="stylus" rel="stylesheet/scss">
-
+	 .overflow-y{ overflow-y: auto;}
 </style>
 <template>
 
@@ -11,13 +11,16 @@
 		<div>
 			<el-row :style="{ height:height +'px' }">
 				<el-col :span="4" style="height:100%;">
-					<div style="height:100%;" class="grid-left bg-purple-darkc" id="app_left_menu">
+					<div :style="{ height:height_cc +'px' }" class="grid-left bg-purple-darkc overflow-y"
+						 id="app_left_menu">
 						<v-leftMenu></v-leftMenu>
 					</div>
 				</el-col>
 				<el-col :span="20" style="height:100%;">
-					<div style="height:100%;" class="grid-content bg-purple-dark" id="app_right_content"></div>
-
+					<div :style="{ height:height_cc +'px' }" class="grid-content bg-purple-dark overflow-y"
+						 id="app_right_content">
+						<v-rightContent></v-rightContent>
+					</div>
 				</el-col>
 			</el-row>
 		</div>
@@ -33,19 +36,14 @@
         data:function(){
             return {
                 height:500,
-                h_height:36,
+                height_cc:500,
+                h_height:80,
 			}
 		},
         computed: mapState({ user: state => state.user }),
         mounted(){
             this.height=document.body.scrollHeight-(this.h_height);
-//            new Vue({
-//                el: '#app_left_menu',
-//                components: {
-//                    app_left_menu:app_left_menu
-//                },
-//                render: h => h(app_left_menu)
-//            })
+            this.height_cc=this.height;
         }
     }
 </script>

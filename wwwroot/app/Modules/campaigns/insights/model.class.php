@@ -19,6 +19,13 @@ class model extends RelationModel{
             'foreign_key'=>'campaigns_insights_id',
             'mapping_name'=>'campaigns_insights_action_types',
         ),
+        'campaigns'=> array(
+            'mapping_type'      => self::BELONGS_TO,
+            'class_name'        => 'campaigns',
+            'foreign_key'=>'campaign_id',
+            'mapping_name'=>'campaigns',
+            'as_fields'=>'effective_status'
+        ),
 	);
 	function __construct(){
 		parent::__construct();

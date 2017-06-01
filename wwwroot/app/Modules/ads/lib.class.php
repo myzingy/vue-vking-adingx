@@ -60,7 +60,7 @@ class lib{
             AdFields::ID,
             AdFields::LAST_UPDATED_BY_APP_ID,
             AdFields::NAME,
-            AdFields::RECOMMENDATIONS,
+            //AdFields::RECOMMENDATIONS,
             AdFields::STATUS,
             //AdFields::TRACKING_SPECS,
             AdFields::UPDATED_TIME,

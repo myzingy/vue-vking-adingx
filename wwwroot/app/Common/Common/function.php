@@ -37,3 +37,41 @@ function asyn($path,$params=array(
 function cronResult($result=true,$message=''){
     \Modules\cron\lib::result($result,$message);
 }
+
+function formatInsightsData($data,$type='campaign'){
+    $formatData=[];
+    $campaign_id= $type."_id";
+    if(count($data)>0){
+        foreach ($data as $r) {
+            $dr = array(
+                "CampaignId" => $r[$campaign_id],
+                "CampaignName" => $r[$type . '_name'],
+                "Delivery" => $r['effective_status'],
+                "Results" => 'XXX',
+                "Reach" => $r['reach'],
+                "Frequency" => $r['frequency'],
+                "CostperResult" => $r['campaign_id'],
+                "AmountSpent" => $r['spend'],
+                "LinkClicks" => $r['inline_link_clicks'],
+                "WebsitePurchases" => 'XXX',
+                "ClicksAll" => $r['clicks'],
+                "CTRAll" => $r['ctr'],
+                "CPCAll" => $r['cpc'],
+                "Impressions" => $r['impressions'],
+                "CPM1000" => $r['cpm'],
+                "CPC" => $r['ost_per_inline_link_click'],
+                "CTR" => $r['inline_link_click_ctr'],
+                'Date' => array($r['date_start']),
+                'List' => array()
+            );
+            if (!$formatData[$r[$campaign_id]]) {
+                $formatData[$r[$campaign_id]] = $dr;
+            } else {
+                $formatData[$r[$campaign_id]]['Date'][1] = "..." . $r['date_stop'];
+
+            }
+            array_push($formatData[$r[$campaign_id]]['List'], $dr);
+        }
+    }
+    return $formatData;
+}

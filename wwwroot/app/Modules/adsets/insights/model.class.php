@@ -19,6 +19,13 @@ class model extends RelationModel{
             'foreign_key'=>'adsets_insights_id',
             'mapping_name'=>'adsets_insights_action_types',
         ),
+        'adsets'=> array(
+            'mapping_type'      => self::BELONGS_TO,
+            'class_name'        => 'adsets',
+            'foreign_key'=>'adset_id',
+            'mapping_name'=>'adsets',
+            'as_fields'=>'effective_status'
+        ),
 	);
 	function __construct(){
 		parent::__construct();
