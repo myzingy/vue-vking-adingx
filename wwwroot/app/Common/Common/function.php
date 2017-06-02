@@ -48,30 +48,38 @@ function formatInsightsData($data,$type='campaign'){
                 "CampaignName" => $r[$type . '_name'],
                 "Delivery" => $r['effective_status'],
                 "Results" => 'XXX',
-                "Reach" => $r['reach'],
+                "Reach" => number_format($r['reach'],0,'.',','),
                 "Frequency" => $r['frequency'],
-                "CostperResult" => $r['campaign_id'],
-                "AmountSpent" => $r['spend'],
-                "LinkClicks" => $r['inline_link_clicks'],
+                "CostperResult" => 'XXX',
+                "AmountSpent" => '$'.number_format($r['spend'],2),
+                "LinkClicks" => number_format($r['inline_link_clicks'],0,'.',','),
                 "WebsitePurchases" => 'XXX',
-                "ClicksAll" => $r['clicks'],
-                "CTRAll" => $r['ctr'],
-                "CPCAll" => $r['cpc'],
-                "Impressions" => $r['impressions'],
-                "CPM1000" => $r['cpm'],
-                "CPC" => $r['ost_per_inline_link_click'],
-                "CTR" => $r['inline_link_click_ctr'],
+                "ClicksAll" => number_format($r['clicks'],0,'.',','),
+                "CTRAll" => number_format($r['ctr'],2).'%',
+                "CPCAll" => number_format($r['cpc'],2).'%',
+                "Impressions" => number_format($r['impressions'],0,'.',','),
+                "CPM1000" => '$'.number_format($r['cpm'],2),
+                "CPC" => '$'.number_format($r['ost_per_inline_link_click'],2),
+                "CTR" => number_format($r['inline_link_click_ctr'],2).'%',
                 'Date' => array($r['date_start']),
-                'List' => array()
+                'List' => array() ,
+                'Budget'=>  '$'.number_format($r['daily_budget']/100,2)
             );
             if (!$formatData[$r[$campaign_id]]) {
                 $formatData[$r[$campaign_id]] = $dr;
             } else {
-                $formatData[$r[$campaign_id]]['Date'][1] = "..." . $r['date_stop'];
+                $formatData[$r[$campaign_id]]['Date'][1] = $r['date_stop'];
 
             }
             array_push($formatData[$r[$campaign_id]]['List'], $dr);
         }
     }
-    return $formatData;
+    $data=[];
+    foreach ($formatData as $r){
+        $r['Date']=array_reverse($r['Date']);
+        $r['Date'][1]="...".$r['Date'][1];
+        //$r['List']=array_reverse($r['List']);
+        array_push($data,$r);
+    }
+    return $data;
 }

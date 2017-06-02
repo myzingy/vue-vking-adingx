@@ -73,6 +73,14 @@ class AppLogic {
         $lib = new \Modules\ads\insights\lib();
         return $lib -> getAdsInsightsData();
     }
+    function user__updateRulesData(){
+        $lib = new \Modules\rules\lib();
+        return $lib -> updateRulesData();
+    }
+    function user__getRulesData(){
+        $lib = new \Modules\rules\lib();
+        return $lib -> getRulesData();
+    }
 	############################################################
 	# 一些异步接口开始
 	############################################################

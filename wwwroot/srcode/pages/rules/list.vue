@@ -13,59 +13,73 @@
 <template>
 	<div>
 		<el-tabs v-model="activeName" @tab-click="handleTabClick">
-			<el-tab-pane label="规则列表" name="getCampaignsData">
-				<el-table :data="campaignsData" border style="width: 100%" max-height="100%">
-					<el-table-column type="expand" fixed>
+			<el-tab-pane label="规则列表" name="getRulesData">
+				<el-table :data="rulesData" border style="width: 100%" max-height="100%">
+					<el-table-column type="expand">
 						<template scope="props">
 							<el-table :data="props.row.List" border style="width: 100%">
-								<el-table-column prop="Date" label="日期" width="150"></el-table-column>
-								<el-table-column prop="Results" label="Results" width="80"></el-table-column>
-								<el-table-column prop="Reach" label="Reach" width="80"></el-table-column>
-								<el-table-column prop="CostperResult" label="Cost per Result" width="80"></el-table-column>
-								<el-table-column prop="AmountSpent" label="Amount Spent" width="80"></el-table-column>
-								<el-table-column prop="LinkClicks" label="Link Clicks" width="80"></el-table-column>
-								<el-table-column prop="WebsitePurchases" label="Website Purchases" width="80"></el-table-column>
-								<el-table-column prop="ClicksAll" label="Clicks (All)" width="80"></el-table-column>
-								<el-table-column prop="CTRAll" label="CTR (All)" width="80"></el-table-column>
-								<el-table-column prop="CPCAll" label="CPC (All)" width="80"></el-table-column>
-								<el-table-column prop="Impressions" label="Impressions" width="80"></el-table-column>
-								<el-table-column prop="CPM1000" label="CPM (Cost per 1,000 Impressions)"
-												 width="80"></el-table-column>
-								<el-table-column prop="CPC" label="CPC (Cost per Link Click)" width="80"></el-table-column>
-								<el-table-column prop="CTR" label="CTR (Link Click-Through Rate)" width="80"></el-table-column>
+								<el-table-column prop="CTR" label="关联的广告会显示在这里"></el-table-column>
 							</el-table>
 						</template>
 					</el-table-column>
-					<el-table-column fixed prop="Date" label="Date" width="100"></el-table-column>
-					<el-table-column fixed prop="CampaignName" label="Campaign Name" width="200" ></el-table-column>
-					<el-table-column prop="Delivery" label="Delivery" ></el-table-column>
-					<el-table-column prop="Results" label="Results" width="80"></el-table-column>
-					<el-table-column prop="Reach" label="Reach" width="80"></el-table-column>
-					<el-table-column prop="CostperResult" label="Cost per Result" width="80"></el-table-column>
-					<el-table-column prop="AmountSpent" label="Amount Spent" width="80"></el-table-column>
-					<el-table-column prop="LinkClicks" label="Link Clicks" width="80"></el-table-column>
-					<el-table-column prop="WebsitePurchases" label="Website Purchases" width="80"></el-table-column>
-					<el-table-column prop="ClicksAll" label="Clicks (All)" width="80"></el-table-column>
-					<el-table-column prop="CTRAll" label="CTR (All)" width="80"></el-table-column>
-					<el-table-column prop="CPCAll" label="CPC (All)" width="80"></el-table-column>
-					<el-table-column prop="Impressions" label="Impressions" width="80"></el-table-column>
-					<el-table-column prop="CPM1000" label="CPM (Cost per 1,000 Impressions)"
-									 width="80"></el-table-column>
-					<el-table-column prop="CPC" label="CPC (Cost per Link Click)" width="80"></el-table-column>
-					<el-table-column prop="CTR" label="CTR (Link Click-Through Rate)" width="80"></el-table-column>
-					<el-table-column label="操作" width="60">
+					<el-table-column prop="id" label="ID" width="60"></el-table-column>
+					<el-table-column prop="name" label="规则名称"  ></el-table-column>
+					<el-table-column prop="type" label="规则大小" width="80">
 						<template scope="scope">
-							<el-button @click.native.prevent="deleteRow(scope.$index, campaignsData)"
+							<template v-if=" scope.row.type == 2 ">
+								大型片段
+							</template>
+							<template v-else-if=" scope.row.type == 1 ">
+								小型片段
+							</template>
+							<template v-else>
+								简单规则
+							</template>
+						</template>
+					</el-table-column>
+					<el-table-column prop="status" label="规则状态" width="80">
+						<template scope="scope">
+							<template v-if=" scope.row.status == 0 ">
+								<el-button @click.native.prevent="deleteRow(scope.$index, rulesData)"
+										   type="success"
+										   size="small">
+									启用中
+								</el-button>
+							</template>
+							<template v-else>
+
+								<el-button @click.native.prevent="deleteRow(scope.$index, rulesData)"
+										   type="button"
+										   size="small">
+									已禁用
+								</el-button>
+							</template>
+
+						</template>
+					</el-table-column>
+					<el-table-column label="操作" width="120">
+						<template scope="scope">
+							<el-button @click.native.prevent="deleteRow(scope.$index, rulesData)"
 									   type="text"
 									   size="small">
 								移除
+							</el-button>
+							<el-button @click.native.prevent="editRule(scope.$index, rulesData)"
+									   type="text"
+									   size="small">
+								修改
+							</el-button>
+							<el-button @click.native.prevent="append(scope.$index, rulesData)"
+									   type="text"
+									   size="small">
+								轮子
 							</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
 			</el-tab-pane>
-			<el-tab-pane label="添加规则" name="getCampaignsDatacc">
-				<v-rule></v-rule>
+			<el-tab-pane label="添加规则" name="updateRule">
+				<v-rule ref="rule"></v-rule>
 			</el-tab-pane>
 		</el-tabs>
 	</div>
@@ -81,14 +95,8 @@
     export default {
         data:function(){
             return {
-                activeName: 'getCampaignsData',
-                campaignsData:[],
-                adsetsData:[],
-                adsData:[],
-				form:{
-                    yestoday:1,
-				},
-
+                activeName: 'updateRule',
+                rulesData:[],
 			}
 		},
         computed: mapState({ user: state => state.user }),
@@ -97,15 +105,9 @@
         methods:{
             then:function(json,code){
                 switch(code){
-					case uri.getCampaignsData.code:
-                        this.campaignsData=json.data;
+					case uri.getRulesData.code:
+                        this.rulesData=json.data;
                         break;
-					case uri.getAdsetsData.code:
-					    this.adsetsData=json.data;
-					    break;
-					case uri.getAdsData.code:
-					    this.adsData=json.data;
-					    break;
 				}
 
 
@@ -113,8 +115,20 @@
             handleTabClick:function(dom){
                 var uriKey=dom.name;
                 var params={};
-                //vk.http(uri[uriKey],params,this.then);
-			}
+                if(uriKey=='getRulesData') {
+                    vk.http(uri[uriKey],params,this.then);
+				}
+			},
+            editRule:function(index,rulesData){
+                this.activeName= 'updateRule';
+                //console.log(index,rulesData[index].xml)
+				this.$refs.rule.editInfo(rulesData[index]);
+			},
+            append:function(index,rulesData){
+                this.activeName= 'updateRule';
+                //console.log(index,rulesData[index].xml)
+                this.$refs.rule.appendXML(rulesData[index].xml);
+            },
 		}
     }
 </script>

@@ -143,7 +143,7 @@ END;
     function getAdsetsInsightsData(){
         $data=$this->model->relation(array('adsets_insights_action_types','adsets'))
             ->where('1=1')
-            ->order('adset_id asc,date_stop asc')
+            ->order('adset_id asc,date_stop desc')
             ->select();
         $formatData=formatInsightsData($data,'adset');
         return array('data'=>$formatData);

@@ -35,7 +35,7 @@
 		</el-collapse>
 		<el-tabs v-model="activeName" @tab-click="handleTabClick">
 			<el-tab-pane label="广告系列" name="getCampaignsData">
-				<el-table :data="campaignsData" border style="width: 100%" max-height="100%">
+				<el-table :data="campaignsData" border style="width: 100%" max-height="100%" :default-sort = "{prop: 'Delivery', order: 'ascending'}">
 					<el-table-column type="expand" fixed>
 						<template scope="props">
 							<el-table :data="props.row.List" border style="width: 100%">
@@ -59,7 +59,7 @@
 					</el-table-column>
 					<el-table-column fixed prop="Date" label="Date" width="100"></el-table-column>
 					<el-table-column fixed prop="CampaignName" label="Campaign Name" width="200" ></el-table-column>
-					<el-table-column prop="Delivery" label="Delivery" ></el-table-column>
+					<el-table-column sortable prop="Delivery" label="Delivery" width="100" sortable></el-table-column>
 					<el-table-column prop="Results" label="Results" width="80"></el-table-column>
 					<el-table-column prop="Reach" label="Reach" width="80"></el-table-column>
 					<el-table-column prop="CostperResult" label="Cost per Result" width="80"></el-table-column>
@@ -86,7 +86,7 @@
 				</el-table>
 			</el-tab-pane>
 			<el-tab-pane label="广告组" name="getAdsetsData">
-				<el-table :data="adsetsData" border style="width: 100%" max-height="100%">
+				<el-table :data="adsetsData" border style="width: 100%" max-height="100%" :default-sort = "{prop: 'Delivery', order: 'ascending'}">
 					<el-table-column type="expand" fixed>
 						<template scope="props">
 							<el-table :data="props.row.List" border style="width: 100%">
@@ -110,8 +110,9 @@
 					</el-table-column>
 					<el-table-column fixed prop="Date" label="Date" width="100"></el-table-column>
 					<el-table-column fixed prop="CampaignName" label="Campaign Name" width="200" ></el-table-column>
-					<el-table-column prop="Delivery" label="Delivery" ></el-table-column>
+					<el-table-column prop="Delivery" label="Delivery" width="100" sortable></el-table-column>
 					<el-table-column prop="Results" label="Results" width="80"></el-table-column>
+					<el-table-column prop="Budget" label="Budget" width="80"></el-table-column>
 					<el-table-column prop="Reach" label="Reach" width="80"></el-table-column>
 					<el-table-column prop="CostperResult" label="Cost per Result" width="80"></el-table-column>
 					<el-table-column prop="AmountSpent" label="Amount Spent" width="80"></el-table-column>
@@ -137,7 +138,7 @@
 				</el-table>
 			</el-tab-pane>
 			<el-tab-pane label="广告" name="getAdsData">
-				<el-table :data="adsData" border style="width: 100%" max-height="100%">
+				<el-table :data="adsData" border style="width: 100%" max-height="100%" :default-sort = "{prop: 'Delivery', order: 'ascending'}">
 					<el-table-column type="expand" fixed>
 						<template scope="props">
 							<el-table :data="props.row.List" border style="width: 100%">
@@ -161,7 +162,7 @@
 					</el-table-column>
 					<el-table-column fixed prop="Date" label="Date" width="100"></el-table-column>
 					<el-table-column fixed prop="CampaignName" label="Campaign Name" width="200" ></el-table-column>
-					<el-table-column prop="Delivery" label="Delivery" ></el-table-column>
+					<el-table-column prop="Delivery" label="Delivery" width="100" sortable></el-table-column>
 					<el-table-column prop="Results" label="Results" width="80"></el-table-column>
 					<el-table-column prop="Reach" label="Reach" width="80"></el-table-column>
 					<el-table-column prop="CostperResult" label="Cost per Result" width="80"></el-table-column>

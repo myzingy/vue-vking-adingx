@@ -4,14 +4,24 @@
 <template>
 	<div>
 		<el-form label-position="top" label-width="80px" :model="form">
-			<el-input v-model="form.id" type="hidden"></el-input>
-			<el-input v-model="form.code" type="hidden"></el-input>
-			<el-input v-model="form.xml" type="hidden"></el-input>
-			<el-form-item label="规则名称">
-				<el-input v-model="form.name" @change="setxml"></el-input>
+			<input v-model="form.id" type="hidden"></input>
+			<input v-model="form.code" type="hidden"></input>
+			<input v-model="form.xml" type="hidden"></input>
+			<el-form-item label="规则名称（尽量描述清楚规则）">
+				<el-input v-model="form.name"></el-input>
+			</el-form-item>
+			<el-form-item label="规则片段大小(不设定将根据代码字节大小判断)">
+				<el-select v-model="form.type" placeholder="请选择片段大小">
+					<el-option label="简单规则" value="0"></el-option>
+					<el-option label="小型片段" value="1"></el-option>
+					<el-option label="大型片段" value="2"></el-option>
+				</el-select>
 			</el-form-item>
 			<el-form-item label="规则内容">
 				<div id="blocklyDiv" :style="{height: blockly.height+'px', width: blockly.width+'px'}"></div>
+			</el-form-item>
+			<el-form-item>
+				<el-button type="primary" @click="onSubmit">保存规则</el-button>
 			</el-form-item>
 		</el-form>
 	</div>
@@ -22,6 +32,9 @@
     import 'element-ui/lib/theme-default/index.css'
     import Blockly from 'node-blockly/browser';
     import BlocklyLibrary from '../blockly/';
+    import vk from '../vk.js';
+    import uri from '../uri.js';
+
     Vue.use(ElementUI)
 
 	export default {
@@ -35,20 +48,42 @@
                     id:'',
                     name:'',
 					xml:'',
-					code:''
+					code:'',
+					type:''
 				},
 			}
 		},
-        props: {
-            title: {
-                type: String,
-                default: ''
-            }
+        props: function(){
+            return {
+				title: {
+					type: String,
+					default: ''
+				}
+			}
         },
         methods:{
-            setxml:function(){
-                var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><block type="controls_if" id="U`szQH_6DX+}`!5N|1`)." x="320" y="208"><value name="IF0"><block type="logic_operation" id="^BvpYE2|Km20iQ]|S7#21"><field name="OP">AND</field><value name="A"><block type="data_comparison" id="*}IB^AFE,JE{)i(}:Nq_"><field name="field">Campaign Name</field><field name="expression">&gt;</field><field name="value">value</field></block></value></block></value></block></xml>');
-                Blockly.Xml.domToWorkspace(xml, this.workspace);
+
+            onSubmit:function(){
+                 vk.http(uri.updateRulesData,this.form,this.then);
+			},
+			then:function(json,code){
+				vk.toast('操作成功','msg')
+			},
+            editInfo:function (obj) {
+                this.workspace.clear();
+				this.form.id=obj.id;
+                this.form.type=obj.type;
+                this.form.name=obj.name;
+                this.form.code=obj.code;
+				this.appendXML(obj.xml);
+            },
+            appendXML:function(xml){
+			    var that=this;
+			    setTimeout(function(){
+                    xml=Blockly.Xml.textToDom(xml);
+                    Blockly.Xml.domToWorkspace(xml, that.workspace);
+				},300);
+
 			}
 		},
         mounted(){
@@ -90,12 +125,18 @@
                     length : 1,
                     colour : '#888',
                     snap : false
-                }
+                },
+                zoom:{
+                    controls: false,
+					wheel: true,
+					startScale: 1.0,
+					maxScale: 3,
+					minScale: 0.3,
+					scaleSpeed: 1.2
+				}
             });
 
-            var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><block type="controls_if" id="U`szQH_6DX+}`!5N|`)." x="320" y="108"><value name="IF0"><block type="logic_operation" id="^BvpYE2|Km20iQ]|S7#2"><field name="OP">AND</field><value name="A"><block type="data_comparison" id="*}IB^AFE,JE{)i(}:Nq_"><field name="field">Campaign Name</field><field name="expression">&gt;</field><field name="value">value</field></block></value></block></value></block></xml>');
-            Blockly.Xml.domToWorkspace(xml, that.workspace);
-
+            //var xml = Blockly.Xml.textToDom('<xml xmlns="http://www.w3.org/1999/xhtml"><block type="controls_if" id="U`szQH_6DX+}`!5N|`)." x="320" y="108"><value name="IF0"><block type="logic_operation" id="^BvpYE2|Km20iQ]|S7#2"><field name="OP">AND</field><value name="A"><block type="data_comparison" id="*}IB^AFE,JE{)i(}:Nq_"><field name="field">Campaign Name</field><field name="expression">&gt;</field><field name="value">value</field></block></value></block></value></block></xml>');
             that.workspace.addChangeListener(function(){
 
             	that.form.code=Blockly.PHP.workspaceToCode(that.workspace);
@@ -103,7 +144,11 @@
                 that.form.xml=Blockly.Xml.domToText(coding_xml_dom);
                 console.log(that.form.code);
 			});
+            //Blockly.inject();
             Blockly.svgResize(that.workspace);
-        },
+
+            //Blockly.Xml.domToWorkspace(xml, that.workspace);
+			
+        }
     }
 </script>

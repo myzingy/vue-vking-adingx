@@ -1,5 +1,6 @@
 import Vue  from 'vue'
 import VueResource  from 'vue-resource'
+import { Message } from 'element-ui';
 
 Vue.use(VueResource);
 let vk={
@@ -12,8 +13,17 @@ let vk={
         console.log('isProduction',this.isProduction(),base_url);
         return base_url;
     },
+    toast:function(msg,type='error'){
+        if(type=='error')
+            return Message.error(msg);
+        Message(msg);
+    },
     then:function(data,code,callback){
         console.log('vk-then',data,code);
+        if(data.code!=200){
+            this.toast(data.message);
+            return;
+        }
         if(callback) callback(data,code);
     },
     http:function(uri,data,callback){
