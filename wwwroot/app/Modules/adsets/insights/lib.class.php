@@ -15,6 +15,9 @@ use FacebookAds\Object\Values\ArchivableCrudObjectEffectiveStatuses;
 class lib{
     function __construct($id="") {
     	$this->model=new model();
+        if($id){
+            $this->model->relation(array('adsets_insights_action_types','adsets'))->find($id);
+        }
     }
 	function flushAdsetsInsights(){
         $adset_id=I('request.adset_id','');
@@ -107,7 +110,8 @@ END;
         $adsets = $campaign->getInsights(
             $fields,
             array(
-                'time_range'=>array('since'=>$yestoday,'until'=>$yestoday)
+                'time_range'=>array('since'=>$yestoday,'until'=>$yestoday),
+                'action_attribution_windows'=>['1d_click','1d_view'],
             )
         );
 
@@ -118,6 +122,7 @@ END;
             foreach ($fields as $i=>$fk){
                 if(is_array($_d[$fk])){
                     foreach ($_d[$fk] as $v){
+                        if(!$v['action_type']) continue;
                         $v['insight_key']=$fk;
                         $campaigns_data['adsets_insights_action_types'][]=$v;
                     }

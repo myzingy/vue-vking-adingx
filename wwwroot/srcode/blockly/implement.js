@@ -2,50 +2,66 @@ import Blockly from 'node-blockly/browser';
 export default {
     json:{
         "type": "implement",
-        "message0": "%1 %2 %3",
+        "message0": "%1 %2 %3 %4 %5",
         "args0": [
+            {
+                "type": "field_dropdown",
+                "name": "field",
+                "options": [
+                    [
+                        "预算调整",
+                        "Budget"
+                    ],
+                    [
+                        "暂停投放",
+                        "Pause"
+                    ]
+                ]
+            },
             {
                 "type": "field_dropdown",
                 "name": "do",
                 "options": [
                     [
-                        "预算减",
-                        "-"
-                    ],
-                    [
-                        "预算加",
+                        "加上",
                         "+"
                     ],
                     [
-                        "预算乘",
-                        "*"
+                        "减去",
+                        "-"
                     ],
                     [
-                        "预算除",
-                        "/"
-                    ],
-                    [
-                        "预算调整为",
+                        "调至",
                         "="
+                    ]
+                ]
+            },
+            {
+                "type": "field_dropdown",
+                "name": "type",
+                "options": [
+                    [
+                        "数值或百分比",
+                        "input"
                     ],
                     [
-                        "停止投放",
-                        "x"
+                        "ROAS",
+                        "ROAS"
                     ]
                 ]
             },
             {
                 "type": "field_input",
                 "name": "value",
-                "text": "0%"
+                "text": "0%    "
             },
             {
                 "type": "input_value",
-                "name": "input"
+                "name": "implement"
             }
         ],
         "previousStatement": null,
-        "colour": 230,
+        "colour": 135,
         "tooltip": "",
         "helpUrl": ""
     },
@@ -58,11 +74,14 @@ export default {
             }
         }
         Blockly.PHP['implement'] = function(block) {
+            var dropdown_field = block.getFieldValue('field');
             var dropdown_do = block.getFieldValue('do');
+            var dropdown_type = block.getFieldValue('type');
             var text_value = block.getFieldValue('value');
-            var value_input = Blockly.PHP.valueToCode(block, 'input', Blockly.PHP.ORDER_ATOMIC);
+            var value_implement = Blockly.JavaScript.valueToCode(block, 'implement', Blockly.JavaScript.ORDER_ATOMIC);
             // TODO: Assemble PHP into code variable.
-            var code = dropdown_do+'#'+text_value+';\n';
+            //var code = dropdown_do+'#'+text_value+';\n';
+            var code = 'return $this->implement("'+dropdown_field+'","'+dropdown_do+'","'+dropdown_type+'","'+text_value.replace(/[ $]/g,'')+'");';
             return code;
         };
     }

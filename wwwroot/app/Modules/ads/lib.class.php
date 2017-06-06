@@ -104,4 +104,15 @@ class lib{
         }
         return $campaigns_data;
     }
+    function runRules(){
+        $id=I('request.id',''); //md5(id+start_date);
+        $type=I('request.type',''); //md5(id+start_date);
+        $insights=new \Modules\ads\insights\lib($id);
+        $data=$insights->model->data();
+        if(!$data['id']) return;
+        $formatData=formatInsightsData([$data],'ad');
+        $exec=new \Modules\rules\exec($formatData[0],'ad');
+        $exec->run();
+        return $formatData;
+    }
 }

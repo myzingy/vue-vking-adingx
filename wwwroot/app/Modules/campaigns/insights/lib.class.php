@@ -95,7 +95,8 @@ END;
         $adsets = $campaign->getInsights(
             $fields,
             array(
-                'time_range'=>array('since'=>$yestoday,'until'=>$yestoday)
+                'time_range'=>array('since'=>$yestoday,'until'=>$yestoday),
+                'action_attribution_windows'=>['1d_click','1d_view'],
             )
         );
 

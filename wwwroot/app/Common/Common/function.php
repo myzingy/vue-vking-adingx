@@ -37,47 +37,77 @@ function asyn($path,$params=array(
 function cronResult($result=true,$message=''){
     \Modules\cron\lib::result($result,$message);
 }
-
+function getDayClick($data){
+    $data_key=array(
+        'actions::offsite_conversion.fb_pixel_add_to_cart'=>'WebsiteAddstoCart',
+        'actions::offsite_conversion.fb_pixel_purchase'=>'WebsitePurchases',
+        'cost_per_action_type::offsite_conversion.fb_pixel_add_to_cart'=>'CostperWebsiteAddtoCart',
+        'action_values::offsite_conversion.fb_pixel_purchase'=>'WebsitePurchasesConversionValue',
+        'cost_per_action_type::link_click'=>'CPC',
+    );
+    //$data=M($type.'s_insights_action_types')->where("{$type}s_insights_id='$id'")->select();
+    $dayData=array();
+    if($data){
+        foreach ($data as  $r){
+              if($key=$data_key[$r['insight_key'].'::'.$r['action_type']]){
+                    $dayData[$key]=$r['1d_click'];
+              }
+        }
+    }
+    return $dayData;
+}
 function formatInsightsData($data,$type='campaign'){
     $formatData=[];
     $campaign_id= $type."_id";
     if(count($data)>0){
         foreach ($data as $r) {
+            $day_click=getDayClick($r[$type.'s_insights_action_types']);
             $dr = array(
-                "CampaignId" => $r[$campaign_id],
-                "CampaignName" => $r[$type . '_name'],
+                "Id" => $r[$campaign_id],
+                "Name" => $r[$type . '_name'],
+                "CampaignId"=>$r['campaign_id'],
+                "CampaignName"=>$r['campaign_name'],
+                "AdsetId"=>$r['adset_id'],
+                "AdsetName"=>$r['adset_name'],
+                "AdId"=>$r['ad_id'],
+                "AdName"=>$r['ad_name'],
+
                 "Delivery" => $r['effective_status'],
-                "Results" => 'XXX',
-                "Reach" => number_format($r['reach'],0,'.',','),
-                "Frequency" => $r['frequency'],
-                "CostperResult" => 'XXX',
-                "AmountSpent" => '$'.number_format($r['spend'],2),
+                'WebsiteAddstoCart'=>(int)$day_click['WebsiteAddstoCart'],
+                'CostperWebsiteAddtoCart'=> '$'.number_format($day_click['CostperWebsiteAddtoCart'],2),
+                "AmountSpent" => number_format($r['spend'],2)+0,
+                "WebsitePurchases" => (int)$day_click['WebsitePurchases'],
+                'WebsitePurchasesConversionValue'=> '$'.number_format($day_click['WebsitePurchasesConversionValue'],2),
                 "LinkClicks" => number_format($r['inline_link_clicks'],0,'.',','),
-                "WebsitePurchases" => 'XXX',
-                "ClicksAll" => number_format($r['clicks'],0,'.',','),
-                "CTRAll" => number_format($r['ctr'],2).'%',
-                "CPCAll" => number_format($r['cpc'],2).'%',
-                "Impressions" => number_format($r['impressions'],0,'.',','),
-                "CPM1000" => '$'.number_format($r['cpm'],2),
-                "CPC" => '$'.number_format($r['ost_per_inline_link_click'],2),
+                "CPC" => '$'.number_format($day_click['CPC'],2),
                 "CTR" => number_format($r['inline_link_click_ctr'],2).'%',
+                "CPM1000" => '$'.number_format($r['cpm'],2),
+                "Reach" => number_format($r['reach'],0,'.',','),
+                "Results" => (int)$day_click['WebsitePurchases'],
+                "CostperResult" => '$'.number_format($r['spend']/($day_click['WebsitePurchases']),2),
+                'Budget'=>  '$'.number_format($r['daily_budget']/100,2),
+                //"Frequency" => $r['frequency'],
+                //"ClicksAll" => number_format($r['clicks'],0,'.',','),
+                //"CTRAll" => number_format($r['ctr'],2).'%',
+                //"CPCAll" => number_format($r['cpc'],2).'%',
+                //"Impressions" => number_format($r['impressions'],0,'.',','),
                 'Date' => array($r['date_start']),
                 'List' => array() ,
-                'Budget'=>  '$'.number_format($r['daily_budget']/100,2)
             );
             if (!$formatData[$r[$campaign_id]]) {
                 $formatData[$r[$campaign_id]] = $dr;
             } else {
                 $formatData[$r[$campaign_id]]['Date'][1] = $r['date_stop'];
-
             }
             array_push($formatData[$r[$campaign_id]]['List'], $dr);
         }
     }
     $data=[];
     foreach ($formatData as $r){
-        $r['Date']=array_reverse($r['Date']);
-        $r['Date'][1]="...".$r['Date'][1];
+        if($r['Date'][1]){
+            $r['Date']=array_reverse($r['Date']);
+            $r['Date'][1]="...".$r['Date'][1];
+        }
         //$r['List']=array_reverse($r['List']);
         array_push($data,$r);
     }

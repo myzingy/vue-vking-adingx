@@ -157,6 +157,20 @@ class AppLogic {
         $lib = new \Modules\ads\insights\lib();
         return $lib -> flushAdsInsights();
     }
+    /**
+     * <ok class="异步"/>  执行规则
+     * 参数
+     *      id:insight_id
+     *      type:ad/adset
+     */
+    function asyn__runRules(){
+        if(I('request.type')=='adset'){
+            $lib = new \Modules\adsets\lib();
+        }else{
+            $lib = new \Modules\ads\lib();
+        }
+        return $lib -> runRules();
+    }
 	############################################################
 	# 一些异步接口结束
 	############################################################

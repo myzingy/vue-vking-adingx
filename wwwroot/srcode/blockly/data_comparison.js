@@ -9,72 +9,36 @@ export default {
                 "name": "field",
                 "options": [
                     [
-                        "Campaign Name",
-                        "Campaign Name"
+                        "今日花费",
+                        "getNowAmountSpent"
                     ],
                     [
-                        "Ad Sets Name",
-                        "Ad Sets Name"
+                        "当前预算",
+                        "getBudget"
                     ],
                     [
-                        "Ad Name",
-                        "Ad Name"
+                        "purchase",
+                        "getPurchase"
                     ],
                     [
-                        "Delivery",
-                        "Delivery"
+                        "ROAS",
+                        "getROAS"
                     ],
                     [
-                        "Results",
-                        "Results"
+                        "加购物车数量",
+                        "getAddCart"
                     ],
                     [
-                        "Reach",
-                        "Reach"
+                        "CPC",
+                        "getCPC"
                     ],
                     [
-                        "Cost per Result",
-                        "Cost per Result"
+                        "广告组名",
+                        "getAdsetName"
                     ],
                     [
-                        "Amount Spent",
-                        "Amount Spent"
-                    ],
-                    [
-                        "Link Clicks",
-                        "Link Clicks"
-                    ],
-                    [
-                        "Website Purchases",
-                        "Website Purchases"
-                    ],
-                    [
-                        "Clicks (All)",
-                        "Clicks (All)"
-                    ],
-                    [
-                        "CTR (All)",
-                        "CTR (All)"
-                    ],
-                    [
-                        "CPC (All)",
-                        "CPC (All)"
-                    ],
-                    [
-                        "Impressions",
-                        "Impressions"
-                    ],
-                    [
-                        "CPM (Cost per 1,000 Impressions)",
-                        "CPM (Cost per 1,000 Impressions)"
-                    ],
-                    [
-                        "CPC (Cost per Link Click)",
-                        "CPC (Cost per Link Click)"
-                    ],
-                    [
-                        "CTR (Link Click-Through Rate)",
-                        "CTR (Link Click-Through Rate)"
+                        "广告系列名",
+                        "getCampaignName"
                     ]
                 ]
             },
@@ -99,28 +63,31 @@ export default {
                         "<="
                     ],
                     [
-                        "包含",
-                        "like"
+                        "等于",
+                        "=="
                     ],
                     [
                         "不包含",
-                        "not like"
+                        "NLI"
+                    ],
+                    [
+                        "包含",
+                        "LI"
                     ]
                 ]
             },
             {
                 "type": "field_input",
-                "name": "value",
+                "name": "input_value",
                 "text": "value"
             },
             {
                 "type": "input_value",
-                "name": "input"
+                "name": "default"
             }
         ],
-        "inputsInline": false,
         "output": null,
-        "colour": 330,
+        "colour": 230,
         "tooltip": "",
         "helpUrl": ""
     },
@@ -135,10 +102,11 @@ export default {
         Blockly.PHP['data_comparison'] = function(block) {
             var dropdown_field = block.getFieldValue('field');
             var dropdown_expression = block.getFieldValue('expression');
-            var text_value = block.getFieldValue('value');
+            var text_value = block.getFieldValue('input_value');
             var value_input = Blockly.PHP.valueToCode(block, 'input', Blockly.PHP.ORDER_ATOMIC);
             // TODO: Assemble PHP into code variable.
-            var code = '$'+dropdown_field+' '+dropdown_expression+' '+text_value;
+            //var code = '$'+dropdown_field+' '+dropdown_expression+' '+text_value;
+            var code = '$this->expression("'+dropdown_field+'","'+dropdown_expression+'","'+text_value.replace(/[ $]/g,'')+'")';
             // TODO: Change ORDER_NONE to the correct strength.
             return [code, Blockly.PHP.ORDER_NONE];
         };

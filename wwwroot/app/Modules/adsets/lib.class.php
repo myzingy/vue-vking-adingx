@@ -83,7 +83,8 @@ class lib{
             array_push($campaigns_data,$_campaigns_data);
             $adsets->next();
             asyn('apido/asyn.flushAds', array(
-                'adset_id' => $_campaigns_data['id']
+                'adset_id' => $_campaigns_data['id'],
+                'active'=>'active'
             ));
             if(ArchivableCrudObjectEffectiveStatuses::ACTIVE==$_campaigns_data[AdSetFields::EFFECTIVE_STATUS]) {
                 asyn('apido/asyn.flushAdsetsInsights', array(
@@ -100,5 +101,16 @@ class lib{
             asyn('apido/asyn.flushAdsets',$asyn_param);
         }
         return $campaigns_data;
+    }
+    function runRules(){
+        $id=I('request.id',''); //md5(id+start_date);
+        $type=I('request.type',''); //md5(id+start_date);
+        $insights=new \Modules\adsets\insights\lib($id);
+        $data=$insights->model->data();
+        if(!$data['id']) return;
+        $formatData=formatInsightsData([$data],'adset');
+        $exec=new \Modules\rules\exec($formatData[0],'adset');
+        $exec->run();
+        return $formatData;
     }
 }

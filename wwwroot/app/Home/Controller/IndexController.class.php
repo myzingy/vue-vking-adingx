@@ -49,52 +49,81 @@ END2;
         $campaigns_data=array();
         $after='';
         $campaign = new Campaign('6033795518964');
-        //$campaign = new AdSet('6034369558164');
+        $campaign = new AdSet('6034369558164');
         //$campaign = new Ad('6034369571964');
 $str=<<<END
-        ["account_id"] => NULL
-        ["adlabels"] => NULL
-        ["adset_schedule"] => NULL
-        ["attribution_spec"] => NULL
-        ["bid_amount"] => NULL
-        ["bid_info"] => NULL
-        ["billing_event"] => NULL
-        ["budget_remaining"] => NULL
-        ["campaign"] => NULL
-        ["campaign_id"] => NULL
-        ["configured_status"] => NULL
-        ["created_time"] => NULL
-        ["creative_sequence"] => NULL
-        ["daily_budget"] => NULL
-        ["effective_status"] => NULL
-        ["end_time"] => NULL
-        ["frequency_cap"] => NULL
-        ["frequency_cap_reset_period"] => NULL
-        ["frequency_control_specs"] => NULL
-        ["id"] => string(13) "6034369558164"
-        ["is_autobid"] => NULL
-        ["is_average_price_pacing"] => NULL
-        ["lifetime_budget"] => NULL
-        ["lifetime_frequency_cap"] => NULL
-        ["lifetime_imps"] => NULL
-        ["name"] => NULL
-        ["optimization_goal"] => NULL
-        ["pacing_type"] => NULL
-        ["promoted_object"] => NULL
-        ["recommendations"] => NULL
-        ["recurring_budget_semantics"] => NULL
-        ["rf_prediction_id"] => NULL
-        ["rtb_flag"] => NULL
-        ["start_time"] => NULL
-        ["status"] => NULL
-        ["targeting"] => NULL
-        ["time_based_ad_rotation_id_blocks"] => NULL
-        ["time_based_ad_rotation_intervals"] => NULL
-        ["updated_time"] => NULL
-        ["use_new_app_click"] => NULL
-        ["campaign_spec"] => NULL
-        ["execution_options"] => NULL
-        ["redownload"] => NULL
+        ["account_id"] => string(16) "1593565507558990"
+        ["account_name"] => NULL
+        ["action_values"] => NULL
+        ["actions"] => NULL
+        ["ad_id"] => string(13) "6034369571964"
+        ["ad_name"] => NULL
+        ["adset_id"] => string(13) "6034369558164"
+        ["adset_name"] => NULL
+        ["app_store_clicks"] => NULL
+        ["buying_type"] => NULL
+        ["call_to_action_clicks"] => NULL
+        ["campaign_id"] => string(13) "6033795518964"
+        ["campaign_name"] => NULL
+        ["canvas_avg_view_percent"] => NULL
+        ["canvas_avg_view_time"] => NULL
+        ["canvas_component_avg_pct_view"] => NULL
+        ["clicks"] => NULL
+        ["cost_per_10_sec_video_view"] => NULL
+        ["cost_per_action_type"] => NULL
+        ["cost_per_estimated_ad_recallers"] => NULL
+        ["cost_per_inline_link_click"] => NULL
+        ["cost_per_inline_post_engagement"] => NULL
+        ["cost_per_total_action"] => NULL
+        ["cost_per_unique_action_type"] => NULL
+        ["cost_per_unique_click"] => NULL
+        ["cost_per_unique_inline_link_click"] => NULL
+        ["cpc"] => NULL
+        ["cpm"] => NULL
+        ["cpp"] => NULL
+        ["ctr"] => NULL
+        ["date_start"] => string(10) "2017-05-26"
+        ["date_stop"] => string(10) "2017-05-26"
+        ["deeplink_clicks"] => NULL
+        ["estimated_ad_recall_rate"] => NULL
+        ["estimated_ad_recallers"] => NULL
+        ["frequency"] => NULL
+        ["impressions"] => string(5) "22150"
+        [`"impressions_dummy"] => NULL
+        ["inline_link_click_ctr"] => NULL
+        ["inline_link_clicks"] => NULL
+        ["inline_post_engagement"] => NULL
+        ["objective"] => NULL
+        ["place_page_name"] => NULL
+        ["reach"] => NULL
+        ["relevance_score"] => NULL
+        ["social_clicks"] => NULL
+        ["social_impressions"] => NULL
+        ["social_reach"] => NULL
+        ["social_spend"] => NULL
+        ["spend"] => string(6) "600.55"
+        ["total_action_value"] => NULL
+        ["total_actions"] => NULL
+        ["total_unique_actions"] => NULL
+        ["unique_actions"] => NULL
+        ["unique_clicks"] => NULL
+        ["unique_ctr"] => NULL
+        ["unique_inline_link_click_ctr"] => NULL
+        ["unique_inline_link_clicks"] => NULL
+        ["unique_link_clicks_ctr"] => NULL
+        ["unique_social_clicks"] => NULL
+        ["video_10_sec_watched_actions"] => NULL
+        ["video_15_sec_watched_actions"] => NULL
+        ["video_30_sec_watched_actions"] => NULL
+        ["video_avg_percent_watched_actions"] => NULL
+        ["video_avg_time_watched_actions"] => NULL
+        ["video_p100_watched_actions"] => NULL
+        ["video_p25_watched_actions"] => NULL
+        ["video_p50_watched_actions"] => NULL
+        ["video_p75_watched_actions"] => NULL
+        ["video_p95_watched_actions"] => NULL
+        ["website_clicks"] => NULL
+        ["website_ctr"] => NULL
 END;
 
         preg_match_all("/\[\"(.*)\"\]/",$str,$match);
@@ -108,11 +137,12 @@ END;
         $sql.=" ,PRIMARY KEY (`id`),KEY `ad_id` (`ad_id`)) ENGINE=INNODB DEFAULT CHARSET=utf8mb4";
         echo $sql."<br>";
 
-        $insights = $campaign->getAdSets(
+        $insights = $campaign->getInsights(
             $fields,
             array(
                 //'end_time' => (new \DateTime('now'))->getTimestamp(),
-                'time_range'=>array('since'=>'2017-05-26','until'=>'2017-05-26')
+                'time_range'=>array('since'=>'2017-06-04','until'=>'2017-06-04'),
+                'action_attribution_windows'=>['1d_click','1d_view']
             )
         );
         dump($insights);
