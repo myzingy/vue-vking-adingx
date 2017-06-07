@@ -24,6 +24,7 @@
         -->
         <el-menu-item index="adsList" dataa="a" data-b="b"><i class="el-icon-menu"></i>广告管理</el-menu-item>
         <el-menu-item index="rulesList" ><i class="el-icon-setting"></i>规则管理</el-menu-item>
+        <el-menu-item index="rulesLog" ><i class="el-icon-setting"></i>优化记录</el-menu-item>
       </el-menu>
     </el-row>
   </div>

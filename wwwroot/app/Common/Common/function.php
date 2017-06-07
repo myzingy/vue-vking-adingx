@@ -31,8 +31,8 @@ function asyn_implement($path,$params=array(
 }
 function asyn($path,$params=array(
     '__t'=>'',
-),$method="GET"){
-    \Modules\cron\lib::create($path, $params, $method);
+),$method="GET",$crontime=0,$priority=0){
+    \Modules\cron\lib::create($path, $params, $method,$crontime=0,$priority=0);
 }
 function cronResult($result=true,$message=''){
     \Modules\cron\lib::result($result,$message);
@@ -64,6 +64,7 @@ function formatInsightsData($data,$type='campaign'){
             $day_click=getDayClick($r[$type.'s_insights_action_types']);
             $dr = array(
                 "Id" => $r[$campaign_id],
+                "Type" =>  $r['type'],
                 "Name" => $r[$type . '_name'],
                 "CampaignId"=>$r['campaign_id'],
                 "CampaignName"=>$r['campaign_name'],
@@ -75,7 +76,7 @@ function formatInsightsData($data,$type='campaign'){
                 "Delivery" => $r['effective_status'],
                 'WebsiteAddstoCart'=>(int)$day_click['WebsiteAddstoCart'],
                 'CostperWebsiteAddtoCart'=> '$'.number_format($day_click['CostperWebsiteAddtoCart'],2),
-                "AmountSpent" => number_format($r['spend'],2)+0,
+                "AmountSpent" => $r['spend']+0,
                 "WebsitePurchases" => (int)$day_click['WebsitePurchases'],
                 'WebsitePurchasesConversionValue'=> '$'.number_format($day_click['WebsitePurchasesConversionValue'],2),
                 "LinkClicks" => number_format($r['inline_link_clicks'],0,'.',','),

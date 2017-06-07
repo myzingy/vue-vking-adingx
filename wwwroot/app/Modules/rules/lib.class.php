@@ -52,4 +52,11 @@ class lib
         $data=$this->model->order('id desc')->select();
         return array('data'=>$data);
     }
+    function getRulesLog(){
+        $data=M('rules_exec_log')->order('id desc')->select();
+        foreach ($data as &$r){
+            $r['time_format']=date('m-d H:i',$r['time']);
+        }
+        return array('data'=>$data);
+    }
 }

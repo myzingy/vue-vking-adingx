@@ -35,7 +35,7 @@
 		</el-collapse>
 		<el-tabs v-model="activeName" @tab-click="handleTabClick">
 			<el-tab-pane label="广告系列" name="getCampaignsData">
-				<v-ad_table v-bind:adsData="campaignsData" dataType="campaign"></v-ad_table>
+				<v-ad_table v-bind:adsData="campaignsData" dataType="campaign" @openRulesDialog="openRulesDialog"></v-ad_table>
 			</el-tab-pane>
 			<el-tab-pane label="广告组" name="getAdsetsData">
 				<v-ad_table v-bind:adsData="adsetsData" dataType="adset"></v-ad_table>
@@ -44,6 +44,9 @@
 				<v-ad_table v-bind:adsData="adsData" dataType="ad"></v-ad_table>
 			</el-tab-pane>
 		</el-tabs>
+		<el-dialog title="收货地址" :visible.sync="dialogTableVisible">
+			<v-rules_list v-bind:checked="[]"></v-rules_list>
+		</el-dialog>
 	</div>
 </template>
 <script>
@@ -64,11 +67,14 @@
 				form:{
                     yestoday:1,
 				},
+                dialogTableVisible:false,
 
 			}
 		},
         computed: mapState({ user: state => state.user }),
         mounted(){
+            var params={};
+            vk.http(uri[this.activeName],params,this.then);
         },
         methods:{
             then:function(json,code){
@@ -90,6 +96,9 @@
                 var uriKey=dom.name;
                 var params={};
                 vk.http(uri[uriKey],params,this.then);
+			},
+            openRulesDialog:function(){
+                this.dialogTableVisible=true;
 			}
 		}
     }

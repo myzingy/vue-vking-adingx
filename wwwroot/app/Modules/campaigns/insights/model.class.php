@@ -6,6 +6,10 @@
 namespace Modules\campaigns\insights;
 use Think\Model\RelationModel;
 class model extends RelationModel{
+    const INSIGHT_TYPE_TODAY=0;
+    const INSIGHT_TYPE_YESTODAY=99;
+    const INSIGHT_TYPE_LAST_7DAY=7;
+    const INSIGHT_TYPE_LAST_14DAY=14;
 	protected $tableName = 'campaigns_insights';
 	protected $pk     = 'id';
 	

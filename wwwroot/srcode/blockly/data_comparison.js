@@ -2,43 +2,69 @@ import Blockly from 'node-blockly/browser';
 export default {
     json:{
         "type": "data_comparison",
-        "message0": "%1 %2 %3 %4",
+        "message0": "%1 %2 %3 %4 %5",
         "args0": [
+            {
+                "type": "field_dropdown",
+                "name": "date",
+                "options": [
+                    [
+                        "今日",
+                        "0"
+                    ],
+                    [
+                        "最近7天",
+                        "7"
+                    ],
+                    [
+                        "最近14天",
+                        "14"
+                    ]
+                ]
+            },
             {
                 "type": "field_dropdown",
                 "name": "field",
                 "options": [
                     [
-                        "今日花费",
-                        "getNowAmountSpent"
+                        "花费（Amount Spent）",
+                        "getAmountSpent"
                     ],
                     [
-                        "当前预算",
+                        "预算（Budget）",
                         "getBudget"
                     ],
                     [
-                        "purchase",
+                        "购买数量（Purchase）",
                         "getPurchase"
                     ],
                     [
-                        "ROAS",
+                        "花费/收入（ROAS，ROI）",
                         "getROAS"
                     ],
                     [
-                        "加购物车数量",
+                        "加购物车数量（Add Cart）",
                         "getAddCart"
                     ],
                     [
-                        "CPC",
+                        "加购物车成本（CPA）",
+                        "getCPA"
+                    ],
+                    [
+                        "单次点击费用（CPC）",
                         "getCPC"
                     ],
                     [
-                        "广告组名",
+                        "广告系列名（Campaign Name）",
+                        "getCampaignName"
+                    ],
+                    [
+                        "广告组名（Adset Name）",
                         "getAdsetName"
                     ],
                     [
-                        "广告系列名",
-                        "getCampaignName"
+                        "广告名（Ad Name）",
+                        "getAdName"
                     ]
                 ]
             },
@@ -83,7 +109,7 @@ export default {
             },
             {
                 "type": "input_value",
-                "name": "default"
+                "name": "NAME"
             }
         ],
         "output": null,
@@ -100,13 +126,14 @@ export default {
             }
         }
         Blockly.PHP['data_comparison'] = function(block) {
+            var dropdown_date = block.getFieldValue('date');
             var dropdown_field = block.getFieldValue('field');
             var dropdown_expression = block.getFieldValue('expression');
             var text_value = block.getFieldValue('input_value');
             var value_input = Blockly.PHP.valueToCode(block, 'input', Blockly.PHP.ORDER_ATOMIC);
             // TODO: Assemble PHP into code variable.
             //var code = '$'+dropdown_field+' '+dropdown_expression+' '+text_value;
-            var code = '$this->expression("'+dropdown_field+'","'+dropdown_expression+'","'+text_value.replace(/[ $]/g,'')+'")';
+            var code = '$this->expression("'+dropdown_date+'","'+dropdown_field+'","'+dropdown_expression+'","'+text_value.replace(/[ $]/g,'')+'")';
             // TODO: Change ORDER_NONE to the correct strength.
             return [code, Blockly.PHP.ORDER_NONE];
         };

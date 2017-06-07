@@ -19,6 +19,11 @@ class exec
     {
         $this->model = new model();
         $this->ad=(object)$ad_adset;
+        $this->adx=[];
+        foreach ($this->ad->List as $list){
+            if($list['Type']==99) break;
+            $this->adx[$list['Type']]=(object)$list;
+        }
         $this->type=$type;
         $this->setRules();
     }
@@ -33,8 +38,9 @@ class exec
             ->where($where)
             ->select();
     }
-    function expression($fun,$lt,$value){
-        $this->expression_str="[$fun,$lt,$value]";
+    function expression($date,$fun,$lt,$value){ //条件
+        $this->date=$date;
+        $this->expression_str="[".($date!=0?"last $date day":"今日").",$fun,$lt,$value]";
         $firstValue=$this->$fun();
         if($lt=="LI" || $lt=="NLI"){
             $flag=stripos($firstValue,$value);
@@ -62,7 +68,7 @@ class exec
         }
         return false;
     }
-    function implement($field,$do,$type,$number){
+    function implement($field,$do,$type,$number){ //执行
         if(strtoupper($this->type)=='AD' && 'Budget'==$field) return;
         $this->implement_str="[$field,$do,$type,$number]";
         if('Budget'==$field){
@@ -76,7 +82,7 @@ class exec
                 $budget_fixed=$is_bai?($oldBudget*($number/100)):$number;
             }else if('ROAS'==$type){
                 $roas=$this->getROAS();
-                $budget_fixed=($number*$this->getNowPurchasesValue())/100;
+                $budget_fixed=($number*$this->getPurchasesValue())/100;
             }
             $newBudget=$oldBudget;
             if(!empty($budget_fixed)){
@@ -92,7 +98,7 @@ class exec
                  }
             }
         }elseif('Pause'==$field){
-            
+            $this->implement_str="[$field]";
         }
         M('rules_exec_log')->add(array(
             'time'=>NOW_TIME,
@@ -113,26 +119,39 @@ class exec
         }
     }
     ////////////////
-    function  getNowAmountSpent(){ //今日花费
-        return preg_replace("/[$,]+/","",$this->ad->AmountSpent);
+    function  getAmountSpent($date=0){ //花费
+        $date=$date>-1?$date:$this->date;
+        return preg_replace("/[$,]+/","",$this->adx[$date]->AmountSpent);
     }
-    function  getNowPurchasesValue(){ //今日shou ru
-        return preg_replace("/[$,]+/","",$this->ad->WebsitePurchasesConversionValue);
+    function  getPurchasesValue($date=0){ //收入
+        $date=$date>-1?$date:$this->date;
+        return preg_replace("/[$,]+/","",$this->adx[$date]->WebsitePurchasesConversionValue);
     }
-    function  getBudget(){        //当前预算
+    function  getBudget(){        //预算
         return preg_replace("/[$,]+/","",$this->ad->Budget);
     }
-    function  getPurchase(){
-        return preg_replace("/[$,]+/","",$this->ad->WebsitePurchases);
+    function  getPurchase($date=0){ //订单数
+        $date=$date>-1?$date:$this->date;
+        return preg_replace("/[$,]+/","",$this->adx[$date]->WebsitePurchases);
     }
-    function  getROAS(){
-        return ($this->getNowAmountSpent()/$this->getNowPurchasesValue())*100;
+    function  getROAS($date=0){ // 花费/收入
+        $date=$date>-1?$date:$this->date;
+        return ($this->getAmountSpent($date)/$this->getPurchasesValue($date))*100;
     }
-    function  getAddCart(){
-        return preg_replace("/[$,]+/","",$this->ad->WebsiteAddstoCart);
+    function  getAddCart($date=0){ //加购物车数量
+        $date=$date>-1?$date:$this->date;
+        return preg_replace("/[$,]+/","",$this->adx[$date]->WebsiteAddstoCart);
     }
-    function  getCPC(){
-        return preg_replace("/[$,]+/","",$this->ad->CPC);
+    function  getCPA($date=0){ //加购物车成本
+        $date=$date>-1?$date:$this->date;
+        return preg_replace("/[$,]+/","",$this->adx[$date]->CostperWebsiteAddtoCart);
+    }
+    function  getCPC($date=0){ //单次点击费率
+        $date=$date>-1?$date:$this->date;
+        return preg_replace("/[$,]+/","",$this->adx[$date]->CPC);
+    }
+    function  getAdName(){
+        return $this->ad->AdName;
     }
     function  getAdsetName(){
         return $this->ad->AdsetName;

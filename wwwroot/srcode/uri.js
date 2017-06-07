@@ -7,4 +7,5 @@ export default {
     //rules
     getRulesData:{act:'user.getRulesData',code:11000},
     updateRulesData:{act:'user.updateRulesData',code:11001},
+    getRulesLog:{act:'user.getRulesLog',code:11002},
 }

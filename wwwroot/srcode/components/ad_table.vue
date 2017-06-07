@@ -7,7 +7,7 @@
 		<el-table-column type="expand" fixed>
 			<template scope="props">
 				<el-table :data="props.row.List" border style="width: 100%">
-					<el-table-column prop="Date" label="日期" width="150"></el-table-column>
+					<el-table-column :formatter="formatChildDate" label="日期" width="150"></el-table-column>
 					<el-table-column prop="WebsiteAddstoCart" label="Website Adds to Cart" width="80"></el-table-column>
 					<el-table-column prop="CostperWebsiteAddtoCart" label="Cost per Website Add to Cart" width="80"></el-table-column>
 					<el-table-column :formatter="formatAmountSpent" prop="AmountSpent" label="Amount Spent" width="80"></el-table-column>
@@ -68,8 +68,13 @@
 		<template v-if=" dataType == 'campaign' ">
 			<el-table-column prop="Ends" label="Ends" width="80"></el-table-column>
 		</template>
-		<el-table-column label="操作" width="60">
+		<el-table-column label="操作" width="80" fixed="right">
 			<template scope="scope">
+				<el-button @click="openRulesDialog"
+						   type="text"
+						   size="small">
+					规则
+				</el-button>
 				<el-button @click.native.prevent="deleteRow(scope.$index, campaignsData)"
 						   type="text"
 						   size="small">
@@ -98,7 +103,13 @@
         methods:{
             formatAmountSpent:function(row, column){
                 return '$'+row.AmountSpent;
-			}
+			},
+            formatChildDate:function(row){
+                return row.Type==7?'last 7 day':(row.Type==14?'last 14 day':row.Date);
+            },
+			openRulesDialog:function(){
+                this.$emit('openRulesDialog');
+			},
 		},
         mounted(){
 			

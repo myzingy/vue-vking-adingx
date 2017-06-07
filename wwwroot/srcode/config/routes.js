@@ -37,6 +37,11 @@ export default [
                 component: resolve => require(['../pages/home/index.vue?rulesList'], resolve)
             },
             {
+                path: 'rulesLog*', //规则列表
+                meta: { auth: false },
+                component: resolve => require(['../pages/home/index.vue?rulesLog'], resolve)
+            },
+            {
                 path: '*', //其他页面，强制跳转到登录页面
                 redirect: '/login'
             },

@@ -26,19 +26,19 @@ class lib{
         $where .= ' and `crontime` <'.NOW_TIME;
         $cron=M('x_cron');
         $cron->where($where)
-            ->order('`addtime` asc')->limit(1)
+            ->order('`priority` desc,`addtime` asc')->limit(1)
             ->find();
         if($cron->id){
             $param=@json_decode($cron->param,true);
             $param['cron_id']= $cron->id;
-            asyn_implement($cron->path,$param);
+            asyn_implement($cron->path,$param,$cron->method);
             $cron->retry+=1;
             $cron->status=self::CRON_STATUS_RUN;
             $cron->runtime=NOW_TIME;
             $cron->save();
         }
     }
-    static function create($path, $params=array(), $method,$crontime=0){
+    static function create($path, $params=array(), $method,$crontime=0,$priority=0){
         $cron=M('x_cron');
         $param=json_encode($params);
         $hash=md5($path.$param);
@@ -50,7 +50,8 @@ class lib{
             'param'=>$param,
             'method'=>$method,
             'addtime'=>NOW_TIME,
-            'crontime'=>$crontime
+            'crontime'=>$crontime,
+            'priority'=>$priority
         ));
     }
     static function result($result=true,$message=""){

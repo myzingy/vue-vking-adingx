@@ -2,6 +2,7 @@
 namespace Home\Controller;
 use FacebookAds\Object\AdSet;
 use Think\Controller;
+use Facebook\FacebookBatchRequest;
 use FacebookAds\Api;
 use FacebookAds\Object\AdAccount;
 use FacebookAds\Cursor;
@@ -49,8 +50,8 @@ END2;
         $campaigns_data=array();
         $after='';
         $campaign = new Campaign('6033795518964');
-        $campaign = new AdSet('6034369558164');
-        //$campaign = new Ad('6034369571964');
+        //$campaign = new AdSet('6034369558164');
+        $campaign = new Ad('6034369571964');
 $str=<<<END
         ["account_id"] => string(16) "1593565507558990"
         ["account_name"] => NULL
@@ -137,14 +138,46 @@ END;
         $sql.=" ,PRIMARY KEY (`id`),KEY `ad_id` (`ad_id`)) ENGINE=INNODB DEFAULT CHARSET=utf8mb4";
         echo $sql."<br>";
 
-        $insights = $campaign->getInsights(
-            $fields,
-            array(
-                //'end_time' => (new \DateTime('now'))->getTimestamp(),
-                'time_range'=>array('since'=>'2017-06-04','until'=>'2017-06-04'),
-                'action_attribution_windows'=>['1d_click','1d_view']
+//        $insights = $campaign->getInsights(
+//            $fields,
+//            array(
+//                //'end_time' => (new \DateTime('now'))->getTimestamp(),
+//                'time_range'=>array('since'=>'2017-06-04','until'=>'2017-06-04'),
+//                'action_attribution_windows'=>['1d_click','1d_view']
+//            )
+//        );
+        $yestoday_7=date('Y-m-d' , strtotime('-7 day'));
+        $yestoday_14=date('Y-m-d' , strtotime('-14 day'));
+        $insights=new FacebookBatchRequest([
+            $campaign->getInsights($fields,
+                array(
+                    //'end_time' => (new \DateTime('now'))->getTimestamp(),
+                    'time_range'=>array('since'=>'2017-06-07','until'=>'2017-06-07'),
+                    'action_attribution_windows'=>['1d_click','1d_view']
+                )
+            ),
+            $campaign->getInsights($fields,
+                array(
+                    //'end_time' => (new \DateTime('now'))->getTimestamp(),
+                    'time_range'=>array('since'=>'2017-06-06','until'=>'2017-06-06'),
+                    'action_attribution_windows'=>['1d_click','1d_view']
+                )
+            ),
+            $campaign->getInsights($fields,
+                array(
+                    //'end_time' => (new \DateTime('now'))->getTimestamp(),
+                    'time_range'=>array('since'=>$yestoday_7,'until'=>'2017-06-07'),
+                    'action_attribution_windows'=>['1d_click','1d_view']
+                )
+            ),
+            $campaign->getInsights($fields,
+                array(
+                    //'end_time' => (new \DateTime('now'))->getTimestamp(),
+                    'time_range'=>array('since'=>$yestoday_14,'until'=>'2017-06-07'),
+                    'action_attribution_windows'=>['1d_click','1d_view']
+                )
             )
-        );
+        ]);
         dump($insights);
 
         /*
