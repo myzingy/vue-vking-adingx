@@ -190,6 +190,8 @@ END;
         foreach ($campaigns_data_branch as $campaigns_data) {
             $this->model->relation(true)->add($campaigns_data);
         }
+        //立即执行规则
+        asyn('apido/asyn.runRules',array('id'=>$adset_id,'type'=>'adset'),null,null,99);
         return $campaigns_data_branch;
     }
 

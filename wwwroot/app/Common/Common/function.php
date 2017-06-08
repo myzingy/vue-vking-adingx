@@ -32,7 +32,7 @@ function asyn_implement($path,$params=array(
 function asyn($path,$params=array(
     '__t'=>'',
 ),$method="GET",$crontime=0,$priority=0){
-    \Modules\cron\lib::create($path, $params, $method,$crontime=0,$priority=0);
+    \Modules\cron\lib::create($path, $params, $method,$crontime,$priority);
 }
 function cronResult($result=true,$message=''){
     \Modules\cron\lib::result($result,$message);

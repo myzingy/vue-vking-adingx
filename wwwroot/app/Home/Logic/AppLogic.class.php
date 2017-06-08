@@ -85,6 +85,14 @@ class AppLogic {
         $lib = new \Modules\rules\lib();
         return $lib -> getRulesLog();
     }
+    function user__getRulesForAd(){
+        $lib = new \Modules\rules\lib();
+        return $lib -> getRulesForAd();
+    }
+    function user__saveRulesForAd(){
+        $lib = new \Modules\rules\lib();
+        return $lib -> saveRulesForAd();
+    }
 	############################################################
 	# 一些异步接口开始
 	############################################################

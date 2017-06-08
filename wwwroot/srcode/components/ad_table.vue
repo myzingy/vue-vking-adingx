@@ -68,20 +68,17 @@
 		<template v-if=" dataType == 'campaign' ">
 			<el-table-column prop="Ends" label="Ends" width="80"></el-table-column>
 		</template>
-		<el-table-column label="操作" width="80" fixed="right">
-			<template scope="scope">
-				<el-button @click="openRulesDialog"
-						   type="text"
-						   size="small">
-					规则
-				</el-button>
-				<el-button @click.native.prevent="deleteRow(scope.$index, campaignsData)"
-						   type="text"
-						   size="small">
-					移除
-				</el-button>
-			</template>
-		</el-table-column>
+		<template v-if=" dataType != 'campaign' ">
+			<el-table-column label="操作" width="80" fixed="right">
+				<template scope="scope">
+					<el-button @click="openRulesDialog(scope.$index, adsData)"
+							   type="text"
+							   size="small">
+						规则
+					</el-button>
+				</template>
+			</el-table-column>
+		</template>
 	</el-table>
 </template>
 <script>
@@ -107,8 +104,8 @@
             formatChildDate:function(row){
                 return row.Type==7?'last 7 day':(row.Type==14?'last 14 day':row.Date);
             },
-			openRulesDialog:function(){
-                this.$emit('openRulesDialog');
+			openRulesDialog:function(index,data){
+                this.$emit('openRulesDialog',data[index]);
 			},
 		},
         mounted(){

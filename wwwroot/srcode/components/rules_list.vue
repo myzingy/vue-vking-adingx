@@ -13,69 +13,35 @@
 </style>
 <template>
 	<div>
-				<el-table :data="rulesData" border style="width: 100%" max-height="100%">
-					<el-table-column type="expand">
-						<template scope="props">
-							<el-table :data="props.row.List" border style="width: 100%">
-								<el-table-column prop="CTR" label="关联的广告会显示在这里"></el-table-column>
-							</el-table>
-						</template>
-					</el-table-column>
-					<el-table-column prop="id" label="ID" width="60"></el-table-column>
-					<el-table-column prop="name" label="规则名称"  ></el-table-column>
-					<el-table-column prop="type" label="规则大小" width="80">
-						<template scope="scope">
-							<template v-if=" scope.row.type == 2 ">
-								大型片段
-							</template>
-							<template v-else-if=" scope.row.type == 1 ">
-								小型片段
-							</template>
-							<template v-else>
-								简单规则
-							</template>
-						</template>
-					</el-table-column>
-					<el-table-column prop="status" label="规则状态" width="80">
-						<template scope="scope">
-							<template v-if=" scope.row.status == 0 ">
-								<el-button @click.native.prevent="deleteRow(scope.$index, rulesData)"
-										   type="success"
-										   size="small">
-									启用中
-								</el-button>
-							</template>
-							<template v-else>
-
-								<el-button @click.native.prevent="deleteRow(scope.$index, rulesData)"
-										   type="button"
-										   size="small">
-									已禁用
-								</el-button>
-							</template>
-
-						</template>
-					</el-table-column>
-					<el-table-column label="操作" width="120">
-						<template scope="scope">
-							<el-button @click.native.prevent="deleteRow(scope.$index, rulesData)"
-									   type="text"
-									   size="small">
-								移除
-							</el-button>
-							<el-button @click.native.prevent="editRule(scope.$index, rulesData)"
-									   type="text"
-									   size="small">
-								修改
-							</el-button>
-							<el-button @click.native.prevent="append(scope.$index, rulesData)"
-									   type="text"
-									   size="small">
-								轮子
-							</el-button>
-						</template>
-					</el-table-column>
-				</el-table>
+		<el-table :data="rulesData" border style="width: 100%" max-height="450" ref="multipleTable"  @selection-change="handleSelectionChange">
+			<el-table-column
+					type="selection"
+					width="55">
+			</el-table-column>
+			<el-table-column prop="id" label="ID" width="60"></el-table-column>
+			<el-table-column prop="name" label="规则名称"  ></el-table-column>
+			<el-table-column prop="type" label="规则大小" width="80">
+				<template scope="scope">
+					<template v-if=" scope.row.type == 2 ">
+						大型片段
+					</template>
+					<template v-else-if=" scope.row.type == 1 ">
+						小型片段
+					</template>
+					<template v-else>
+						简单规则
+					</template>
+				</template>
+			</el-table-column>
+		</el-table>
+		<br>
+		<el-form ref="form" :model="form" label-width="80px">
+			<el-form-item label="执行时间">
+				<el-time-select :picker-options="{start: '10:00',step: '00:30',end: '22:00'}"
+								placeholder="选择时间" v-model="form.date" :editable="false"
+								:clearable="false"></el-time-select>
+			</el-form-item>
+		</el-form>
 	</div>
 </template>
 <script>
@@ -90,40 +56,76 @@
         data:function(){
             return {
                 rulesData:[],
+                multipleSelection:[],
+				form:{
+                    date:"10:00",
+				}
             }
         },
+//        props: {
+//            'RulesChecked':{
+//                type: Array,
+//                validator: function (value) {
+//                    console.log('props-RulesChecked',value);
+//                    return true;
+//                }
+//            }
+//        },
         computed: mapState({ user: state => state.user }),
         mounted(){
-            var params={};
+            var params={'status':0};
             vk.http(uri.getRulesData,params,this.then);
         },
         methods:{
+            init:function(RulesChecked,RulesCheckedTime){
+                this.multipleSelection=[];
+                this.RulesChecked= RulesChecked;
+                this.form={date:RulesCheckedTime};
+                console.log('this.form',RulesCheckedTime,this.form.date);
+                //this.$refs.multipleTable.clearSelection();
+                this.toggleSelection();
+			},
             then:function(json,code){
                 switch(code){
                     case uri.getRulesData.code:
                         this.rulesData=json.data;
+                        this.toggleSelection();
+                        break;
+					case uri.saveRulesForAd.code:
+					    vk.toast('操作成功','msg');
                         break;
                 }
+            },
+            toggleSelection:function() {
+                //console.log('RulesChecked-rows',this.RulesChecked);
+                var that=this;
+                this.$refs.multipleTable.clearSelection();
+                if(this.RulesChecked.length>0){
+                    setTimeout(function(){
+                        that.rulesData.forEach(row => {
+                            for(var i in that.RulesChecked){
+                                if(that.RulesChecked[i]==row.id){
+                                    that.$refs.multipleTable.toggleRowSelection(row);
+                                }
+                            }
+                        })
+					},0);
 
-
+				}
             },
-            handleTabClick:function(dom){
-                var uriKey=dom.name;
-                var params={};
-                if(uriKey=='getRulesData') {
-                    vk.http(uri[uriKey],params,this.then);
-                }
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
             },
-            editRule:function(index,rulesData){
-                this.activeName= 'updateRule';
-                //console.log(index,rulesData[index].xml)
-                this.$refs.rule.editInfo(rulesData[index]);
-            },
-            append:function(index,rulesData){
-                this.activeName= 'updateRule';
-                //console.log(index,rulesData[index].xml)
-                this.$refs.rule.appendXML(rulesData[index].xml);
-            },
+            saveRulesForAd(target_id,target){
+                this.form.target=target;
+                this.form.target_id=target_id;
+                this.form.rules_ids=[];
+                console.log(this.multipleSelection);
+                this.multipleSelection.forEach(r=>{
+                    this.form.rules_ids.push(r.id);
+				});
+                vk.http(uri.saveRulesForAd,this.form,this.then);
+			}
         }
     }
 </script>

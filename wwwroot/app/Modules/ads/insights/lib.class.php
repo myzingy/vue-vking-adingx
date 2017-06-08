@@ -196,7 +196,9 @@ END;
         foreach ($campaigns_data_branch as $campaigns_data){
             $this->model->relation(true)->add($campaigns_data);
         }
-
+        //立即执行规则
+        asyn('apido/asyn.runRules',array('id'=>$ad_id,'type'=>'ad'),null,null,99);
+        
         return $campaigns_data_branch;
     }
     function getAdsInsightsData($ad_id=""){

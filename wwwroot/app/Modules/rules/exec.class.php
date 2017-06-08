@@ -15,6 +15,7 @@ use FacebookAds\Object\Fields\AdFields;
 
 class exec
 {
+    const EXEC_TIMEOUT=85000;//下次执行时间
     function __construct($ad_adset,$type='ad')
     {
         $this->model = new model();
@@ -29,14 +30,20 @@ class exec
     }
     function setRules(){
         $this->rules=[];
-        $subsql=M('rules_link')->field('rule_id')->where(array(
+        $sub_where=array(
             'target'=>$this->type,
-            'target_id'=>$this->ad->Id
-        ))->buildSql();
+            'target_id'=>$this->ad->Id,
+            'runtime'=>array('lt',NOW_TIME-self::EXEC_TIMEOUT),
+            'exec_hour_minute'=>array('gt',date("H:i",NOW_TIME))
+        );
+        $subsql=M('rules_link')->field('rule_id')->where($sub_where)->buildSql();
         $where=" status=0 and id in ($subsql) ";
         $this->rules=$this->model
             ->where($where)
             ->select();
+        M('rules_link')->where($sub_where)->save(array(
+            'runtime'=>NOW_TIME
+        ));
     }
     function expression($date,$fun,$lt,$value){ //条件
         $this->date=$date;

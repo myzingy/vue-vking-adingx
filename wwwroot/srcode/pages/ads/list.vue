@@ -38,15 +38,22 @@
 				<v-ad_table v-bind:adsData="campaignsData" dataType="campaign" @openRulesDialog="openRulesDialog"></v-ad_table>
 			</el-tab-pane>
 			<el-tab-pane label="广告组" name="getAdsetsData">
-				<v-ad_table v-bind:adsData="adsetsData" dataType="adset"></v-ad_table>
+				<v-ad_table v-bind:adsData="adsetsData" dataType="adset" @openRulesDialog="openRulesDialog"></v-ad_table>
 			</el-tab-pane>
 			<el-tab-pane label="广告" name="getAdsData">
-				<v-ad_table v-bind:adsData="adsData" dataType="ad"></v-ad_table>
+				<v-ad_table v-bind:adsData="adsData" dataType="ad" @openRulesDialog="openRulesDialog"></v-ad_table>
 			</el-tab-pane>
 		</el-tabs>
-		<el-dialog title="收货地址" :visible.sync="dialogTableVisible">
-			<v-rules_list v-bind:checked="[]"></v-rules_list>
+		<div id="dialogRules">
+		<el-dialog ref="refDialog" title="规则列表" :visible.sync="dialogTableVisible" :close-on-click-modal="false"
+				   :close-on-press-escape="false" @close="dialogClose" @open="dialogOpen">
+			<v-rules_list ref="refRules"></v-rules_list>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="dialogClose">取 消</el-button>
+				<el-button type="primary" @click="saveRulesForAd">确 定</el-button>
+			  </span>
 		</el-dialog>
+		</div>
 	</div>
 </template>
 <script>
@@ -68,6 +75,10 @@
                     yestoday:1,
 				},
                 dialogTableVisible:false,
+                RulesChecked:[],
+                RulesCheckedTime:"10:00",
+				target:"",
+				target_id:"",
 
 			}
 		},
@@ -88,6 +99,16 @@
 					case uri.getAdsData.code:
 					    this.adsData=json.data;
 					    break;
+					case uri.getRulesForAd.code:
+                        this.RulesChecked=[];
+                        this.RulesCheckedTime="10:00";
+                        json.data.forEach(r=>{
+                            this.RulesChecked.push(r.id);
+                            this.RulesCheckedTime=r.exec_hour_minute;
+						});
+					    //this.RulesChecked=json.data;
+                        this.dialogTableVisible=true;
+					    break;
 				}
 
 
@@ -97,8 +118,25 @@
                 var params={};
                 vk.http(uri[uriKey],params,this.then);
 			},
-            openRulesDialog:function(){
-                this.dialogTableVisible=true;
+            openRulesDialog:function($data){
+                this.target_id=$data.Id;
+                this.target=this.activeName;
+                vk.http(uri.getRulesForAd,{id:$data.Id,type:this.activeName},this.then);
+
+			},
+            dialogClose(){
+                this.dialogTableVisible=false;
+			},
+            dialogOpen(){
+                var that=this;
+                setTimeout(function(){
+                    that.$refs.refRules.init(that.RulesChecked,that.RulesCheckedTime);
+				},100);
+
+			},
+            saveRulesForAd(){
+                this.dialogClose();
+                this.$refs.refRules.saveRulesForAd(this.target_id,this.target);
 			}
 		}
     }
