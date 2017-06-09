@@ -199,6 +199,8 @@ END;
 	    $where =' 1=1 ';
 	    if($adset_id){
             $where.=" and adset_id='$adset_id' ";
+        }else{
+            $where.=" and date_stop>='".date('Y-m-d',strtotime('-1 day'))."' ";
         }
         $data=$this->model->relation(array('adsets_insights_action_types','adsets'))
             ->where($where)

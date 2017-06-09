@@ -43,8 +43,12 @@ export default {
                         "getPurchaseValue"
                     ],
                     [
-                        "花费/收入（ROAS，ROI）",
+                        "花费/收入（ROAS）",
                         "getROAS"
+                    ],
+                    [
+                        "收入/花费（ROI）",
+                        "getROI"
                     ],
                     [
                         "加购物车数量（Add Cart）",

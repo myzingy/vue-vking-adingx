@@ -47,6 +47,10 @@ export default {
                     [
                         "ROAS",
                         "ROAS"
+                    ],
+                    [
+                        "今日花费",
+                        "getAmountSpentNow"
                     ]
                 ]
             },

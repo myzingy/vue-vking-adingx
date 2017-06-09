@@ -34,7 +34,7 @@ class exec
             'target'=>$this->type,
             'target_id'=>$this->ad->Id,
             'runtime'=>array('lt',NOW_TIME-self::EXEC_TIMEOUT),
-            'exec_hour_minute'=>array('lt',date("H:i",NOW_TIME))
+            'exec_hour_minute'=>array('elt',date("H:i",NOW_TIME))
         );
         $subsql=M('rules_link')->field('rule_id')->where($sub_where)->buildSql();
         $where=" status=0 and id in ($subsql) ";
@@ -85,13 +85,16 @@ class exec
                 $number=preg_replace("/[^\.\d]+/","",$number);
             }
             $oldBudget=$this->getBudget();
+            $newBudget=$oldBudget;
             if($type=='input'){
                 $budget_fixed=$is_bai?($oldBudget*($number/100)):$number;
             }else if('ROAS'==$type){
                 $roas=$this->getROAS();
                 $budget_fixed=($number*$this->getPurchasesValue())/100;
+            }else if('getAmountSpentNow'==$type){
+                $newBudget=$this->getAmountSpent(0);
+                $budget_fixed=$is_bai?($newBudget*($number/100)):$number;
             }
-            $newBudget=$oldBudget;
             if(!empty($budget_fixed)){
                  if($do=='+'){
                      $newBudget+=$budget_fixed;
@@ -148,6 +151,10 @@ class exec
     function  getROAS($date=0){ // 花费/收入
         $date=$date>-1?$date:$this->date;
         return ($this->getAmountSpent($date)/$this->getPurchasesValue($date))*100;
+    }
+    function  getROI($date=0){ // 收入/花费
+        $date=$date>-1?$date:$this->date;
+        return ($this->getPurchasesValue($date)/$this->getAmountSpent($date))*100;
     }
     function  getAddCart($date=0){ //加购物车数量
         $date=$date>-1?$date:$this->date;
