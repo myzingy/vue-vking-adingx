@@ -19,6 +19,7 @@ class lib{
     }
 	function flushAdsetsInsights(){
         $adset_id=I('request.adset_id','');
+        $adset_timespace=I('request.adset_timespace','today');
         if(!$adset_id)   return;
         vendor("vendor.autoload");
         $fb_conf=C('fb');
@@ -107,92 +108,77 @@ END;
         $time_range=array(date('Y-m-d' ,NOW_TIME),date('Y-m-d' , strtotime('-1 day'))
         ,date('Y-m-d' , strtotime('-7 day')),date('Y-m-d' , strtotime('-14 day')));
         list($today,$yestoday,$last_7day,$last_14day)=$time_range;
-//        $adsets = $campaign->getInsights(
-//            $fields,
-//            array(
-//                'time_range'=>array('since'=>$yestoday,'until'=>$yestoday),
-//                'action_attribution_windows'=>['1d_click','1d_view'],
-//            )
-//        );
-//
-//        $asyn_param['after']=$adsets->getAfter();
-        $adsets_branch=new FacebookBatchRequest([
-            $campaign->getInsights(
+        if($adset_timespace=='today'){
+            $adsets = $campaign->getInsights(
                 $fields,
                 array(
                     'time_range'=>array('since'=>$today,'until'=>$today),
                     'action_attribution_windows'=>['1d_click','1d_view'],
                 )
-            ),
-            $campaign->getInsights(
+            );
+        }else{
+            $adsets = $campaign->getInsights(
                 $fields,
                 array(
-                    'time_range'=>array('since'=>$yestoday,'until'=>$yestoday),
+                    'time_range'=>array('since'=>$$adset_timespace,'until'=>$yestoday),
                     'action_attribution_windows'=>['1d_click','1d_view'],
                 )
-            ),
-            $campaign->getInsights(
-                $fields,
-                array(
-                    'time_range'=>array('since'=>$last_7day,'until'=>$yestoday),
-                    'action_attribution_windows'=>['1d_click','1d_view'],
-                )
-            ),
-            $campaign->getInsights(
-                $fields,
-                array(
-                    'time_range'=>array('since'=>$last_14day,'until'=>$yestoday),
-                    'action_attribution_windows'=>['1d_click','1d_view'],
-                )
-            ),
-        ]);
-        $campaigns_data_branch=[];
-        foreach ($adsets_branch->getApp() as $adsets) {
-            while ($adsets->valid()) {
-                $campaigns_data['adsets_insights_action_types'] = array();
-                $_d = $adsets->current()->getData();
-                foreach ($fields as $i => $fk) {
-                    if (is_array($_d[$fk])) {
-                        foreach ($_d[$fk] as $v) {
-                            if (!$v['action_type']) continue;
-                            $v['insight_key'] = $fk;
-                            $campaigns_data['adsets_insights_action_types'][] = $v;
-                        }
-                    } else {
-                        $campaigns_data[$fk] = $_d[$fk];
-                    }
-                }
-                switch($campaigns_data['date_start']){
-                    case $today:
-                        $campaigns_data['id']=$campaigns_data['adset_id'].'.today';
-                        $campaigns_data['type']=model::INSIGHT_TYPE_TODAY;
-                        break;
-                    case $last_7day:
-                        $campaigns_data['id']=$campaigns_data['adset_id'].'.last_7day';
-                        $campaigns_data['type']=model::INSIGHT_TYPE_LAST_7DAY;
-                        break;
-                    case $last_14day:
-                        $campaigns_data['id']=$campaigns_data['adset_id'].'.last_14day';
-                        $campaigns_data['type']=model::INSIGHT_TYPE_LAST_14DAY;
-                        break;
-                    default:
-                        $campaigns_data['id']=md5($campaigns_data['adset_id'].$campaigns_data['date_start']);
-                        $campaigns_data['type']=model::INSIGHT_TYPE_YESTODAY;
-                }
-                M('adsets_insights')->where("id='{$campaigns_data['id']}'")->delete();
-                M('adsets_insights_action_types')->where("adsets_insights_id='{$campaigns_data['id']}'")->delete();
-                array_push($campaigns_data_branch,$campaigns_data);
-                //$campaigns_data['id'] = md5($campaigns_data['adset_id'] . $campaigns_data['date_start']);
-                $adsets->next();
-            }
+            );
         }
-        //return $campaigns_data_branch;
-        foreach ($campaigns_data_branch as $campaigns_data) {
+
+        while ($adsets->valid()) {
+            $campaigns_data['adsets_insights_action_types'] = array();
+            $_d = $adsets->current()->getData();
+            foreach ($fields as $i => $fk) {
+                if (is_array($_d[$fk])) {
+                    foreach ($_d[$fk] as $v) {
+                        if (!$v['action_type']) continue;
+                        $v['insight_key'] = $fk;
+                        $campaigns_data['adsets_insights_action_types'][] = $v;
+                    }
+                } else {
+                    $campaigns_data[$fk] = $_d[$fk];
+                }
+            }
+            switch($campaigns_data['date_start']){
+                case $today:
+                    $campaigns_data['id']=$campaigns_data['adset_id'].'.today';
+                    $campaigns_data['type']=model::INSIGHT_TYPE_TODAY;
+                    break;
+                case $last_7day:
+                    $campaigns_data['id']=$campaigns_data['adset_id'].'.last_7day';
+                    $campaigns_data['type']=model::INSIGHT_TYPE_LAST_7DAY;
+                    break;
+                case $last_14day:
+                    $campaigns_data['id']=$campaigns_data['adset_id'].'.last_14day';
+                    $campaigns_data['type']=model::INSIGHT_TYPE_LAST_14DAY;
+                    break;
+                default:
+                    $campaigns_data['id']=md5($campaigns_data['adset_id'].$campaigns_data['date_start']);
+                    $campaigns_data['type']=model::INSIGHT_TYPE_YESTODAY;
+            }
+            M('adsets_insights')->where("id='{$campaigns_data['id']}'")->delete();
+            M('adsets_insights_action_types')->where("adsets_insights_id='{$campaigns_data['id']}'")->delete();
+            //$campaigns_data['id'] = md5($campaigns_data['adset_id'] . $campaigns_data['date_start']);
+            $adsets->next();
+        }
+
+        //return $campaigns_data;
+        if ($campaigns_data) {
             $this->model->relation(true)->add($campaigns_data);
         }
-        //立即执行规则
-        asyn_implement('apido/asyn.runRules',array('id'=>$adset_id,'type'=>'adset'));
-        return $campaigns_data_branch;
+        if($adset_timespace=='today') {
+            //立即执行规则
+            asyn_implement('apido/asyn.runRules', array('id' => $adset_id, 'type' => 'adset'));
+            //其它Insights
+            asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'yestoday',
+                'CRON_RENEW_TIMEOUT'=>85000));
+            asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'last_7day',
+                'CRON_RENEW_TIMEOUT'=>85000));
+            asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'last_14day',
+                'CRON_RENEW_TIMEOUT'=>85000));
+        }
+        return $campaigns_data;
     }
 
     function getAdsetsInsightsData($adset_id=""){

@@ -40,9 +40,15 @@ class lib{
     }
     static function create($path, $params=array(), $method,$crontime=0,$priority=0){
         $cron=M('x_cron');
+        $CRON_RENEW_TIMEOUT=self::CRON_RENEW_TIMEOUT;
+        if($params['CRON_RENEW_TIMEOUT']){
+            $CRON_RENEW_TIMEOUT=$params['CRON_RENEW_TIMEOUT'];
+            unset($params['CRON_RENEW_TIMEOUT']);
+        }
         $param=json_encode($params);
         $hash=md5($path.$param);
-        $cron->where("`hash`='{$hash}' and addtime>".(NOW_TIME-self::CRON_RENEW_TIMEOUT))->find();
+
+        $cron->where("`hash`='{$hash}' and addtime>".(NOW_TIME-$CRON_RENEW_TIMEOUT))->find();
         if($cron->id) return;
         $cron->add(array(
             'hash'=>$hash,
