@@ -14,7 +14,8 @@ module.exports = {
   output: {
     //path: path.resolve(__dirname, './dist'),
     //publicPath: process.env.NODE_ENV === 'production'?'./dist/':'dist/',
-    publicPath: publicPath, //服务器的路径
+    //publicPath: publicPath, //服务器的路径
+    publicPath:"./",
     path: path.resolve(__dirname + publicPath), //编译到app目录
     filename: 'build.js?[hash]'
   },
