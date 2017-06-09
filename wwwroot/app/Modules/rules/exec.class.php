@@ -141,6 +141,10 @@ class exec
         $date=$date>-1?$date:$this->date;
         return preg_replace("/[$,]+/","",$this->adx[$date]->WebsitePurchases);
     }
+    function getPurchaseValue($date=0){ //收入
+        $date=$date>-1?$date:$this->date;
+        return preg_replace("/[$,]+/","",$this->adx[$date]->WebsitePurchasesConversionValue);
+    }
     function  getROAS($date=0){ // 花费/收入
         $date=$date>-1?$date:$this->date;
         return ($this->getAmountSpent($date)/$this->getPurchasesValue($date))*100;

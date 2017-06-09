@@ -67,7 +67,17 @@
                  vk.http(uri.updateRulesData,this.form,this.then);
 			},
 			then:function(json,code){
-				vk.toast('操作成功','msg')
+                this.form={
+                    id:'',
+                    name:'',
+                    xml:'',
+                    code:'',
+                    type:''
+				};
+                this.workspace.clear();
+                this.appendXML('<xml xmlns="http://www.w3.org/1999/xhtml"></xml>');
+				vk.toast('操作成功','msg');
+				this.$emit('showRulesView');
 			},
             editInfo:function (obj) {
                 this.workspace.clear();

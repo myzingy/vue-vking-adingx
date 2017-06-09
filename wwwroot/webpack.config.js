@@ -1,6 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
-const publicPath='dist/';
+//const publicPath='dist/';
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 var plugins = []
 plugins.push(
@@ -9,16 +9,24 @@ plugins.push(
         template: './srcode/template/index.html', //html模板路径
     })
 )
+if(process.env.NODE_ENV === 'production'){
+  var publicPath='dist/';
+  var output={
+      publicPath:"./",
+      path: path.resolve(__dirname + publicPath), //编译到app目录
+      filename: 'build.js?[hash]'
+  };
+}else{
+    var publicPath='/dist/';
+    var output={
+        publicPath:publicPath,
+        path: path.resolve(__dirname + publicPath), //编译到app目录
+        filename: 'build.js?[hash]'
+    };
+}
 module.exports = {
   entry: './srcode/main.js',
-  output: {
-    //path: path.resolve(__dirname, './dist'),
-    //publicPath: process.env.NODE_ENV === 'production'?'./dist/':'dist/',
-    //publicPath: publicPath, //服务器的路径
-    publicPath:"./",
-    path: path.resolve(__dirname + publicPath), //编译到app目录
-    filename: 'build.js?[hash]'
-  },
+  output: output,
   module: {
     rules: [
       {

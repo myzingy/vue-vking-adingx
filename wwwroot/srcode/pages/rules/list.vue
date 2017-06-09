@@ -78,8 +78,8 @@
 					</el-table-column>
 				</el-table>
 			</el-tab-pane>
-			<el-tab-pane label="添加规则" name="updateRule">
-				<v-rule ref="rule"></v-rule>
+			<el-tab-pane label="编辑规则" name="updateRule">
+				<v-rule ref="rule" @showRulesView="showRulesView"></v-rule>
 			</el-tab-pane>
 		</el-tabs>
 	</div>
@@ -109,8 +109,6 @@
                         this.rulesData=json.data;
                         break;
 				}
-
-
 			},
             handleTabClick:function(dom){
                 var uriKey=dom.name;
@@ -129,6 +127,10 @@
                 //console.log(index,rulesData[index].xml)
                 this.$refs.rule.appendXML(rulesData[index].xml);
             },
+			showRulesView:function(){
+                this.activeName='getRulesData';
+                vk.http(uri.getRulesData,{},this.then);
+			}
 		}
     }
 </script>

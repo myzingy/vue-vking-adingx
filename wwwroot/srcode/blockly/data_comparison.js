@@ -39,6 +39,10 @@ export default {
                         "getPurchase"
                     ],
                     [
+                        "收入（Purchase Value）",
+                        "getPurchaseValue"
+                    ],
+                    [
                         "花费/收入（ROAS，ROI）",
                         "getROAS"
                     ],
