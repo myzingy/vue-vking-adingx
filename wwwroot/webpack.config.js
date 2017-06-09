@@ -1,6 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
-const publicPath='/dist/';
+const publicPath='dist/';
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 var plugins = []
 plugins.push(
