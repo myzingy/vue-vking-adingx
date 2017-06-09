@@ -25,7 +25,10 @@ class IndexController extends Controller {
 		parent::__construct();
 		$this->api_lib=D('App','Logic');
 	}
-    function index()
+	function index(){
+        die('<meta http-equiv="refresh" content="5;url='.url('dist/').'"> ');
+    }
+    function test()
     {
 	    //die("<h2>facebook ads server!</h2>");
         vendor("vendor.autoload");
