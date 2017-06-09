@@ -30,10 +30,12 @@ class exec
     }
     function setRules(){
         $this->rules=[];
+        if($this->ad->RuleRuntime > NOW_TIME-self::EXEC_TIMEOUT) return;
         $sub_where=array(
-            'target'=>$this->type,
-            'target_id'=>$this->ad->Id,
-            'runtime'=>array('lt',NOW_TIME-self::EXEC_TIMEOUT),
+            //'target'=>$this->type,
+            //'target_id'=>$this->ad->Id,
+            'target_id'=>$this->ad->CampaignId,
+            //'runtime'=>array('lt',NOW_TIME-self::EXEC_TIMEOUT),
             'exec_hour_minute'=>array('elt',date("H:i",NOW_TIME))
         );
         $subsql=M('rules_link')->field('rule_id')->where($sub_where)->buildSql();
@@ -41,9 +43,13 @@ class exec
         $this->rules=$this->model
             ->where($where)
             ->select();
-        M('rules_link')->where($sub_where)->save(array(
-            'runtime'=>NOW_TIME
-        ));
+//        M('rules_link')->where($sub_where)->save(array(
+//            'runtime'=>NOW_TIME
+//        ));
+        if(count($this->rules)>0){
+            $table=$this->type.'s';
+            M($table)->where("id='".$this->ad->Id."'")->save(array('rule_runtime'=>NOW_TIME));
+        }
     }
     function expression($date,$fun,$lt,$value){ //条件
         $this->date=$date;

@@ -179,8 +179,9 @@ END;
     }
 
     function getCampaignsInsightsData(){
+        $where=" date_stop>='".date('Y-m-d',strtotime('-1 day'))."' ";
         $data=$this->model->relation(array('campaigns_insights_action_types','campaigns'))
-            ->where('1=1')
+            ->where($where)
             ->order('campaign_id asc,date_stop desc')
             ->select();
         $formatData=formatInsightsData($data);

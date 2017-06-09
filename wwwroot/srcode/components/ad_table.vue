@@ -68,7 +68,7 @@
 		<template v-if=" dataType == 'campaign' ">
 			<el-table-column prop="Ends" label="Ends" width="80"></el-table-column>
 		</template>
-		<template v-if=" dataType != 'campaign' ">
+		<template v-if=" dataType == 'campaign' ">
 			<el-table-column label="操作" width="80" fixed="right">
 				<template scope="scope">
 					<el-button @click="openRulesDialog(scope.$index, adsData)"

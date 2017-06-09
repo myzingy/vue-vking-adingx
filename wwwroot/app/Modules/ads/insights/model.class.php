@@ -29,7 +29,7 @@ class model extends RelationModel{
             'class_name'        => 'ads',
             'foreign_key'=>'ad_id',
             'mapping_name'=>'ads',
-            'as_fields'=>'effective_status'
+            'as_fields'=>'effective_status,rule_runtime'
         ),
 	);
 	function __construct(){

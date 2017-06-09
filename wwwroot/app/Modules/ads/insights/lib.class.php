@@ -197,7 +197,7 @@ END;
             $this->model->relation(true)->add($campaigns_data);
         }
         //立即执行规则
-        asyn('apido/asyn.runRules',array('id'=>$ad_id,'type'=>'ad'),null,null,99);
+        asyn_implement('apido/asyn.runRules',array('id'=>$ad_id,'type'=>'ad'));
         
         return $campaigns_data_branch;
     }
@@ -205,6 +205,8 @@ END;
         $where =' 1=1 ';
         if($ad_id){
             $where.=" and ad_id='$ad_id' ";
+        }else{
+            $where.=" and date_stop>='".date('Y-m-d',strtotime('-1 day'))."' ";
         }
         $data=$this->model->relation(array('ads_insights_action_types','ads'))
             ->where($where)

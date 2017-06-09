@@ -28,7 +28,7 @@ class model extends RelationModel{
             'class_name'        => 'adsets',
             'foreign_key'=>'adset_id',
             'mapping_name'=>'adsets',
-            'as_fields'=>'effective_status,daily_budget'
+            'as_fields'=>'effective_status,daily_budget,rule_runtime'
         ),
 	);
 	function __construct(){

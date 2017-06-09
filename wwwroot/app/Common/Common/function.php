@@ -94,6 +94,7 @@ function formatInsightsData($data,$type='campaign'){
                 //"Impressions" => number_format($r['impressions'],0,'.',','),
                 'Date' => array($r['date_start']),
                 'List' => array() ,
+                'RuleRuntime'=>$r['rule_runtime']
             );
             if (!$formatData[$r[$campaign_id]]) {
                 $formatData[$r[$campaign_id]] = $dr;

@@ -64,7 +64,8 @@ class lib
     function getRulesForAd(){
         $where=array(
             'RL.target_id'=> I('request.id'),
-            'RL.target'=> I('request.type')=='getAdsetsData'?'adset':'ad',
+            //'RL.target'=> I('request.type')=='getAdsetsData'?'adset':'ad',
+            'RL.target'=> 'campaign',
         );
         //$subwhere=" id in (".M('rules_link')->field('rule_id')->where($where)->buildSql().")";
         $data=$this->model
@@ -82,7 +83,8 @@ class lib
         foreach ($rules_ids as $rule_id){
             $data[]=array(
                 'target_id'=>$target_id,
-                'target'=>I('request.target')=='getAdsetsData'?'adset':'ad',
+                //'target'=>I('request.target')=='getAdsetsData'?'adset':'ad',
+                'target'=>'campaign',
                 'rule_id'=>$rule_id,
                 'exec_hour_minute'=>I('request.date')
             );
