@@ -7,7 +7,7 @@ $conf['fb']=include(CONF_PATH.'facebookads.php');
 $conf['think']=array(
 	"URL_MODEL"=>2,
 	//"SESSION_AUTO_START"=>true,
-    'DEFAULT_TIMEZONE'=>'Asia/Shanghai'
+    'DEFAULT_TIMEZONE'=>'UTC+8'
 );
 $_conf=array();
 foreach ($conf as $_c) {

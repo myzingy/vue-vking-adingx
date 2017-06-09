@@ -34,7 +34,7 @@ class exec
             'target'=>$this->type,
             'target_id'=>$this->ad->Id,
             'runtime'=>array('lt',NOW_TIME-self::EXEC_TIMEOUT),
-            'exec_hour_minute'=>array('gt',date("H:i",NOW_TIME))
+            'exec_hour_minute'=>array('lt',date("H:i",NOW_TIME))
         );
         $subsql=M('rules_link')->field('rule_id')->where($sub_where)->buildSql();
         $where=" status=0 and id in ($subsql) ";
