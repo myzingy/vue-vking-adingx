@@ -15,7 +15,7 @@ use FacebookAds\Object\Fields\AdFields;
 
 class exec
 {
-    const EXEC_TIMEOUT=85000;//下次执行时间
+    const EXEC_TIMEOUT=86000;//下次执行时间
     function __construct($ad_adset,$type='ad')
     {
         $this->model = new model();
@@ -31,25 +31,19 @@ class exec
     function setRules(){
         $this->rules=[];
         if($this->ad->RuleRuntime > NOW_TIME-self::EXEC_TIMEOUT) return;
-        $sub_where=array(
-            //'target'=>$this->type,
-            //'target_id'=>$this->ad->Id,
-            'target_id'=>$this->ad->CampaignId,
-            //'runtime'=>array('lt',NOW_TIME-self::EXEC_TIMEOUT),
-            'exec_hour_minute'=>array('elt',date("H:i",NOW_TIME))
+        $where=array(
+            'RL.target_id'=> $this->ad->CampaignId,
+            'RL.exec_hour_minute'=>array('elt',date("H:i",NOW_TIME)),
+            'rules.status'=>0
         );
-        $subsql=M('rules_link')->field('rule_id')->where($sub_where)->buildSql();
-        $where=" status=0 and id in ($subsql) ";
         $this->rules=$this->model
-            ->where($where)
-            ->select();
-//        M('rules_link')->where($sub_where)->save(array(
-//            'runtime'=>NOW_TIME
-//        ));
-        //echo ("<pre>".$subsql."\n");
+            ->field('rules.*,RL.exec_hour_minute')
+            ->join('rules_link RL ON RL.rule_id=rules.id')
+            ->order('id desc')->where($where)->select();
         if(count($this->rules)>0){
             $table=$this->type.'s';
-            M($table)->where("id='".$this->ad->Id."'")->save(array('rule_runtime'=>NOW_TIME));
+            $rule_runtime=strtotime(date("Y-m-d ".$this->rules[0]['exec_hour_minute'].":00",NOW_TIME));
+            M($table)->where("id='".$this->ad->Id."'")->save(array('rule_runtime'=>$rule_runtime));
         }
     }
     function expression($date,$fun,$lt,$value){ //条件
@@ -132,6 +126,7 @@ class exec
         foreach ($this->rules as $r){
             $this->rule=$r;
             $r['code']=str_replace('$',"\$",$r['code']);
+            //var_dump('<pre>',$r['code']);
             eval($r['code']);
         }
     }
