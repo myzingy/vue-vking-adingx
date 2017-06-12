@@ -46,6 +46,7 @@ class exec
 //        M('rules_link')->where($sub_where)->save(array(
 //            'runtime'=>NOW_TIME
 //        ));
+        //echo ("<pre>".$subsql."\n");
         if(count($this->rules)>0){
             $table=$this->type.'s';
             M($table)->where("id='".$this->ad->Id."'")->save(array('rule_runtime'=>NOW_TIME));
@@ -105,7 +106,7 @@ class exec
                  if($do=='+'){
                      $newBudget+=$budget_fixed;
                  }elseif ($do=='-'){
-                     $newBudget+=$budget_fixed;
+                     $newBudget-=$budget_fixed;
                  }elseif ($do=='='){
                      $newBudget=$budget_fixed;
                  }
