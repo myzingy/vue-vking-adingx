@@ -188,11 +188,9 @@ END;
         return $campaigns_data;
     }
     function getAdsInsightsData($ad_id=""){
-        $where =' 1=1 ';
+        $where=" date_stop>='".date('Y-m-d',strtotime('-1 day'))."' ";
         if($ad_id){
             $where.=" and ad_id='$ad_id' ";
-        }else{
-            $where.=" and date_stop>='".date('Y-m-d',strtotime('-1 day'))."' ";
         }
         $keyword_type=I('request.keyword_type');
         if($keyword_type){

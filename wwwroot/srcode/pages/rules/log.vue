@@ -15,7 +15,12 @@
 		<el-tabs v-model="activeName" @tab-click="handleTabClick">
 			<el-tab-pane label="优化记录" name="getRulesLog">
 				<el-table :data="rulesLog" border style="width: 100%" max-height="750">
-					<el-table-column prop="id" label="ID" width="60"></el-table-column>
+					<el-table-column type="expand" fixed>
+						<template scope="scope">
+							<v-ad_table :adsData="scope.row.expandTabData" :dataType="scope.row.expandTabDataType"
+										rulesLog="rulesLog"></v-ad_table>
+						</template>
+					</el-table-column>
 					<el-table-column :formatter="formatExecTarget" label="执行目标" width="180"></el-table-column>
 					<el-table-column prop="time_format" label="执行时间"  width="120"></el-table-column>
 					<el-table-column :formatter="formatExecRule" label="执行规则"  ></el-table-column>
@@ -52,7 +57,11 @@
             then:function(json,code){
                 switch(code){
 					case uri.getRulesLog.code:
-                        this.rulesLog=json.data;
+					    for(var i in json.data){
+					        json.data[i].expandTabData=[JSON.parse(json.data[i].target_data)];
+                            json.data[i].expandTabDataType=json.data[i].target.toLowerCase();
+						}
+					    this.rulesLog=json.data;
                         break;
 				}
 
@@ -70,7 +79,12 @@
             },
             formatExecRule:function(row){
                 return '['+row.rule_id+']'+row.rule_name;
-			}
+			},
+//            expandTab:function(row, expanded){
+//            	this.expandTabData=[JSON.parse(row.target_data)];
+//                this.expandTabDataType=row.target.toLowerCase();
+//                console.log(this.expandTabDataType);
+//			}
 		}
     }
 </script>

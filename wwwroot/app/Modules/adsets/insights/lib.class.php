@@ -182,11 +182,9 @@ END;
     }
 
     function getAdsetsInsightsData($adset_id=""){
-	    $where =' 1=1 ';
+        $where=" date_stop>='".date('Y-m-d',strtotime('-1 day'))."' ";
 	    if($adset_id){
             $where.=" and adset_id='$adset_id' ";
-        }else{
-            $where.=" and date_stop>='".date('Y-m-d',strtotime('-1 day'))."' ";
         }
         $keyword_type=I('request.keyword_type');
 	    if($keyword_type=='campaign' || $keyword_type=='adset'){

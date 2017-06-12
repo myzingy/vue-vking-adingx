@@ -113,12 +113,15 @@
             searchThatID(data){
 				this.$emit('searchThatID',data,this.dataType);
 			},
+//            getShowSummary(){
+//            	return (this.adsData.length>2);
+//			},
             getSummaries(param){
                 const { columns, data } = param;
                 const sums = [];
+                if(data.length<2) return [];
                 columns.forEach((column, index) => {
                     if (index === 0) {
-						//sums[index] = '统计';
 						return;
 					}
 					if (index === 2) {
