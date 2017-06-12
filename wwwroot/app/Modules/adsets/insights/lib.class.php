@@ -188,11 +188,25 @@ END;
         }else{
             $where.=" and date_stop>='".date('Y-m-d',strtotime('-1 day'))."' ";
         }
+        $keyword_type=I('request.keyword_type');
+	    if($keyword_type=='campaign' || $keyword_type=='adset'){
+            $keyword=trim(I('request.keyword'));
+            if($keyword){
+                $where.=" and `{$keyword_type}_name` like '%{$keyword}%' ";
+            }
+        }
+        if($checked_campaigns=I('request.checked_campaigns')){
+	        $campaigns=array();
+	        foreach ($checked_campaigns as $r){
+                $campaigns[]="'{$r['id']}'";
+            }
+            $where.=" and campaign_id in (".implode(',',$campaigns).")";
+        }
         $data=$this->model->relation(array('adsets_insights_action_types','adsets'))
             ->where($where)
             ->order('adset_id asc,date_stop desc')
             ->select();
         $formatData=formatInsightsData($data,'adset');
-        return array('data'=>$formatData);
+        return array('data'=>$formatData,'where'=>$where);
     }
 }

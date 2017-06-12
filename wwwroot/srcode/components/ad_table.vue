@@ -25,7 +25,7 @@
 			</template>
 		</el-table-column>
 		<el-table-column fixed prop="Date" label="Date" width="100"></el-table-column>
-		<el-table-column fixed prop="Name" label="Name" width="200" >
+		<el-table-column fixed prop="Name" label="Name" width="200">
 			<template scope="scope">
 				<template v-if=" dataType != 'campaign' ">
 					<el-popover trigger="hover" placement="top">
@@ -33,12 +33,12 @@
 						<p>Adset Name: {{ scope.row.AdsetName }}</p>
 						<template v-if=" dataType == 'ad' "><p>Ad Name: {{ scope.row.AdName }}</p> </template>
 						<div slot="reference" class="name-wrapper">
-							<el-tag>{{ scope.row.Name }}</el-tag>
+							<a href="javascript://" @click="searchThatID(scope.row)">{{ scope.row.Name }}</a>
 						</div>
 					</el-popover>
 				</template>
 				<template v-else>
-					{{ scope.row.Name }}
+					<a href="javascript://" @click="searchThatID(scope.row)">{{ scope.row.Name }}</a>
 				</template>
 			</template>
 		</el-table-column>
@@ -71,7 +71,7 @@
 		<template v-if=" dataType == 'campaign' ">
 			<el-table-column label="操作" width="80" fixed="right">
 				<template scope="scope">
-					<el-button @click="openRulesDialog(scope.$index, adsData)"
+					<el-button @click="openRulesDialog(scope.row)"
 							   type="text"
 							   size="small">
 						规则
@@ -104,8 +104,11 @@
             formatChildDate:function(row){
                 return row.Type==7?'last 7 day':(row.Type==14?'last 14 day':row.Date);
             },
-			openRulesDialog:function(index,data){
-                this.$emit('openRulesDialog',data[index]);
+			openRulesDialog:function(data){
+                this.$emit('openRulesDialog',data);
+			},
+            searchThatID(data){
+				this.$emit('searchThatID',data,this.dataType);
 			},
 		},
         mounted(){
