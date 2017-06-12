@@ -207,6 +207,6 @@ END;
             ->order('adset_id asc,date_stop desc')
             ->select();
         $formatData=formatInsightsData($data,'adset');
-        return array('data'=>$formatData,'where'=>$where);
+        return array('data'=>$formatData);
     }
 }

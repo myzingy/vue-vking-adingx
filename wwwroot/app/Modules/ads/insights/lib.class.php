@@ -201,6 +201,13 @@ END;
                 $where.=" and `{$keyword_type}_name` like '%{$keyword}%' ";
             }
         }
+        if($checked_campaigns=I('request.checked_campaigns')){
+            $campaigns=array();
+            foreach ($checked_campaigns as $r){
+                $campaigns[]="'{$r['id']}'";
+            }
+            $where.=" and campaign_id in (".implode(',',$campaigns).")";
+        }
         if($checked_adsets=I('request.checked_adsets')){
             $adsets=array();
             foreach ($checked_adsets as $r){
@@ -213,6 +220,6 @@ END;
             ->order('ad_id asc,type asc,date_stop desc')
             ->select();
         $formatData=formatInsightsData($data,'ad');
-        return array('data'=>$formatData,'sql'=>$where);
+        return array('data'=>$formatData);
     }
 }

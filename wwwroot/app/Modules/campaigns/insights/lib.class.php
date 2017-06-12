@@ -168,6 +168,13 @@ END;
 
     function getCampaignsInsightsData(){
         $where=" date_stop>='".date('Y-m-d',strtotime('-1 day'))."' ";
+        $keyword_type=I('request.keyword_type');
+        if($keyword_type=='campaign'){
+            $keyword=trim(I('request.keyword'));
+            if($keyword){
+                $where.=" and `{$keyword_type}_name` like '%{$keyword}%' ";
+            }
+        }
         $data=$this->model->relation(array('campaigns_insights_action_types','campaigns'))
             ->where($where)
             ->order('campaign_id asc,date_stop desc')

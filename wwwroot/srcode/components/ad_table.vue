@@ -2,8 +2,10 @@
 
 </style>
 <template>
+	<div>
 	<el-table :data="adsData" border style="width: 100%" max-height="750" :default-sort =
-			"{prop: 'AmountSpent', order: 'descending'}">
+			"{prop: 'AmountSpent', order: 'descending'}" :summary-method="getSummaries"
+			  show-summary>
 		<el-table-column type="expand" fixed>
 			<template scope="props">
 				<el-table :data="props.row.List" border style="width: 100%">
@@ -80,6 +82,7 @@
 			</el-table-column>
 		</template>
 	</el-table>
+	</div>
 </template>
 <script>
     import Vue from 'vue'
@@ -110,9 +113,57 @@
             searchThatID(data){
 				this.$emit('searchThatID',data,this.dataType);
 			},
+            getSummaries(param){
+                const { columns, data } = param;
+                const sums = [];
+                columns.forEach((column, index) => {
+                    if (index === 0) {
+						//sums[index] = '统计';
+						return;
+					}
+					if (index === 2) {
+						sums[index] = '共计('+data.length+')条';
+						return;
+					}
+
+					const values = data.map(item =>
+						Number(item[column.property]?item[column.property].toString().replace("$",''):item[column.property]));
+					//console.log('values',values);
+
+
+					if (!values.every(value => isNaN(value))) {
+						sums[index] = values.reduce((prev, curr) => {
+								const value = Number(curr);
+							if (!isNaN(value)) {
+								return prev + curr;
+							} else {
+								return prev;
+							}
+						}, 0);
+						if(index=='5' || index=='6' || index=='8' || index=='10' || index=='12'|| index=='15' ||
+							index=='16'){
+                            sums[index] = '$'+sums[index].toFixed(2);
+						}
+
+					} else {
+						sums[index] = '';
+					}
+				});
+                setTimeout(function(){
+                    var el=document.getElementsByClassName('el-table__fixed');
+                    var el_r=document.getElementsByClassName('el-table__fixed-right');
+                    for(var i in el){
+                        if(typeof el[i]!='undefined' && typeof el[i].style!='undefined')
+                        	el[i].style.bottom=0;
+                        if(typeof el_r[i]!='undefined' && typeof el_r[i].style!='undefined')
+                        	el_r[i].style.bottom=0;
+                    }
+                },1000);
+                return sums;
+			}
 		},
         mounted(){
-			
+
         }
     }
 </script>
