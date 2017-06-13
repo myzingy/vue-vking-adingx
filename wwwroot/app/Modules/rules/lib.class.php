@@ -55,7 +55,7 @@ class lib
         return array('data'=>$data);
     }
     function getRulesLog(){
-        $data=M('rules_exec_log')->order('id desc')->select();
+        $data=M('rules_exec_log')->order('id desc')->limit(100)->select();
         foreach ($data as &$r){
             $r['time_format']=date('m-d H:i',$r['time']);
         }
