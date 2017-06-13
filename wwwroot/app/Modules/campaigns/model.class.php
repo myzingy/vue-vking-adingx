@@ -14,14 +14,18 @@ class model extends RelationModel{
      	array('id','require','ID require！'),
     );
 	protected $_link = array(
-         'insights'=>array(
-             'mapping_type'      => self::HAS_MANY,
-             'class_name'        => insights_model,
-             'foreign_key'=>'campaign_id',
-             'mapping_name'=>'insights',
-         ),
+        'insights'=> array(
+            'mapping_type'      => self::HAS_MANY,
+            'class_name'        => 'campaigns_insights',
+            'foreign_key'=>'campaign_id',
+            'mapping_name'=>'insights',
+            //'mapping_fields'=>'rule_runtime',
+            "mapping_limit"=>4,
+            "mapping_order"=>'date_stop desc'
+        ),
 	);
 	function __construct(){
+        $this->_link['insights']['condition']=" date_stop>='".date('Y-m-d',strtotime('-1 day'))."' ";
 		parent::__construct();
 	}
 }

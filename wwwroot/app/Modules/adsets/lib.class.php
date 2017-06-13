@@ -105,12 +105,43 @@ class lib{
     function runRules(){
         $adset_id=I('request.id',''); //adset_id;
         $type=I('request.type','');
-        $insights=new \Modules\adsets\insights\lib();
-        $data=$insights->getAdsetsInsightsData($adset_id);
+        //$insights=new \Modules\adsets\insights\lib();
+        //$data=$insights->getAdsetsInsightsData($adset_id);
+        $data=$this->getAdsetsData($adset_id);
         if(!$data['data']) return;
         $formatData=$data['data'];
         $exec=new \Modules\rules\exec($formatData[0],'adset');
         $exec->run();
         return $formatData;
+    }
+    //用于替换 getAdsetsInsightsData
+    function getAdsetsData($adset_id){
+        $where=" AI.date_stop='".date('Y-m-d',NOW_TIME)."' ";
+        if($adset_id){
+            $where.=" and AI.adset_id='$adset_id' ";
+        }
+        $keyword_type=I('request.keyword_type');
+        if($keyword_type=='campaign' || $keyword_type=='adset'){
+            $keyword=trim(I('request.keyword'));
+            if($keyword){
+                $where.=" and AI.`{$keyword_type}_name` like '%{$keyword}%' ";
+            }
+        }
+        if($checked_campaigns=I('request.checked_campaigns')){
+            $campaigns=array();
+            foreach ($checked_campaigns as $r){
+                $campaigns[]="'{$r['id']}'";
+            }
+            $where.=" and AI.campaign_id in (".implode(',',$campaigns).")";
+        }
+        $data=$this->model
+            ->field('adsets.id,adsets.name,adsets.effective_status,adsets.daily_budget')
+            ->relation(array('insights','rules_run'))
+            ->join('adsets_insights AI ON AI.adset_id=adsets.id')
+            ->where($where)
+            ->order('adsets.updated_time desc')
+            ->select();
+        $formatData=formatInsightsData($data,'adset');
+        return array('data'=>$formatData);
     }
 }

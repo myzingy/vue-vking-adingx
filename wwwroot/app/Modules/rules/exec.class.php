@@ -41,9 +41,9 @@ class exec
             ->join('rules_link RL ON RL.rule_id=rules.id')
             ->order('id desc')->where($where)->select();
         if(count($this->rules)>0){
-            $table=$this->type.'s';
+            $table=$this->type.'s_rules_run';
             $rule_runtime=strtotime(date("Y-m-d ".$this->rules[0]['exec_hour_minute'].":00",NOW_TIME));
-            M($table)->where("id='".$this->ad->Id."'")->save(array('rule_runtime'=>$rule_runtime));
+            M($table)->add(array('rule_runtime'=>$rule_runtime,'id'=>$this->ad->Id),null,true);
         }
     }
     function expression($date,$fun,$lt,$value){ //条件

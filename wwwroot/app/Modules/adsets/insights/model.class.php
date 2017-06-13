@@ -28,7 +28,15 @@ class model extends RelationModel{
             'class_name'        => 'adsets',
             'foreign_key'=>'adset_id',
             'mapping_name'=>'adsets',
-            'as_fields'=>'effective_status,daily_budget,rule_runtime'
+            'as_fields'=>'effective_status,daily_budget'
+        ),
+        'rules_run'=> array(
+            'mapping_type'      => self::HAS_ONE,
+            'class_name'        => 'adsets_rules_run',
+            'foreign_key'=>'id',
+            
+            'mapping_name'=>'rules_run',
+            'as_fields'=>'rule_runtime'
         ),
 	);
 	function __construct(){

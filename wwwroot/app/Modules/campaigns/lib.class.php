@@ -97,4 +97,24 @@ class lib{
         }
         return $campaigns_data;
     }
+    //用于替换 getCampaignsInsightsData
+    function getCampaignsData(){
+        $where=" AI.date_stop='".date('Y-m-d',NOW_TIME)."' ";
+        $keyword_type=I('request.keyword_type');
+        if($keyword_type=='campaign'){
+            $keyword=trim(I('request.keyword'));
+            if($keyword){
+                $where.=" and AI.`{$keyword_type}_name` like '%{$keyword}%' ";
+            }
+        }
+        $data=$this->model
+            ->field('campaigns.id,campaigns.name,campaigns.effective_status')
+            ->relation(array('insights'))
+            ->join('campaigns_insights AI ON AI.campaign_id=campaigns.id')
+            ->where($where)
+            ->order('campaigns.updated_time desc')
+            ->select();
+        $formatData=formatInsightsData($data,'campaign');
+        return array('data'=>$formatData);
+    }
 }

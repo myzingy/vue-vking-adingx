@@ -107,12 +107,50 @@ class lib{
     function runRules(){
         $ad_id=I('request.id',''); //ad_id;
         $type=I('request.type','');
-        $insights=new \Modules\ads\insights\lib();
-        $data=$insights->getAdsInsightsData($ad_id);
+        //$insights=new \Modules\ads\insights\lib();
+        //$data=$insights->getAdsInsightsData($ad_id);
+        $data=$this->getAdsData($ad_id);
         if(!$data['data']) return;
         $formatData=$data['data'];
         $exec=new \Modules\rules\exec($formatData[0],'ad');
         $exec->run();
         return $formatData;
+    }
+    //用于替换 getAdsInsightsData
+    function getAdsData($ad_id=""){
+        $where=" AI.date_stop='".date('Y-m-d',NOW_TIME)."' ";
+        if($ad_id){
+            $where.=" and AI.ad_id='$ad_id' ";
+        }
+        $keyword_type=I('request.keyword_type');
+        if($keyword_type){
+            $keyword=trim(I('request.keyword'));
+            if($keyword){
+                $where.=" and AI.`{$keyword_type}_name` like '%{$keyword}%' ";
+            }
+        }
+        if($checked_campaigns=I('request.checked_campaigns')){
+            $campaigns=array();
+            foreach ($checked_campaigns as $r){
+                $campaigns[]="'{$r['id']}'";
+            }
+            $where.=" and AI.campaign_id in (".implode(',',$campaigns).")";
+        }
+        if($checked_adsets=I('request.checked_adsets')){
+            $adsets=array();
+            foreach ($checked_adsets as $r){
+                $adsets[]="'{$r['id']}'";
+            }
+            $where.=" and AI.adset_id in (".implode(',',$adsets).")";
+        }
+        $data=$this->model
+            ->field('ads.id,ads.name,ads.effective_status')
+            ->relation(array('insights','rules_run'))
+            ->join('ads_insights AI ON AI.ad_id=ads.id')
+            ->where($where)
+            ->order('ads.updated_time desc')
+            ->select();
+        $formatData=formatInsightsData($data,'ad');
+        return array('data'=>$formatData);
     }
 }

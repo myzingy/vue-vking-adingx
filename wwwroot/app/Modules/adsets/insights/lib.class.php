@@ -200,7 +200,7 @@ END;
             }
             $where.=" and campaign_id in (".implode(',',$campaigns).")";
         }
-        $data=$this->model->relation(array('adsets_insights_action_types','adsets'))
+        $data=$this->model->relation(array('adsets_insights_action_types','adsets','rules_run'))
             ->where($where)
             ->order('adset_id asc,date_stop desc')
             ->select();
