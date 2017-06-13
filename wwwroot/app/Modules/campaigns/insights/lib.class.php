@@ -156,11 +156,11 @@ END;
         if ($campaign_timespace == 'today') {
             //其它Insights
             asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'yestoday',
-                'CRON_RENEW_TIMEOUT' => 85000));
+                'CRON_RENEW_TIMEOUT' => \Modules\cron\lib::CRON_RENEW_TIMEOUT_7Y14));
             asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'last_7day',
-                'CRON_RENEW_TIMEOUT' => 85000));
+                'CRON_RENEW_TIMEOUT' => \Modules\cron\lib::CRON_RENEW_TIMEOUT_7Y14));
             asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'last_14day',
-                'CRON_RENEW_TIMEOUT' => 85000));
+                'CRON_RENEW_TIMEOUT' => \Modules\cron\lib::CRON_RENEW_TIMEOUT_7Y14));
 
         }
         return $campaigns_data;

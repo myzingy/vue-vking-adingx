@@ -12,6 +12,7 @@ class lib{
     
     const CRON_RETRY_COUNT=3;
     const CRON_RENEW_TIMEOUT=3600;
+    const CRON_RENEW_TIMEOUT_7Y14=21600;
 
     function __construct($id="") {
 

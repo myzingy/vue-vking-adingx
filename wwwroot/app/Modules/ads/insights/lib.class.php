@@ -178,11 +178,11 @@ END;
             asyn_implement('apido/asyn.runRules', array('id' => $ad_id, 'type' => 'ad'));
             //其它Insights
             asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'yestoday',
-                'CRON_RENEW_TIMEOUT'=>85000));
+                'CRON_RENEW_TIMEOUT'=>\Modules\cron\lib::CRON_RENEW_TIMEOUT_7Y14));
             asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_7day',
-                'CRON_RENEW_TIMEOUT'=>85000));
+                'CRON_RENEW_TIMEOUT'=>\Modules\cron\lib::CRON_RENEW_TIMEOUT_7Y14));
             asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_14day',
-                'CRON_RENEW_TIMEOUT'=>85000));
+                'CRON_RENEW_TIMEOUT'=>\Modules\cron\lib::CRON_RENEW_TIMEOUT_7Y14));
 
         }
         return $campaigns_data;
