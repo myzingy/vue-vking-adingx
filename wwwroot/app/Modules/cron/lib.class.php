@@ -48,7 +48,7 @@ class lib{
      * @param int $crontime
      * @param int $priority
      */
-    static function create($path, $params=array(), $method,$crontime=0,$priority=0){
+    static function create($path, $params=array(), $method='GET',$crontime=0,$priority=0){
         $cron=M('x_cron');
         $CRON_RENEW_TIMEOUT=self::CRON_RENEW_TIMEOUT;
         if($params['CRON_RENEW_TIMEOUT']){

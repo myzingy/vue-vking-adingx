@@ -7,6 +7,7 @@ namespace Modules\adsets;
 use FacebookAds\Api;
 use FacebookAds\Object\AdAccount;
 use FacebookAds\Cursor;
+use FacebookAds\Object\AdSet;
 use FacebookAds\Object\Values\ArchivableCrudObjectEffectiveStatuses;
 //广告组
 use FacebookAds\Object\Campaign;
@@ -143,5 +144,19 @@ class lib{
             ->select();
         $formatData=formatInsightsData($data,'adset');
         return array('data'=>$formatData);
+    }
+    //调整fb预算
+    function setBudget(){
+        $ac_id=I('request.ac_id');
+        $adset_id=I('request.adset_id');
+        $budget=I('request.budget')*100;
+        vendor("vendor.autoload");
+        $fb_conf=C('fb');
+        $fba=Api::init($fb_conf['app_id'],$fb_conf['app_secret'],$fb_conf['zhule']['access_tokens']);
+        $api = Api::instance();
+        $adset=new AdSet($adset_id);
+        $adset->save(array(
+            'daily_budget'=>$budget
+        ));
     }
 }

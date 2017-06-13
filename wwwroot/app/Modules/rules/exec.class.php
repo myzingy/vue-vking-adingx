@@ -112,6 +112,11 @@ class exec
                  }
                  if($newBudget!=$oldBudget){
                      $this->implement_str.="==>[oldBudget:$oldBudget=>newBudget:$newBudget]";
+                     asyn('apido/asyn.setBudget',array(
+                         'ac_id'=>$this->ad->AccountId,
+                         'adset_id'=>$this->ad->Id,
+                         'budget'=>$newBudget,
+                     ),null,null,99);
                  }
             }
         }elseif('Pause'==$field){

@@ -186,6 +186,16 @@ class AppLogic {
         }
         return $lib -> runRules();
     }
+    /**
+     * <ok class="异步"/>  调整fb预算
+     * 参数
+     *      adset_id:adset_id
+     *      budget:budget 
+     */
+    function asyn__setBudget(){
+        $lib = new \Modules\adsets\lib();
+        return $lib -> setBudget();
+    }
 	############################################################
 	# 一些异步接口结束
 	############################################################
