@@ -106,6 +106,9 @@
                 BlocklyLibrary[key].init();
             });
             var toolbox = '<xml>';
+            toolbox +='<category name="限定设置" colour="180">';
+            toolbox += '	<block type="budget_limit"></block>';
+            toolbox += '</category>';
             toolbox +='<category name="起因" colour="210">';
             toolbox += '	<block type="controls_if"></block>';
             toolbox += '	<block type="logic_operation"></block>';

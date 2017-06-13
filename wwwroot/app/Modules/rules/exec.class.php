@@ -104,6 +104,12 @@ class exec
                  }elseif ($do=='='){
                      $newBudget=$budget_fixed;
                  }
+                 if($this->BudgetLimitMAX>0){
+                     $newBudget=$newBudget>$this->BudgetLimitMAX?$this->BudgetLimitMAX:$newBudget;
+                 }
+                 if($this->BudgetLimitMIN>0){
+                     $newBudget=$newBudget<$this->BudgetLimitMIN?$this->BudgetLimitMIN:$newBudget;
+                 }
                  if($newBudget!=$oldBudget){
                      $this->implement_str.="==>[oldBudget:$oldBudget=>newBudget:$newBudget]";
                  }
@@ -129,6 +135,11 @@ class exec
             //var_dump('<pre>',$r['code']);
             eval($r['code']);
         }
+    }
+    function setBudgetLimit($type,$val){
+        $val+=0;
+        $limit='BudgetLimit'.strtoupper($type);
+        $this->$limit=$val>0?$val:0;
     }
     ////////////////
     function  getAmountSpent($date=0){ //花费
