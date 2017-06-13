@@ -29,9 +29,7 @@ function asyn_implement($path,$params=array(
 ),$method="GET"){
 	return \Modules\common\common_lib::http_asyn($path, $params, $method);
 }
-function asyn($path,$params=array(
-    '__t'=>'',
-),$method="GET",$crontime=0,$priority=0){
+function asyn($path,$params=array('__t'=>''),$method="GET",$crontime=0,$priority=0){
     \Modules\cron\lib::create($path, $params, $method,$crontime,$priority);
 }
 function cronResult($result=true,$message=''){
@@ -107,4 +105,8 @@ function formatInsightsData($data,$type='campaign'){
 
     }
     return $data;
+}
+function getDayTime($his,$day_num=1){
+    $format="Y-m-d $his";
+    return strtotime("$day_num day", strtotime(date($format,NOW_TIME)));
 }

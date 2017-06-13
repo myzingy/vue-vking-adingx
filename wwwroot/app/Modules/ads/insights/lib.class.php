@@ -177,12 +177,12 @@ END;
             //立即执行规则
             asyn_implement('apido/asyn.runRules', array('id' => $ad_id, 'type' => 'ad'));
             //其它Insights
-            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'yestoday',
-                'CRON_RENEW_TIMEOUT'=>\Modules\cron\lib::CRON_RENEW_TIMEOUT_7Y14));
-            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_7day',
-                'CRON_RENEW_TIMEOUT'=>\Modules\cron\lib::CRON_RENEW_TIMEOUT_7Y14));
-            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_14day',
-                'CRON_RENEW_TIMEOUT'=>\Modules\cron\lib::CRON_RENEW_TIMEOUT_7Y14));
+            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'yestoday'),null,
+                getDayTime("03:00:00"));
+            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_7day'),null,
+                getDayTime("03:00:00"));
+            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_14day'),null,
+                getDayTime("03:00:00"));
 
         }
         return $campaigns_data;
