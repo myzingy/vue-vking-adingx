@@ -12,7 +12,7 @@ my_handler() {
   #cat >> /tmp/some_file.txt
 }
 
-for delay in {1..11}; do
+for delay in {1..14}; do
   delayed_ajax http://127.0.0.1/facebook/wwwroot/apido/cron.demon my_handler &
-  sleep 5
+  sleep 4
 done
