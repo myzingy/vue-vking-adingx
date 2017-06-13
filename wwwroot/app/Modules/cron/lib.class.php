@@ -39,6 +39,15 @@ class lib{
             $cron->save();
         }
     }
+
+    /**
+     * @param $path
+     * @param array $params
+     *  CRON_RENEW_TIMEOUT 重复添加时间限制
+     * @param $method
+     * @param int $crontime
+     * @param int $priority
+     */
     static function create($path, $params=array(), $method,$crontime=0,$priority=0){
         $cron=M('x_cron');
         $CRON_RENEW_TIMEOUT=self::CRON_RENEW_TIMEOUT;
@@ -47,7 +56,7 @@ class lib{
             unset($params['CRON_RENEW_TIMEOUT']);
         }
         $param=json_encode($params);
-        $hash=md5($path.$param);
+        $hash=md5($path.$param.($crontime>0?$crontime:""));
 
         $cron->where("`hash`='{$hash}' and addtime>".(NOW_TIME-$CRON_RENEW_TIMEOUT))->find();
         if($cron->id) return;

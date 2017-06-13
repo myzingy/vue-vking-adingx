@@ -155,12 +155,12 @@ END;
         }
         if ($campaign_timespace == 'today') {
             //其它Insights
-            asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'yestoday',
-                'CRON_RENEW_TIMEOUT' => \Modules\cron\lib::CRON_RENEW_TIMEOUT_7Y14));
-            asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'last_7day',
-                'CRON_RENEW_TIMEOUT' => \Modules\cron\lib::CRON_RENEW_TIMEOUT_7Y14));
-            asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'last_14day',
-                'CRON_RENEW_TIMEOUT' => \Modules\cron\lib::CRON_RENEW_TIMEOUT_7Y14));
+            asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'yestoday'),null,
+                getDayTime("03:00:00"));
+            asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'last_7day'),null,
+                getDayTime("03:00:00"));
+            asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'last_14day'),null,
+                getDayTime("03:00:00"));
 
         }
         return $campaigns_data;
