@@ -156,6 +156,10 @@ END;
                     $campaigns_data['id']=$campaigns_data['adset_id'].'.last_14day';
                     $campaigns_data['type']=model::INSIGHT_TYPE_LAST_14DAY;
                     break;
+                case $yestoday:
+                    $campaigns_data['id']=$campaigns_data['adset_id'].'.yestoday';
+                    $campaigns_data['type']=model::INSIGHT_TYPE_YESTODAY;
+                    break;
                 default:
                     $campaigns_data['id']=md5($campaigns_data['adset_id'].$campaigns_data['date_start']);
                     $campaigns_data['type']=model::INSIGHT_TYPE_YESTODAY;
