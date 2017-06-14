@@ -57,8 +57,11 @@ class lib{
         }
         $param=json_encode($params);
         $hash=md5($path.$param.($crontime>0?$crontime:""));
-
-        $cron->where("`hash`='{$hash}' and addtime>".(NOW_TIME-$CRON_RENEW_TIMEOUT))->find();
+        if($crontime>0){
+            $cron->where("`hash`='{$hash}'")->find();
+        }else{
+            $cron->where("`hash`='{$hash}' and addtime>".(NOW_TIME-$CRON_RENEW_TIMEOUT))->find();
+        }
         if($cron->id) return;
         $cron->add(array(
             'hash'=>$hash,
