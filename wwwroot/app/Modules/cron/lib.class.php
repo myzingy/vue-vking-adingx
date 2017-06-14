@@ -67,10 +67,10 @@ class lib{
             'hash'=>$hash,
             'path'=>$path,
             'param'=>$param,
-            'method'=>$method,
+            'method'=>is_null($method)?'GET':$method,
             'addtime'=>NOW_TIME,
-            'crontime'=>$crontime,
-            'priority'=>$priority
+            'crontime'=>$crontime+0,
+            'priority'=>$priority+0
         ));
     }
     static function result($result=true,$message=""){
