@@ -174,11 +174,11 @@ END;
             //立即执行规则
             asyn_implement('apido/asyn.runRules', array('id' => $adset_id, 'type' => 'adset'));
             //其它Insights
-            asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'yestoday'),null,
+            asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'yestoday','ac_id'=>$ac_id),null,
                 getDayTime("03:00:00"));
-            asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'last_7day'),null,
+            asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'last_7day','ac_id'=>$ac_id),null,
                 getDayTime("03:00:00"));
-            asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'last_14day'),null,
+            asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'last_14day','ac_id'=>$ac_id),null,
                 getDayTime("03:00:00"));
         }
         return $campaigns_data;

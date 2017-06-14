@@ -180,11 +180,11 @@ END;
             //立即执行规则
             asyn_implement('apido/asyn.runRules', array('id' => $ad_id, 'type' => 'ad'));
             //其它Insights
-            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'yestoday'),null,
+            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'yestoday','ac_id'=>$ac_id),null,
                 getDayTime("03:00:00"));
-            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_7day'),null,
+            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_7day','ac_id'=>$ac_id),null,
                 getDayTime("03:00:00"));
-            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_14day'),null,
+            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_14day','ac_id'=>$ac_id),null,
                 getDayTime("03:00:00"));
 
         }
