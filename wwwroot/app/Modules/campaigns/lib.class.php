@@ -120,6 +120,10 @@ class lib{
     //用于替换 getCampaignsInsightsData
     function getCampaignsData(){
         $where=" AI.date_stop='".date('Y-m-d',NOW_TIME)."' ";
+        $ac_id=I('request.ac_id');
+        if($ac_id){
+            $where.=" AND campaigns.account_id='$ac_id' ";
+        }
         $keyword_type=I('request.keyword_type');
         if($keyword_type=='campaign'){
             $keyword=trim(I('request.keyword'));

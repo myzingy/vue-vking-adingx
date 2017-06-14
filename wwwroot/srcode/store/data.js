@@ -1,17 +1,16 @@
-import Vue from 'vue'
-
-export const EDIT_RULE = 'EDIT_RULE' //修改规则
+export const CKECKED_AC = 'CKECKED_AC' //checked ac
 
 export default {
-    state: {},
+    state: JSON.parse(localStorage.getItem('data')) || {},
     mutations: {
-        [EDIT_RULE](state, data) {
+        [CKECKED_AC](state, data) {
+            localStorage.setItem('data', JSON.stringify(data))
             Object.assign(state, data)
         },
     },
     actions: {
-        [EDIT_RULE]({commit}, data) {
-            commit(EDIT_RULE, data)
-        }
+        [CKECKED_AC]({commit}, data) {
+            commit(CKECKED_AC, data)
+        },
     }
 }

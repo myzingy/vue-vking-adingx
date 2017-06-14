@@ -28,17 +28,14 @@ export default [
             },
             {
                 path: 'adsList*', //广告列表
-                meta: { auth: false },
                 component: resolve => require(['../pages/home/index.vue?adsList'], resolve)
             },
             {
                 path: 'rulesList*', //规则列表
-                meta: { auth: false },
                 component: resolve => require(['../pages/home/index.vue?rulesList'], resolve)
             },
             {
                 path: 'rulesLog*', //规则列表
-                meta: { auth: false },
                 component: resolve => require(['../pages/home/index.vue?rulesLog'], resolve)
             },
             {

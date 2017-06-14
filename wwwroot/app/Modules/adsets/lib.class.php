@@ -117,10 +117,16 @@ class lib{
     }
     //用于替换 getAdsetsInsightsData
     function getAdsetsData($adset_id){
+
         $where=" AI.date_stop='".date('Y-m-d',NOW_TIME)."' ";
+        $ac_id=I('request.ac_id');
+        if($ac_id){
+            $where.=" AND adsets.account_id='$ac_id' ";
+        }
         if($adset_id){
             $where.=" and AI.adset_id='$adset_id' ";
         }
+
         $keyword_type=I('request.keyword_type');
         if($keyword_type=='campaign' || $keyword_type=='adset'){
             $keyword=trim(I('request.keyword'));

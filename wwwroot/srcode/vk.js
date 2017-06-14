@@ -1,6 +1,7 @@
 import Vue  from 'vue'
 import VueResource  from 'vue-resource'
 import { Message } from 'element-ui';
+import store from './store/'
 
 Vue.use(VueResource);
 let vk={
@@ -29,6 +30,8 @@ let vk={
     http:function(uri,data,callback){
         var url=this.cgi(uri);
         var that=this;
+        var ac_id = store.state.data.ac_id;
+        data.ac_id=ac_id;
         console.log('postdata',data);
         Vue.http.post(url,data,{emulateJSON: true}).then(
             (response) => {

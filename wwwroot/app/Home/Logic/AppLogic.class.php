@@ -96,6 +96,9 @@ class AppLogic {
         $lib = new \Modules\rules\lib();
         return $lib -> saveRulesForAd();
     }
+    function user__getAcsList(){
+        return array('data'=>FBC());
+    }
 	############################################################
 	# 一些异步接口开始
 	############################################################
