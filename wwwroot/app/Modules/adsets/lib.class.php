@@ -21,27 +21,26 @@ class lib{
 		}
     }
 	function flushAdsets(){
-        $campaign_id=I('request.campaign_id','');
-        if(!$campaign_id)   return;
+        $ac_id=I('request.ac_id');
+        if(!$ac_id) return;
+        $ac=FBC($ac_id);
         vendor("vendor.autoload");
-        $fb_conf=C('fb');
-        $fba=Api::init($fb_conf['app_id'],$fb_conf['app_secret'],$fb_conf['zhule']['access_tokens']);
+        $fba=Api::init($ac['app_id'],$ac['app_secret'],$ac['access_tokens']);
         $api = Api::instance();
-        //$account =new AdAccount($fb_conf['zhule']['account_id']);
+        $account =new AdAccount($ac['act_id']);
+
         $campaigns_data=array();
         $after=I('request.after','');
         $active=I('request.active','');
         $EFFECTIVE_STATUS=array(
             ArchivableCrudObjectEffectiveStatuses::ACTIVE,
         );
-        $asyn_param=array('campaign_id'=>$campaign_id,'after'=>'');
+        $asyn_param=array('ac_id'=>$ac_id,'after'=>'');
         if(!$active){
             array_push($EFFECTIVE_STATUS,ArchivableCrudObjectEffectiveStatuses::PAUSED);
         }else{
             $asyn_param['active']=$active;
         }
-
-        $campaign = new Campaign($campaign_id);
         $fields= array(
             AdSetFields::ACCOUNT_ID,
             AdSetFields::BILLING_EVENT,
@@ -65,7 +64,7 @@ class lib{
             AdSetFields::STATUS,
             AdSetFields::UPDATED_TIME
         );
-        $adsets = $campaign->getAdSets(
+        $adsets = $account->getAdSets(
             $fields,
             array(
                 AdSetFields::EFFECTIVE_STATUS =>$EFFECTIVE_STATUS,
@@ -83,10 +82,10 @@ class lib{
             }
             array_push($campaigns_data,$_campaigns_data);
             $adsets->next();
-            asyn('apido/asyn.flushAds', array(
-                'adset_id' => $_campaigns_data['id'],
-                'active'=>'active'
-            ));
+//            asyn('apido/asyn.flushAds', array(
+//                'adset_id' => $_campaigns_data['id'],
+//                'active'=>'active'
+//            ));
             if(ArchivableCrudObjectEffectiveStatuses::ACTIVE==$_campaigns_data[AdSetFields::EFFECTIVE_STATUS]) {
                 asyn('apido/asyn.flushAdsetsInsights', array(
                     'adset_id' => $_campaigns_data['id']
@@ -99,7 +98,7 @@ class lib{
             $this->model->addAll($campaigns_data,null,true);
         }
         if($adsets->getNext() && count($campaigns_data)==25){
-            asyn('apido/asyn.flushAdsets',$asyn_param);
+            asyn('apido/asyn.flushAdsets',$asyn_param,null,null,90);
         }
         return $campaigns_data;
     }
@@ -147,6 +146,7 @@ class lib{
     }
     //调整fb预算
     function setBudget(){
+        if(__APP__POS=='CC__DEV') return;
         $ac_id=I('request.ac_id');
         $adset_id=I('request.adset_id');
         $budget=I('request.budget')*100;

@@ -20,27 +20,27 @@ class lib{
 		}
     }
 	function flushAds(){
-        $adset_id=I('request.adset_id','');
-        if(!$adset_id)   return;
+        $ac_id=I('request.ac_id');
+        if(!$ac_id) return;
+        $ac=FBC($ac_id);
         vendor("vendor.autoload");
-        $fb_conf=C('fb');
-        $fba=Api::init($fb_conf['app_id'],$fb_conf['app_secret'],$fb_conf['zhule']['access_tokens']);
+        $fba=Api::init($ac['app_id'],$ac['app_secret'],$ac['access_tokens']);
         $api = Api::instance();
-        //$account =new AdAccount($fb_conf['zhule']['account_id']);
+        $account =new AdAccount($ac['act_id']);
+        
         $campaigns_data=array();
         $after=I('request.after','');
         $active=I('request.active','');
         $EFFECTIVE_STATUS=array(
             ArchivableCrudObjectEffectiveStatuses::ACTIVE,
         );
-        $asyn_param=array('adset_id'=>$adset_id,'after'=>'');
+        $asyn_param=array('ac_id'=>$ac_id,'after'=>'');
         if(!$active){
             array_push($EFFECTIVE_STATUS,ArchivableCrudObjectEffectiveStatuses::PAUSED);
         }else{
             $asyn_param['active']=$active;
         }
 
-        $adset = new AdSet($adset_id);
         $fields= array(
             AdFields::ACCOUNT_ID,
             AdFields::AD_REVIEW_FEEDBACK,
@@ -71,7 +71,7 @@ class lib{
             AdFields::REDOWNLOAD,
             AdFields::FILENAME
         );
-        $adsets = $adset->getAds(
+        $adsets = $account->getAds(
             $fields,
             array(
                 AdFields::EFFECTIVE_STATUS =>$EFFECTIVE_STATUS,
@@ -100,7 +100,7 @@ class lib{
             $this->model->addAll($campaigns_data,null,true);
         }
         if($adsets->getNext() && count($campaigns_data)==25){
-            asyn('apido/asyn.flushAds',$asyn_param);
+            asyn('apido/asyn.flushAds',$asyn_param,null,null,90);
         }
         return $campaigns_data;
     }

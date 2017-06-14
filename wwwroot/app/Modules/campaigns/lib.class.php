@@ -20,19 +20,38 @@ class lib{
 			$this->model->relation(array())->find($id);
 		}
     }
+    function flushCampaignsInit(){
+        $acs=FBC();
+        foreach ($acs as $ac){
+            asyn('apido/sync.flushCampaigns',array(
+                'ac_id'=>$ac['account_id'],
+                'active'=>'active'
+            ),null,null,90);
+            asyn('apido/sync.flushAdsets',array(
+                'ac_id'=>$ac['account_id'],
+                'active'=>'active'
+            ),null,null,90);
+            asyn('apido/sync.flushAds',array(
+                'ac_id'=>$ac['account_id'],
+                'active'=>'active'
+            ),null,null,90);
+        }
+    }
 	function flushCampaigns(){
+        $ac_id=I('request.ac_id');
+        if(!$ac_id) return;
+        $ac=FBC($ac_id);
         vendor("vendor.autoload");
-        $fb_conf=C('fb');
-        $fba=Api::init($fb_conf['app_id'],$fb_conf['app_secret'],$fb_conf['zhule']['access_tokens']);
+        $fba=Api::init($ac['app_id'],$ac['app_secret'],$ac['access_tokens']);
         $api = Api::instance();
-        $account =new AdAccount($fb_conf['zhule']['account_id']);
+        $account =new AdAccount($ac['act_id']);
         $campaigns_data=array();
         $after=I('request.after','');
         $active=I('request.active','');
         $EFFECTIVE_STATUS=array(
             ArchivableCrudObjectEffectiveStatuses::ACTIVE,
         );
-        $asyn_param=array('after'=>'');
+        $asyn_param=array('after'=>'','ac_id'=>$ac_id);
         if(!$active){
             array_push($EFFECTIVE_STATUS,ArchivableCrudObjectEffectiveStatuses::PAUSED);
             //array_push($EFFECTIVE_STATUS,ArchivableCrudObjectEffectiveStatuses::ARCHIVED);
@@ -76,10 +95,10 @@ class lib{
             array_push($campaigns_data,$_campaigns_data);
             $campaigns->next();
             if(ArchivableCrudObjectEffectiveStatuses::ACTIVE==$_campaigns_data[CampaignFields::EFFECTIVE_STATUS]) {
-                asyn('apido/asyn.flushAdsets',array(
-                    'campaign_id'=>$_campaigns_data['id'],
-                    'active'=>'active'
-                ));
+//                asyn('apido/asyn.flushAdsets',array(
+//                    'campaign_id'=>$_campaigns_data['id'],
+//                    'active'=>'active'
+//                ));
                 asyn('apido/asyn.flushCampaignsInsights',array(
                     'campaign_id'=>$_campaigns_data['id']
                 ));
@@ -93,7 +112,7 @@ class lib{
             $this->model->addAll($campaigns_data,null,true);
         }
         if($campaigns->getNext() && count($campaigns_data)==25){
-            asyn('apido/asyn.flushCampaigns',$asyn_param);
+            asyn('apido/asyn.flushCampaigns',$asyn_param,null,null,90);
         }
         return $campaigns_data;
     }

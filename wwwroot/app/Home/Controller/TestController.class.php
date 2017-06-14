@@ -29,19 +29,19 @@ class TestController extends Controller {
     {
 	    //die("<h2>facebook ads server!</h2>");
         vendor("vendor.autoload");
-        $fb_conf=C('fb');
+        $fb_conf=FBC('1593565507558990');
         $token=<<<END
 EAABeuMl0aOwBAPpI4rsqiYGXIslPKCIMQ5fUWaZBQElfXmT850XzFWgCphpZCP5WvJZCTUq4yaa3nLROYgYq0cHqSuvRkjkDrUW18tivOQl6jRv22jLY9ClBoQtbCkv6kMGpNJBfBTx8GLsmpx3lBKSK0XyfqmMLUOy1ZAA8BHpkDWJb2OeREDq4lmd7ZCWI5cjgM3XYbUJ4ZBZCkZCZC7CtL
 END;
         $token=<<<END2
 EAABeuMl0aOwBABsrRnMU82d8BKjERXJ8Y4cqajP1elZB24FETbrjN6T75LsY0gKNZA3nhO4k3yZC5UFCcXqIGsQJH3c5yRwBgu2cV1hr8hasZBnJbXfcDlGJ2MmXIHc0xB678Tott7i8V2lKTTBrhWK3k0Dx2Vo7SA5kCz7cfVY0apWR9tob
 END2;
-        $fba=Api::init($fb_conf['app_id'],$fb_conf['app_secret'],$token);
+        $fba=Api::init($fb_conf['app_id'],$fb_conf['app_secret'],$fb_conf['access_tokens']);
         $api = Api::instance();
 
         //$account_id='act_103859203538756';
         //$account_id='act_101623620428821';
-        $account_id='act_1593565507558990';
+        $account_id=$fb_conf['act_id'];
         $account =new AdAccount($account_id);
         //var_dump($account->read());
 

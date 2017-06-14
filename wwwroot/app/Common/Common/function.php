@@ -111,3 +111,18 @@ function getDayTime($his,$day_num=1){
     $format="Y-m-d $his";
     return strtotime("$day_num day", strtotime(date($format,NOW_TIME)));
 }
+function FBC($ac_id=""){
+    $fb=C('fb');
+    $acs=array();
+    foreach ($fb as $app){
+        foreach ($app['accounts'] as $ac){
+            $ac['act_id']='act_'.$ac['account_id'];
+            array_push($acs,$ac);
+            if($ac['account_id']==$ac_id){
+                $appx=array_merge($app,$ac);
+                return $appx;
+            }
+        }
+    }
+    return $ac_id?false:$acs;
+}

@@ -111,6 +111,16 @@ class AppLogic {
         die('<meta http-equiv="refresh" content="5;url='.url('apido/cron.demon_test?t=').rand(1,22222222).'"> ');
     }
     /**
+     * <ok class="异步"/> 刷新广告系列
+     * 参数
+     *      after:分页
+     *      active:只获取 active 状态
+     */
+    function asyn__flushCampaignsInit(){
+        $lib = new \Modules\campaigns\lib();
+        return $lib -> flushCampaignsInit();
+    }
+    /**
 	 * <ok class="异步"/> 刷新广告系列
 	 * 参数
      *      after:分页
