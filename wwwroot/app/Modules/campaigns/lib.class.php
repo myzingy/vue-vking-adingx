@@ -23,15 +23,15 @@ class lib{
     function flushCampaignsInit(){
         $acs=FBC();
         foreach ($acs as $ac){
-            asyn('apido/sync.flushCampaigns',array(
+            asyn('apido/asyn.flushCampaigns',array(
                 'ac_id'=>$ac['account_id'],
                 'active'=>'active'
             ),null,null,90);
-            asyn('apido/sync.flushAdsets',array(
+            asyn('apido/asyn.flushAdsets',array(
                 'ac_id'=>$ac['account_id'],
                 'active'=>'active'
             ),null,null,90);
-            asyn('apido/sync.flushAds',array(
+            asyn('apido/asyn.flushAds',array(
                 'ac_id'=>$ac['account_id'],
                 'active'=>'active'
             ),null,null,90);
