@@ -21,11 +21,14 @@ class lib{
         $adset_id=I('request.adset_id','');
         $adset_timespace=I('request.adset_timespace','today');
         if(!$adset_id)   return;
+        
+        $ac_id=I('request.ac_id');
+        if(!$ac_id) return;
+        $ac=FBC($ac_id);
         vendor("vendor.autoload");
-        $fb_conf=C('fb');
-        $fba=Api::init($fb_conf['app_id'],$fb_conf['app_secret'],$fb_conf['zhule']['access_tokens']);
+        $fba=Api::init($ac['app_id'],$ac['app_secret'],$ac['access_tokens']);
         $api = Api::instance();
-        //$account =new AdAccount($fb_conf['zhule']['account_id']);
+        
         $campaigns_data=array();
         $after=I('request.after','');
         $active=I('request.active','');

@@ -100,7 +100,8 @@ class lib{
 //                    'active'=>'active'
 //                ));
                 asyn('apido/asyn.flushCampaignsInsights',array(
-                    'campaign_id'=>$_campaigns_data['id']
+                    'campaign_id'=>$_campaigns_data['id'],
+                    'ac_id'=>$ac_id
                 ));
             }
 

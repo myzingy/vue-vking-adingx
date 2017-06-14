@@ -88,7 +88,8 @@ class lib{
 //            ));
             if(ArchivableCrudObjectEffectiveStatuses::ACTIVE==$_campaigns_data[AdSetFields::EFFECTIVE_STATUS]) {
                 asyn('apido/asyn.flushAdsetsInsights', array(
-                    'adset_id' => $_campaigns_data['id']
+                    'adset_id' => $_campaigns_data['id'],
+                    'ac_id'=>$ac_id
                 ));
             }
         }
