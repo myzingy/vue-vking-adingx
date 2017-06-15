@@ -4,7 +4,7 @@ return array(
         'oneday'=>array(
             'app_id'=>'104147746842860',
             'app_secret'=>'2b8cf7d36a3a389505d7a745449adc86',
-            'access_tokens'=>'EAABeuMl0aOwBABsrRnMU82d8BKjERXJ8Y4cqajP1elZB24FETbrjN6T75LsY0gKNZA3nhO4k3yZC5UFCcXqIGsQJH3c5yRwBgu2cV1hr8hasZBnJbXfcDlGJ2MmXIHc0xB678Tott7i8V2lKTTBrhWK3k0Dx2Vo7SA5kCz7cfVY0apWR9tob',
+            'access_tokens'=>'EAABeuMl0aOwBAPZCLcYEPplOoZCHcyJS3KOLARa4xWBv3ZAoukNejCLZA4WrZCN78jsj5rERvrDXCWNbFz9pifPycPaIxX0mrC8UyTeZCkIOtZCwIPYfoZBJGCrkWTYEd7RnpfSSOOOAgdPGxd7bgnxjEahqyXFK4iuZCjECTVEpZB9HnHAZAcnCjUUX6MuEWcdBwQZD',
             'accounts'=>array(
                 array('fb_account'=>'Jeulia Jewelry','account_name'=>'Jeulia','account_id'=>'1593565507558990'),
                 array('fb_account'=>'Jeulia Jewelry','account_name'=>'BF-YM-Xi\'an Zhule-0704-02','account_id'=>'564914007023762'),
