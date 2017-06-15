@@ -4,9 +4,10 @@ return array(
         'oneday'=>array(
             'app_id'=>'104147746842860',
             'app_secret'=>'2b8cf7d36a3a389505d7a745449adc86',
-            'access_tokens'=>'EAABeuMl0aOwBAGow3FvfUEnNanN5EmLky1ZChcp1M0IjZBbg9dbnEF4GZB7Puhca2V85F5QzaB2qN8ww1K0RQr3ZCUHtTsZBJDTRevHgtiP17RjkZAymO3m80BUKNnD3UtlgGAI0ELVXF5hO1TS4wpMTZAnGk8cf4sY1NaOOQ7vaapsQbxyvdKubdhqGe1D6g0ZD',
+            'access_tokens'=>'EAABeuMl0aOwBABsrRnMU82d8BKjERXJ8Y4cqajP1elZB24FETbrjN6T75LsY0gKNZA3nhO4k3yZC5UFCcXqIGsQJH3c5yRwBgu2cV1hr8hasZBnJbXfcDlGJ2MmXIHc0xB678Tott7i8V2lKTTBrhWK3k0Dx2Vo7SA5kCz7cfVY0apWR9tob',
             'accounts'=>array(
                 array('fb_account'=>'Jeulia Jewelry','account_name'=>'Jeulia','account_id'=>'1593565507558990'),
+                array('fb_account'=>'Jeulia Jewelry','account_id'=>'769185746596586','account_name'=>'BF-YM-Zhule-0310-01'),
                 array('fb_account'=>'Jeulia Jewelry','account_name'=>'BF-YM-Xi\'an Zhule-0704-02','account_id'=>'564914007023762'),
                 array('fb_account'=>'Jeulia Jewelry','account_name'=>'BF-YM-zhule-0728-01','account_id'=>'559461654235664'),
                 array('fb_account'=>'Jeulia Jewelry','account_name'=>'BF-YM-zhule-0719-01','account_id'=>'561910137324149'),
@@ -22,6 +23,5 @@ return array(
         ),
     )
 );
-
 
 
