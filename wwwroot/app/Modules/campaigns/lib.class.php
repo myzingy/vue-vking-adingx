@@ -21,6 +21,10 @@ class lib{
 		}
     }
     function flushCampaignsInit(){
+        //00:00-08:00 不获取数据
+        $time0=getDayTime("00:00:00");
+        $time8=getDayTime("08:00:00");
+        if(NOW_TIME > $time0 && NOW_TIME < $time8) return;
         $acs=FBC();
         foreach ($acs as $ac){
             asyn('apido/asyn.flushCampaigns',array(
