@@ -155,12 +155,14 @@ class lib{
     function setBudget(){
         if(__APP__POS=='CC__DEV') return;
         $ac_id=I('request.ac_id');
+        if(!$ac_id) return;
+        $ac=FBC($ac_id);
+        vendor("vendor.autoload");
+        $fba=Api::init($ac['app_id'],$ac['app_secret'],$ac['access_tokens']);
+        $api = Api::instance();
+
         $adset_id=I('request.adset_id');
         $budget=I('request.budget')*100;
-        vendor("vendor.autoload");
-        $fb_conf=C('fb');
-        $fba=Api::init($fb_conf['app_id'],$fb_conf['app_secret'],$fb_conf['zhule']['access_tokens']);
-        $api = Api::instance();
         $adset=new AdSet($adset_id);
         $adset->save(array(
             'daily_budget'=>$budget
