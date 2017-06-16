@@ -27,7 +27,7 @@ class lib{
         $where .= ' and `crontime` <'.NOW_TIME;
         $cron=M('x_cron');
         $data=$cron->where($where)
-            ->order('`priority` desc,`addtime` asc')->limit(20)
+            ->order('`priority` desc,`addtime` asc')->limit(5)
             ->select();
 
         if($data){
