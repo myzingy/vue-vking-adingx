@@ -179,11 +179,11 @@ END;
             asyn_implement('apido/asyn.runRules', array('id' => $adset_id, 'type' => 'adset'));
             //其它Insights
             asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'yestoday','ac_id'=>$ac_id),null,
-                getDayTime("03:00:00"));
+                getDayTime("00:01:00"),0);
             asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'last_7day','ac_id'=>$ac_id),null,
-                getDayTime("03:00:00"));
+                getDayTime("00:01:00"),-1);
             asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'last_14day','ac_id'=>$ac_id),null,
-                getDayTime("03:00:00"));
+                getDayTime("00:01:00"),-2);
         }
         return $campaigns_data;
     }

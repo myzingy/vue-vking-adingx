@@ -29,7 +29,7 @@ function asyn_implement($path,$params=array(
 ),$method="GET"){
 	return \Modules\common\common_lib::http_asyn($path, $params, $method);
 }
-function asyn($path,$params=array('__t'=>''),$method="GET",$crontime=0,$priority=0){
+function asyn($path,$params=array('__t'=>''),$method="GET",$crontime=0,$priority=1){
     \Modules\cron\lib::create($path, $params, $method,$crontime,$priority);
 }
 function cronResult($result=true,$message=''){

@@ -173,7 +173,7 @@ END;
         if($ad_timespace=='today') {
             //其它Insights
             asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>'yestoday','ac_id'=>$ac_id),null,
-                getDayTime("03:00:00"));
+                getDayTime("00:01:00"),0);
 //            asyn('apido/asyn.flushAccountsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_7day','ac_id'=>$ac_id),null,
 //                getDayTime("03:00:00"));
 //            asyn('apido/asyn.flushAccountsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_14day','ac_id'=>$ac_id),null,
