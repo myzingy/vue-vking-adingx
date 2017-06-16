@@ -26,20 +26,17 @@ class lib{
         $where .= ' and `retry`<'.self::CRON_RETRY_COUNT;
         $where .= ' and `crontime` <'.NOW_TIME;
         $cron=M('x_cron');
-        $data=$cron->where($where)
-            ->order('`priority` desc,`addtime` asc')->limit(2)
-            ->select();
-
-        if($data){
-            foreach ($data as $r){
-                $param=@json_decode($r['param'],true);
-                $param['cron_id']= $r['id'];
-                asyn_implement($r['path'],$param,$r['method']);
-//                $cron->retry+=1;
-//                $cron->status=self::CRON_STATUS_RUN;
-//                $cron->runtime=NOW_TIME;
-//                $cron->save();
-            }
+        $cron->where($where)
+            ->order('`priority` desc,`addtime` asc')->limit(1)
+            ->find();
+        if($cron->id){
+            $param=@json_decode($cron->param,true);
+            $param['cron_id']= $cron->id;
+            asyn_implement($cron->path,$param,$cron->method);
+            $cron->retry+=1;
+            $cron->status=self::CRON_STATUS_RUN;
+            $cron->runtime=NOW_TIME;
+            $cron->save();
         }
     }
 
