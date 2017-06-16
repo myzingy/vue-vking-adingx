@@ -10,7 +10,7 @@ class lib{
     const CRON_STATUS_RUN_FIL=-1;
     const CRON_STATUS_RUN_OK=2;
     
-    const CRON_RETRY_COUNT=3;
+    const CRON_RETRY_COUNT=2;
     const CRON_RENEW_TIMEOUT=3600;
     const CRON_RENEW_TIMEOUT_7Y14=21600;
 
