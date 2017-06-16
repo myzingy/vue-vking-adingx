@@ -175,7 +175,7 @@ class common_lib {
 
     
 	static function url($path=""){
-		if(strpos('http', $path)>-1){
+        if(strpos($path,'http')!==false){
 			return $path;
 		}
 		$path=str_replace('./', '/', $path);
@@ -224,11 +224,12 @@ class common_lib {
     ),$method="GET"){
         $data=http_build_query($params);
         $url=url($path).'?'.$data;
+        //var_dump($url);
         $url_array = parse_url($url); //获取URL信息
         $def_port=(__APP__POS=='CC__DEV')?80:80;
         $port = isset($url_array['port'])? $url_array['port'] : $def_port;
         $getPath = $method=='POST'?$url_array['path']:($url_array['path'] ."?". $url_array['query']);
-
+        //var_dump(array($url_array['host'],$port,$getPath,$data));
         $fp = fsockopen($url_array['host'],$port,$errno,$errstr,5);
         if(!$fp){
             console(__CLASS__,"http_asyn fsockopen::$errstr ($errno)");

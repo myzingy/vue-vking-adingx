@@ -143,10 +143,10 @@ END;
                     $campaigns_data['id'] = $campaigns_data['campaign_id'] . '.last_14day';
                     $campaigns_data['type'] = model::INSIGHT_TYPE_LAST_14DAY;
                     break;
-                case $yestoday:
-                    $campaigns_data['id'] = $campaigns_data['campaign_id'] . '.yestoday';
-                    $campaigns_data['type'] = model::INSIGHT_TYPE_YESTODAY;
-                    break;
+//                case $yestoday:
+//                    $campaigns_data['id'] = $campaigns_data['campaign_id'] . '.yestoday';
+//                    $campaigns_data['type'] = model::INSIGHT_TYPE_YESTODAY;
+//                    break;
                 default:
                     $campaigns_data['id'] = md5($campaigns_data['campaign_id'] . $campaigns_data['date_start']);
                     $campaigns_data['type'] = model::INSIGHT_TYPE_YESTODAY;
@@ -164,10 +164,10 @@ END;
             //其它Insights
             asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'yestoday','ac_id'=>$ac_id),null,
                 getDayTime("03:00:00"));
-            asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'last_7day','ac_id'=>$ac_id),null,
-                getDayTime("03:00:00"));
-            asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'last_14day','ac_id'=>$ac_id),null,
-                getDayTime("03:00:00"));
+//            asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'last_7day','ac_id'=>$ac_id),null,
+//                getDayTime("03:00:00"));
+//            asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'last_14day','ac_id'=>$ac_id),null,
+//                getDayTime("03:00:00"));
 
         }
         return $campaigns_data;

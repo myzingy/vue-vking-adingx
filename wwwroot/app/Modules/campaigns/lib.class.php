@@ -39,6 +39,10 @@ class lib{
                 'ac_id'=>$ac['account_id'],
                 'active'=>'active'
             ),null,null,90);
+            asyn('apido/asyn.flushAccounts',array(
+                'ac_id'=>$ac['account_id'],
+                'active'=>'active'
+            ));
         }
     }
 	function flushCampaigns(){

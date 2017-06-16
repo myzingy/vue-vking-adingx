@@ -209,6 +209,26 @@ class AppLogic {
         $lib = new \Modules\adsets\lib();
         return $lib -> setBudget();
     }
+    /**
+     * <ok class="异步"/> 刷新广告账户
+     * 参数
+     *      after:分页
+     *      active:只获取 active 状态
+     */
+    function asyn__flushAccounts(){
+        $lib = new \Modules\accounts\lib();
+        return $lib -> flushAccounts();
+    }
+    /**
+     * <ok class="异步"/> 刷新广告账户的insight
+     * 参数
+     *      campaign_id:campaign_id
+     *      active:只获取 active 状态
+     */
+    function asyn__flushAccountsInsights(){
+        $lib = new \Modules\accounts\insights\lib();
+        return $lib -> flushAccountsInsights();
+    }
 	############################################################
 	# 一些异步接口结束
 	############################################################

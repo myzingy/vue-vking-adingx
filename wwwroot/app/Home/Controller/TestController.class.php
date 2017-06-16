@@ -29,18 +29,10 @@ class TestController extends Controller {
     {
 	    //die("<h2>facebook ads server!</h2>");
         vendor("vendor.autoload");
-        $fb_conf=FBC('1593565507558990');
-        $token=<<<END
-EAABeuMl0aOwBAPpI4rsqiYGXIslPKCIMQ5fUWaZBQElfXmT850XzFWgCphpZCP5WvJZCTUq4yaa3nLROYgYq0cHqSuvRkjkDrUW18tivOQl6jRv22jLY9ClBoQtbCkv6kMGpNJBfBTx8GLsmpx3lBKSK0XyfqmMLUOy1ZAA8BHpkDWJb2OeREDq4lmd7ZCWI5cjgM3XYbUJ4ZBZCkZCZC7CtL
-END;
-        $token=<<<END2
-EAABeuMl0aOwBABsrRnMU82d8BKjERXJ8Y4cqajP1elZB24FETbrjN6T75LsY0gKNZA3nhO4k3yZC5UFCcXqIGsQJH3c5yRwBgu2cV1hr8hasZBnJbXfcDlGJ2MmXIHc0xB678Tott7i8V2lKTTBrhWK3k0Dx2Vo7SA5kCz7cfVY0apWR9tob
-END2;
+        $fb_conf=FBC('769185746596586');
         $fba=Api::init($fb_conf['app_id'],$fb_conf['app_secret'],$fb_conf['access_tokens']);
         $api = Api::instance();
 
-        //$account_id='act_103859203538756';
-        //$account_id='act_101623620428821';
         $account_id=$fb_conf['act_id'];
         $account =new AdAccount($account_id);
         //var_dump($account->read());
@@ -49,66 +41,72 @@ END2;
 
         $campaigns_data=array();
         $after='';
-        //$campaign = new Campaign('6033795518964');
+        //$campaign = new Campaign('23842610790400125');
         //$campaign = new AdSet('6034369558164');
         //$campaign = new Ad('6034369571964');
 $str=<<<END
-         ["account_id"] => NULL
-        ["adlabels"] => NULL
-        ["adset_schedule"] => NULL
-        ["attribution_spec"] => NULL
-        ["bid_amount"] => NULL
-        ["bid_info"] => NULL
-        ["billing_event"] => NULL
-        ["budget_remaining"] => NULL
-        ["campaign"] => NULL
-        ["campaign_id"] => NULL
-        ["configured_status"] => NULL
-        ["created_time"] => NULL
-        ["creative_sequence"] => NULL
-        ["daily_budget"] => NULL
-        ["effective_status"] => NULL
-        ["end_time"] => NULL
-        ["frequency_cap"] => NULL
-        ["frequency_cap_reset_period"] => NULL
-        ["frequency_control_specs"] => NULL
-        ["id"] => string(13) "6084047333764"
-        ["is_autobid"] => NULL
-        ["is_average_price_pacing"] => NULL
-        ["lifetime_budget"] => NULL
-        ["lifetime_frequency_cap"] => NULL
-        ["lifetime_imps"] => NULL
-        ["name"] => NULL
-        ["optimization_goal"] => NULL
-        ["pacing_type"] => NULL
-        ["promoted_object"] => NULL
-        ["recommendations"] => NULL
-        ["recurring_budget_semantics"] => NULL
-        ["rf_prediction_id"] => NULL
-        ["rtb_flag"] => NULL
-        ["start_time"] => NULL
-        ["status"] => NULL
-        ["targeting"] => NULL
-        ["time_based_ad_rotation_id_blocks"] => NULL
-        ["time_based_ad_rotation_intervals"] => NULL
-        ["updated_time"] => NULL
-        ["use_new_app_click"] => NULL
-        ["campaign_spec"] => NULL
-        ["execution_options"] => NULL
-        ["redownload"] => NULL
+  ["account_id"] => string(15) "769185746596586"
+    ["account_status"] => NULL
+    ["age"] => NULL
+    ["agency_client_declaration"] => NULL
+    ["amount_spent"] => NULL
+    ["balance"] => NULL
+    ["business"] => NULL
+    ["business_city"] => NULL
+    ["business_country_code"] => NULL
+    ["business_name"] => NULL
+    ["business_state"] => NULL
+    ["business_street"] => NULL
+    ["business_street2"] => NULL
+    ["business_zip"] => NULL
+    ["capabilities"] => NULL
+    ["created_time"] => NULL
+    ["currency"] => NULL
+    ["disable_reason"] => NULL
+    ["end_advertiser"] => NULL
+    ["end_advertiser_name"] => NULL
+    ["failed_delivery_checks"] => NULL
+    ["funding_source"] => NULL
+    ["funding_source_details"] => NULL
+    ["has_migrated_permissions"] => NULL
+    ["id"] => string(19) "act_769185746596586"
+    ["io_number"] => NULL
+    ["is_notifications_enabled"] => NULL
+    ["is_personal"] => NULL
+    ["is_prepay_account"] => NULL
+    ["is_tax_id_required"] => NULL
+    ["line_numbers"] => NULL
+    ["media_agency"] => NULL
+    ["min_campaign_group_spend_cap"] => NULL
+    ["min_daily_budget"] => NULL
+    ["name"] => NULL
+    ["offsite_pixels_tos_accepted"] => NULL
+    ["owner"] => NULL
+    ["partner"] => NULL
+    ["rf_spec"] => NULL
+    ["salesforce_invoice_group_id"] => NULL
+    ["spend_cap"] => NULL
+    ["tax_id"] => NULL
+    ["tax_id_status"] => NULL
+    ["tax_id_type"] => NULL
+    ["timezone_id"] => NULL
+    ["timezone_name"] => NULL
+    ["timezone_offset_hours_utc"] => NULL
+    ["tos_accepted"] => NULL
+    ["user_role"] => NULL
 END;
 
         preg_match_all("/\[\"(.*)\"\]/",$str,$match);
         $fields=$match[1];
         //$fields=false;
-        $sql="CREATE TABLE `ads_insights` ( ";
+        $sql="CREATE TABLE `account_insights` ( ";
         $sql.=" `id` varchar(32) NOT NULL COMMENT 'ad_id + date' ";
         foreach ($fields as $key){
             $sql.=" ,`{$key}` varchar(50) DEFAULT NULL ";
         }
-        $sql.=" ,PRIMARY KEY (`id`),KEY `ad_id` (`ad_id`)) ENGINE=INNODB DEFAULT CHARSET=utf8mb4";
-        echo $sql."<br>";
-
+        $sql.=" ,PRIMARY KEY (`id`),KEY `account_id` (`account_id`)) ENGINE=INNODB DEFAULT CHARSET=utf8mb4";
+        //echo $sql."<br>";
+        /*
         $insights = $account->getAdSets(
             $fields,
             array(
@@ -119,19 +117,50 @@ END;
             )
         );
         dump($insights);
-
-        /*
-         *
-        $campaign = new Campaign('6032660080764');
-
-        if(count($campaigns_data)>0){
-            $model=new \Modules\campaigns\model();
-            //$model->truncate();
-            $model->addAll($campaigns_data,null,true);
-        }
         */
-        //var_dump($campaigns->response->request->client->content['data']);
+        //https://graph.facebook.com/v2.5/act_nnnnnnnnnnnnnn/insights
+        //?level=adset&fields=adset_id,adset_name,campaign_id,campaign_name,impressions,inline_link_clicks,spend
+        //&time_increment=1&time_range[since]=2016-02-09&time_range[until]=2016-02-11
+        //&breakdowns=impression_device,placement&limit=25
+        //$campaign = new Campaign('23842610790400125');
+        $insights = $account->getSelf(
+            $fields,
+            array(
+                //'end_time' => (new \DateTime('now'))->getTimestamp(),
+                //'time_range'=>array('since'=>'2017-06-14','until'=>'2017-06-14'),
+                'action_attribution_windows'=>['1d_click','1d_view'],
+                //'effective_status' =>array('ACTIVE'),
+                //'breakdowns'=> 'impression_device,placement',
+                //'action_breakdowns'=>['action_device'],
+                //'date_preset'=>'yesterday',
+                //'time_increment'=>1
+            )
+        );
+        //dump($insights);
+        //exit;
+        $campaigns_data=[];
+        //while ($insights->valid()) {
+            //$campaigns_data['campaigns_insights_action_types'] = array();
+            //$_d = $insights->current()->getData();
+            $_d = $insights->getData();
+            foreach ($fields as $i => $fk) {
+                if (is_array($_d[$fk])) {
+                    continue;
+                    foreach ($_d[$fk] as $v) {
+                        $v['insight_key'] = $fk;
+                        $campaigns_data['campaigns_insights_action_types'][] = $v;
+                    }
+                } else {
+                    $campaigns_data[$fk] = $_d[$fk];
+                }
+            }
 
+            //$campaigns_data['id'] = md5($campaigns_data['campaign_id'] . $campaigns_data['date_start']);
+            //$campaigns_data['type'] = 1;
+            //$insights->next();
+        //}
+        dump($campaigns_data);
+        //M('account')->add($campaigns_data);
         ##广告系列-创建
 //        $campaign = new Campaign(null, $account_id);
 //        $campaign->setData(array(
