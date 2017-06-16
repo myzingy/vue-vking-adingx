@@ -22,8 +22,8 @@ class lib{
     }
     function flushCampaignsInit(){
         //20:00-08:00 不获取数据
-        $time_s=getDayTime("20:00:00");
-        $time_e=getDayTime("08:00:00");
+        $time_s=getDayTime("20:00:00",0);
+        $time_e=getDayTime("08:00:00",0);
         if(NOW_TIME > $time_s || NOW_TIME < $time_e) return;
         $acs=FBC();
         foreach ($acs as $ac){
