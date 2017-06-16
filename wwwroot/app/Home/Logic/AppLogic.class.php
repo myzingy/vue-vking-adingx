@@ -111,7 +111,7 @@ class AppLogic {
     }
     function cron__demon_test(){
         $this->cron__demon();
-        die('<meta http-equiv="refresh" content="5;url='.url('apido/cron.demon_test?t=').rand(1,22222222).'"> ');
+        die('<meta http-equiv="refresh" content="0;url='.url('apido/cron.demon_test?t=').rand(1,22222222).'"> ');
     }
     /**
      * <ok class="异步"/> 刷新广告系列
