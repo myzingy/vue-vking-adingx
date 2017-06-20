@@ -1,5 +1,6 @@
 <?php
 namespace Home\Controller;
+set_time_limit(0);
 use FacebookAds\Object\AdSet;
 use Think\Controller;
 use Facebook\FacebookBatchRequest;
@@ -123,23 +124,24 @@ END;
         //&time_increment=1&time_range[since]=2016-02-09&time_range[until]=2016-02-11
         //&breakdowns=impression_device,placement&limit=25
         //$campaign = new Campaign('23842610790400125');
-        $insights = $account->getSelf(
-            $fields,
-            array(
-                //'end_time' => (new \DateTime('now'))->getTimestamp(),
-                //'time_range'=>array('since'=>'2017-06-14','until'=>'2017-06-14'),
-                'action_attribution_windows'=>['1d_click','1d_view'],
-                //'effective_status' =>array('ACTIVE'),
-                //'breakdowns'=> 'impression_device,placement',
-                //'action_breakdowns'=>['action_device'],
-                //'date_preset'=>'yesterday',
-                //'time_increment'=>1
-            )
-        );
-        //dump($insights);
-        //exit;
-        $campaigns_data=[];
-        //while ($insights->valid()) {
+        for($iiii=0;$iiii<1;$iiii++) {
+            $insights = $account->getSelf(
+                $fields,
+                array(
+                    //'end_time' => (new \DateTime('now'))->getTimestamp(),
+                    //'time_range'=>array('since'=>'2017-06-14','until'=>'2017-06-14'),
+                    'action_attribution_windows' => ['1d_click', '1d_view'],
+                    //'effective_status' =>array('ACTIVE'),
+                    //'breakdowns'=> 'impression_device,placement',
+                    //'action_breakdowns'=>['action_device'],
+                    //'date_preset'=>'yesterday',
+                    //'time_increment'=>1
+                )
+            );
+            //dump($insights);
+            //exit;
+            $campaigns_data = [];
+            //while ($insights->valid()) {
             //$campaigns_data['campaigns_insights_action_types'] = array();
             //$_d = $insights->current()->getData();
             $_d = $insights->getData();
@@ -158,8 +160,9 @@ END;
             //$campaigns_data['id'] = md5($campaigns_data['campaign_id'] . $campaigns_data['date_start']);
             //$campaigns_data['type'] = 1;
             //$insights->next();
-        //}
-        dump($campaigns_data);
+            //}
+            dump(array($iiii,$campaigns_data['id']));
+        }
         //M('account')->add($campaigns_data);
         ##广告系列-创建
 //        $campaign = new Campaign(null, $account_id);

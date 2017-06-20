@@ -11,8 +11,12 @@ class lib{
     const CRON_STATUS_RUN_OK=2;
     
     const CRON_RETRY_COUNT=2;
+    const CRON_RETRY_TIME=300;//通话将被阻止一分钟;在这段时间内，最大分数会衰减，最多5分钟后降至0
     const CRON_RENEW_TIMEOUT=3600;
     const CRON_RENEW_TIMEOUT_7Y14=21600;
+    const CRON_ERROR_ACID='CRON_ERROR_ACID';
+
+    const CRON_TIMEOUT=86400;//不再使用retry进行判断，每次执行错误，对cron降低优先级（priority）
 
     function __construct($id="") {
 
@@ -20,23 +24,62 @@ class lib{
     function demon(){
         $this->implement();
     }
+    function getErrorACID(){
+        $acids=S(self::CRON_ERROR_ACID);
+        $error_acid=[];
+        if($acids){
+            foreach ($acids as $k=>$t){
+                echo $k.':'.(NOW_TIME-($t+self::CRON_RETRY_TIME)).'s<br/>';
+                if($t+self::CRON_RETRY_TIME < NOW_TIME){
+                    unset($acids[$k]);
+                    continue;
+                }
+                $error_acid[]="'{$k}'";
+            }
+            S(self::CRON_ERROR_ACID,$acids);
+
+        }
+        return implode(',',$error_acid);
+    }
     function implement(){
-        $where = ' (`status`='.self::CRON_STATUS_DEF
-            .' or (`status`='.self::CRON_STATUS_RUN.' and `runtime`<'.(NOW_TIME-180).')) ';
-        $where .= ' and `retry`<'.self::CRON_RETRY_COUNT;
+
+//        $where = ' (`status`='.self::CRON_STATUS_DEF
+//            .' or (`status`='.self::CRON_STATUS_RUN.' and `runtime`<'.(NOW_TIME-self::CRON_RETRY_TIME).')) ';
+//        $where .= ' and `retry`<'.self::CRON_RETRY_COUNT;
+        $where = '`status`='.self::CRON_STATUS_DEF;
+        $where .= ' and `addtime` >'.(NOW_TIME-self::CRON_TIMEOUT);
+        $where .= ' and (`runtime` is null or `runtime`<'.(NOW_TIME-self::CRON_RETRY_TIME).') ';
         $where .= ' and `crontime` <'.NOW_TIME;
+        $error_acid=$this->getErrorACID();
+        if($error_acid){
+            $where .= " and `ac_id`  not in ($error_acid) ";
+        }
         $cron=M('x_cron');
-        $cron->where($where)
-            ->order('`priority` desc,`addtime` asc')->limit(1)
-            ->find();
-        if($cron->id){
-            $param=@json_decode($cron->param,true);
-            $param['cron_id']= $cron->id;
-            asyn_implement($cron->path,$param,$cron->method);
-            $cron->retry+=1;
-            $cron->status=self::CRON_STATUS_RUN;
-            $cron->runtime=NOW_TIME;
-            $cron->save();
+//        $cron->where($where)
+//            ->order('`priority` desc,`addtime` asc')->limit(1)
+//            ->find();
+//        if($cron->id){
+//            $param=@json_decode($cron->param,true);
+//            $param['cron_id']= $cron->id;
+//            asyn_implement($cron->path,$param,$cron->method);
+//            $cron->retry+=1;
+//            $cron->status=self::CRON_STATUS_RUN;
+//            $cron->runtime=NOW_TIME;
+//            $cron->save();
+//        }
+        $data=$cron->where($where)
+            ->order('`priority` desc,`addtime` asc')->limit(50)
+            ->select();
+        echo $cron->getLastSql();
+        if($data){
+            foreach ($data as $r){
+                $param=@json_decode($r['param'],true);
+                $param['cron_id']= $r['id'];
+                $url=url($r['path']).'?'.http_build_query($param, '', '&');
+                echo '<br>'.$r['id'].'#'.$r['message'].'##<a href="'.$url.'" target="_blank">'.$url.'</a>';
+                asyn_implement($r['path'],$param,$r['method']);
+            }
+
         }
     }
 
@@ -67,6 +110,7 @@ class lib{
             'hash'=>$hash,
             'path'=>$path,
             'param'=>$param,
+            'ac_id'=> $params['ac_id'],
             'method'=>is_null($method)?'GET':$method,
             'addtime'=>NOW_TIME,
             'crontime'=>$crontime+0,
@@ -79,10 +123,21 @@ class lib{
         $cron=M('x_cron');
         $cron->find($cron_id);
         if(!$cron->id) return;
+        $cron->runtime=NOW_TIME;
+        $cron->retry+=1;
         if($result){
             $cron->status=self::CRON_STATUS_RUN_OK;
         }elseif($cron->retry>=self::CRON_RETRY_COUNT){
             $cron->status=self::CRON_STATUS_RUN_FIL;
+        }
+        if(!$result){
+            $cron->priority-=1;
+            $ac_id=I('request.ac_id');
+            if($ac_id && strpos($message,'Exception:(#17)')!==false){
+                $acids=S(self::CRON_ERROR_ACID);
+                $acids[$ac_id]=NOW_TIME;
+                S(self::CRON_ERROR_ACID,$acids);
+            }
         }
         $cron->message=$message;
         $cron->save();

@@ -11,13 +11,16 @@
 	.header .el-input__inner{
 		border: 0;
 	}
+	 .header-select .el-select-dropdown__wrap {
+		 max-height: 100%;
+	 }
 </style>
 <template>
 
 	<div>
 		<v-header title="首页">
 			<router-link slot="left" to="?">
-				<el-select v-model="ac_idx" placeholder="请选择" @change="acChecked">
+				<el-select v-model="ac_idx" placeholder="请选择AD账号开始" @change="acChecked" popper-class="header-select">
 					<el-option
 							v-for="item in acs"
 							:key="item.account_id"
@@ -49,7 +52,7 @@
 			<el-row :style="{ height:height +'px' }" v-else>
 				<div :style="{ height:height_cc +'px' }" class="grid-content bg-purple-darkc overflow-y"
 					 id="app_overview">
-					<center><h2>请选择广告账户...</h2></center>
+					<statistical></statistical>
 				</div>
 			</el-row>
 		</div>
@@ -63,8 +66,12 @@
     import { CKECKED_AC } from '../../store/data.js'
     import vk from '../../vk.js';
     import uri from '../../uri.js';
+    import statistical from './statistical.vue';
     Vue.use(ElementUI)
     export default {
+        components:{
+            statistical:statistical,
+		},
         data:function(){
             return {
                 height:500,

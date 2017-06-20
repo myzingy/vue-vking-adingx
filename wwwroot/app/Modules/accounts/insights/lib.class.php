@@ -49,7 +49,7 @@ class lib{
         ["campaign_id"] => string(13) "6033795518964"
         ["campaign_name"] => NULL
         ["clicks"] => NULL
-        ["cost_per_10_sec_video_view"] => NULL
+        [`"cost_per_10_sec_video_view"] => NULL
         ["cost_per_action_type"] => NULL
         ["cost_per_estimated_ad_recallers"] => NULL
         ["cost_per_inline_link_click"] => NULL
@@ -88,16 +88,16 @@ class lib{
         ["unique_inline_link_clicks"] => NULL
         ["unique_link_clicks_ctr"] => NULL
         ["unique_social_clicks"] => NULL
-        ["video_10_sec_watched_actions"] => NULL
-        ["video_15_sec_watched_actions"] => NULL
-        ["video_30_sec_watched_actions"] => NULL
-        ["video_avg_percent_watched_actions"] => NULL
-        ["video_avg_time_watched_actions"] => NULL
-        ["video_p100_watched_actions"] => NULL
-        ["video_p25_watched_actions"] => NULL
-        ["video_p50_watched_actions"] => NULL
-        ["video_p75_watched_actions"] => NULL
-        ["video_p95_watched_actions"] => NULL
+        [`"video_10_sec_watched_actions"] => NULL
+        [`"video_15_sec_watched_actions"] => NULL
+        [`"video_30_sec_watched_actions"] => NULL
+        [`"video_avg_percent_watched_actions"] => NULL
+        [`"video_avg_time_watched_actions"] => NULL
+        [`"video_p100_watched_actions"] => NULL
+        [`"video_p25_watched_actions"] => NULL
+        [`"video_p50_watched_actions"] => NULL
+        [`"video_p75_watched_actions"] => NULL
+        [`"video_p95_watched_actions"] => NULL
         ["website_clicks"] => NULL
         ["website_ctr"] => NULL
 END;
