@@ -1,6 +1,6 @@
 /*
 SQLyog Ultimate v11.27 (32 bit)
-MySQL - 5.6.20 : Database - facebook_ads
+MySQL - 5.5.47-MariaDB-log : Database - facebook_ads
 *********************************************************************
 */
 
@@ -14,6 +14,139 @@ MySQL - 5.6.20 : Database - facebook_ads
 CREATE DATABASE /*!32312 IF NOT EXISTS*/`facebook_ads` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 
 USE `facebook_ads`;
+
+/*Table structure for table `accounts` */
+
+DROP TABLE IF EXISTS `accounts`;
+
+CREATE TABLE `accounts` (
+  `account_id` varchar(50) DEFAULT NULL,
+  `account_status` varchar(50) DEFAULT NULL,
+  `age` varchar(50) DEFAULT NULL,
+  `agency_client_declaration` varchar(50) DEFAULT NULL,
+  `amount_spent` varchar(50) DEFAULT NULL,
+  `balance` varchar(50) DEFAULT NULL,
+  `business` varchar(50) DEFAULT NULL,
+  `business_city` varchar(50) DEFAULT NULL,
+  `business_country_code` varchar(50) DEFAULT NULL,
+  `business_name` varchar(50) DEFAULT NULL,
+  `business_state` varchar(50) DEFAULT NULL,
+  `business_street` varchar(50) DEFAULT NULL,
+  `business_street2` varchar(50) DEFAULT NULL,
+  `business_zip` varchar(50) DEFAULT NULL,
+  `capabilities` varchar(50) DEFAULT NULL,
+  `created_time` varchar(50) DEFAULT NULL,
+  `currency` varchar(50) DEFAULT NULL,
+  `disable_reason` varchar(50) DEFAULT NULL,
+  `end_advertiser` varchar(50) DEFAULT NULL,
+  `end_advertiser_name` varchar(50) DEFAULT NULL,
+  `failed_delivery_checks` varchar(50) DEFAULT NULL,
+  `funding_source` varchar(50) DEFAULT NULL,
+  `funding_source_details` varchar(50) DEFAULT NULL,
+  `has_migrated_permissions` varchar(50) DEFAULT NULL,
+  `id` varchar(50) NOT NULL DEFAULT '',
+  `io_number` varchar(50) DEFAULT NULL,
+  `is_notifications_enabled` varchar(50) DEFAULT NULL,
+  `is_personal` varchar(50) DEFAULT NULL,
+  `is_prepay_account` varchar(50) DEFAULT NULL,
+  `is_tax_id_required` varchar(50) DEFAULT NULL,
+  `line_numbers` varchar(50) DEFAULT NULL,
+  `media_agency` varchar(50) DEFAULT NULL,
+  `min_campaign_group_spend_cap` varchar(50) DEFAULT NULL,
+  `min_daily_budget` varchar(50) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `offsite_pixels_tos_accepted` varchar(50) DEFAULT NULL,
+  `owner` varchar(50) DEFAULT NULL,
+  `partner` varchar(50) DEFAULT NULL,
+  `rf_spec` varchar(50) DEFAULT NULL,
+  `salesforce_invoice_group_id` varchar(50) DEFAULT NULL,
+  `spend_cap` varchar(50) DEFAULT NULL,
+  `tax_id` varchar(50) DEFAULT NULL,
+  `tax_id_status` varchar(50) DEFAULT NULL,
+  `tax_id_type` varchar(50) DEFAULT NULL,
+  `timezone_id` varchar(50) DEFAULT NULL,
+  `timezone_name` varchar(50) DEFAULT NULL,
+  `timezone_offset_hours_utc` varchar(50) DEFAULT NULL,
+  `tos_accepted` varchar(50) DEFAULT NULL,
+  `user_role` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `account_id` (`account_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Table structure for table `accounts_insights` */
+
+DROP TABLE IF EXISTS `accounts_insights`;
+
+CREATE TABLE `accounts_insights` (
+  `id` varchar(32) NOT NULL COMMENT 'ad_id + date',
+  `type` tinyint(1) DEFAULT '0',
+  `account_id` varchar(50) DEFAULT NULL,
+  `account_name` varchar(50) DEFAULT NULL,
+  `action_values` varchar(50) DEFAULT NULL,
+  `actions` varchar(50) DEFAULT NULL,
+  `app_store_clicks` varchar(50) DEFAULT NULL,
+  `buying_type` varchar(50) DEFAULT NULL,
+  `call_to_action_clicks` varchar(50) DEFAULT NULL,
+  `campaign_id` varchar(50) DEFAULT NULL,
+  `campaign_name` varchar(50) DEFAULT NULL,
+  `clicks` varchar(50) DEFAULT NULL,
+  `cost_per_action_type` varchar(50) DEFAULT NULL,
+  `cost_per_estimated_ad_recallers` varchar(50) DEFAULT NULL,
+  `cost_per_inline_link_click` varchar(50) DEFAULT NULL,
+  `cost_per_inline_post_engagement` varchar(50) DEFAULT NULL,
+  `cost_per_total_action` varchar(50) DEFAULT NULL,
+  `cost_per_unique_action_type` varchar(50) DEFAULT NULL,
+  `cost_per_unique_click` varchar(50) DEFAULT NULL,
+  `cost_per_unique_inline_link_click` varchar(50) DEFAULT NULL,
+  `cpc` varchar(50) DEFAULT NULL,
+  `cpm` varchar(50) DEFAULT NULL,
+  `cpp` varchar(50) DEFAULT NULL,
+  `ctr` varchar(50) DEFAULT NULL,
+  `date_start` varchar(50) DEFAULT NULL,
+  `date_stop` varchar(50) DEFAULT NULL,
+  `deeplink_clicks` varchar(50) DEFAULT NULL,
+  `estimated_ad_recall_rate` varchar(50) DEFAULT NULL,
+  `frequency` varchar(50) DEFAULT NULL,
+  `impressions` varchar(50) DEFAULT NULL,
+  `inline_link_click_ctr` varchar(50) DEFAULT NULL,
+  `inline_link_clicks` varchar(50) DEFAULT NULL,
+  `inline_post_engagement` varchar(50) DEFAULT NULL,
+  `objective` varchar(50) DEFAULT NULL,
+  `reach` varchar(50) DEFAULT NULL,
+  `social_clicks` varchar(50) DEFAULT NULL,
+  `social_impressions` varchar(50) DEFAULT NULL,
+  `social_reach` varchar(50) DEFAULT NULL,
+  `social_spend` varchar(50) DEFAULT NULL,
+  `spend` varchar(50) DEFAULT NULL,
+  `total_action_value` varchar(50) DEFAULT NULL,
+  `total_actions` varchar(50) DEFAULT NULL,
+  `total_unique_actions` varchar(50) DEFAULT NULL,
+  `unique_actions` varchar(50) DEFAULT NULL,
+  `unique_clicks` varchar(50) DEFAULT NULL,
+  `unique_ctr` varchar(50) DEFAULT NULL,
+  `unique_inline_link_click_ctr` varchar(50) DEFAULT NULL,
+  `unique_inline_link_clicks` varchar(50) DEFAULT NULL,
+  `unique_link_clicks_ctr` varchar(50) DEFAULT NULL,
+  `unique_social_clicks` varchar(50) DEFAULT NULL,
+  `website_clicks` varchar(50) DEFAULT NULL,
+  `website_ctr` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `account_id` (`account_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Table structure for table `accounts_insights_action_types` */
+
+DROP TABLE IF EXISTS `accounts_insights_action_types`;
+
+CREATE TABLE `accounts_insights_action_types` (
+  `accounts_insights_id` char(32) NOT NULL,
+  `insight_key` varchar(50) NOT NULL,
+  `action_type` varchar(50) DEFAULT NULL,
+  `value` varchar(50) DEFAULT NULL,
+  `1d_click` varchar(50) DEFAULT NULL,
+  `1d_view` varchar(50) DEFAULT NULL,
+  KEY `account_insights_id` (`accounts_insights_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `ads` */
 
@@ -48,7 +181,8 @@ CREATE TABLE `ads` (
   `execution_options` varchar(50) DEFAULT NULL,
   `redownload` varchar(50) DEFAULT NULL,
   `filename` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `account_id` (`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `ads_insights` */
@@ -183,7 +317,8 @@ CREATE TABLE `adsets` (
   `start_time` varchar(50) DEFAULT NULL,
   `status` varchar(50) DEFAULT NULL,
   `updated_time` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `account_id` (`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `adsets_insights` */
@@ -318,7 +453,8 @@ CREATE TABLE `campaigns` (
   `updated_time` varchar(50) DEFAULT NULL,
   `execution_options` varchar(50) DEFAULT NULL,
   `promoted_object` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `account_id` (`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `campaigns_insights` */
@@ -447,7 +583,7 @@ CREATE TABLE `rules_exec_log` (
   `target_data` text,
   `rule_exec` varchar(2000) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `rules_link` */
 
@@ -470,6 +606,7 @@ DROP TABLE IF EXISTS `x_cron`;
 CREATE TABLE `x_cron` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `path` varchar(100) DEFAULT NULL,
+  `ac_id` varchar(50) DEFAULT NULL,
   `param` varchar(255) DEFAULT NULL,
   `method` varchar(10) DEFAULT 'GET',
   `header` varchar(255) DEFAULT NULL,
@@ -482,8 +619,9 @@ CREATE TABLE `x_cron` (
   `hash` char(32) DEFAULT NULL,
   `priority` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `hash` (`hash`)
-) ENGINE=InnoDB AUTO_INCREMENT=1727 DEFAULT CHARSET=utf8mb4;
+  KEY `hash` (`hash`),
+  KEY `ac_id` (`ac_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=123012 DEFAULT CHARSET=utf8mb4;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
