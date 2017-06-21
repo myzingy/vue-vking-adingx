@@ -10,6 +10,10 @@
 			<template scope="props">
 				<el-table :data="props.row.List" border style="width: 100%">
 					<el-table-column :formatter="formatChildDate" label="日期" width="150"></el-table-column>
+					<template v-if=" rulesLog == 'rulesLog' ">
+						<el-table-column label="ROI" width="40" :formatter="formatROI"></el-table-column>
+						<el-table-column label="ROAS" width="60" :formatter="formatROAS"></el-table-column>
+					</template>
 					<el-table-column prop="WebsiteAddstoCart" label="Website Adds to Cart" width="80"></el-table-column>
 					<el-table-column prop="CostperWebsiteAddtoCart" label="Cost per Website Add to Cart" width="80"></el-table-column>
 					<el-table-column :formatter="formatAmountSpent" prop="AmountSpent" label="Amount Spent" width="80"></el-table-column>
@@ -44,8 +48,13 @@
 				</template>
 			</template>
 		</el-table-column>
-		<el-table-column prop="Delivery" label="Delivery" width="60"></el-table-column>
-
+		<template v-if=" rulesLog == 'rulesLog' ">
+			<el-table-column label="ROI" width="40" :formatter="formatROI"></el-table-column>
+			<el-table-column label="ROAS" width="60" :formatter="formatROAS"></el-table-column>
+		</template>
+		<template v-else>
+			<el-table-column prop="Delivery" label="Delivery" width="60"></el-table-column>
+		</template>
 		<el-table-column prop="WebsiteAddstoCart" label="Website Adds to Cart" width="80"></el-table-column>
 		<el-table-column prop="CostperWebsiteAddtoCart" label="Cost per Website Add to Cart" width="80"></el-table-column>
 		<el-table-column :formatter="formatAmountSpent" prop="AmountSpent" label="Amount Spent" width="140"
@@ -99,8 +108,26 @@
                 
 			}
 		},
-        props: ['adsData','dataType'],
+        props: ['adsData','dataType','rulesLog'],
         methods:{
+            roias(type,row){
+            	var $1=parseFloat(row.WebsitePurchasesConversionValue.replace(/[\$,]+/,''));
+                var $2=row.AmountSpent;
+                if(type=='ROI'){
+					var n=$1/($2==0?1:$2);
+                    return n.toFixed(1);
+				}else{
+                    if($1==0) return 'X%';
+                    var n=$2/$1;
+				}
+                return (n.toFixed(4)*100)+'%';
+			},
+            formatROI(row){
+                return this.roias('ROI',row);
+			},
+            formatROAS(row){
+                return this.roias('ROAS',row);
+			},
             formatAmountSpent:function(row, column){
                 return '$'+row.AmountSpent;
 			},

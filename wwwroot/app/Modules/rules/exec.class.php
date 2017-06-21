@@ -168,11 +168,13 @@ class exec
     }
     function  getROAS($date=0){ // 花费/收入
         $date=$date>-1?$date:$this->date;
-        return ($this->getAmountSpent($date)/$this->getPurchasesValue($date))*100;
+        $PurchasesValue=$this->getPurchasesValue($date)+0;
+        if($PurchasesValue==0) return 0;
+        return ($this->getAmountSpent($date)/$PurchasesValue)*100;
     }
     function  getROI($date=0){ // 收入/花费
         $date=$date>-1?$date:$this->date;
-        return ($this->getPurchasesValue($date)/$this->getAmountSpent($date))*100;
+        return ($this->getPurchasesValue($date)/$this->getAmountSpent($date));
     }
     function  getAddCart($date=0){ //加购物车数量
         $date=$date>-1?$date:$this->date;
