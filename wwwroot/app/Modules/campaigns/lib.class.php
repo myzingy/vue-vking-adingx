@@ -121,7 +121,7 @@ class lib{
             $this->model->addAll($campaigns_data,null,true);
         }
         if($campaigns->getNext() && count($campaigns_data)==25){
-            asyn('apido/asyn.flushCampaigns',$asyn_param,null,null,90);
+            asyn('apido/asyn.flushCampaigns',$asyn_param,null,null,2);
         }
         return $campaigns_data;
     }

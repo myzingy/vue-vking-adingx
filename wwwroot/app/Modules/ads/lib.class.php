@@ -101,7 +101,7 @@ class lib{
             $this->model->addAll($campaigns_data,null,true);
         }
         if($adsets->getNext() && count($campaigns_data)==25){
-            asyn('apido/asyn.flushAds',$asyn_param,null,null,90);
+            asyn('apido/asyn.flushAds',$asyn_param,null,null,2);
         }
         return $campaigns_data;
     }
