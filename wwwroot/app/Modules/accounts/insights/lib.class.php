@@ -216,7 +216,6 @@ END;
         return $breakdowns_data?$breakdowns_data:$campaigns_data;
     }
     function postERP($url,$data){
-	    debug($url,$data);
 	    asyn_implement($url,$data,'POST');
     }
 }

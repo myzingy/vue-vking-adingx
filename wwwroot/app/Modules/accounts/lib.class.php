@@ -107,25 +107,6 @@ END;
         }
         $this->model->add($campaigns_data,null,true);
         asyn('apido/asyn.flushAccountsInsights',array('ac_id'=>$ac_id));
-        //异步提交数据
-        //测试环境
-        asyn_implement('http://54.199.246.177/api/api/facebook-fee',array(
-            'date'=> date("Y-m-d",NOW_TIME),
-            'account_id'=>$campaigns_data['account_id'],
-            'account_name'=>$campaigns_data['name'],
-            'pc_fee'=>0,
-            'mb_fee'=>0,
-            'fee'=>$campaigns_data['amount_spent'],
-        ),'POST');
-        //正式环境
-        asyn_implement('http://52.199.219.172/api/api/facebook-fee',array(
-            'date'=> date("Y-m-d",NOW_TIME),
-            'account_id'=>$campaigns_data['account_id'],
-            'account_name'=>$campaigns_data['name'],
-            'pc_fee'=>0,
-            'mb_fee'=>0,
-            'fee'=>$campaigns_data['amount_spent'],
-        ),'POST');
         return $campaigns_data;
     }
     function getAccountData($account_id=""){
