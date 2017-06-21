@@ -12,12 +12,14 @@ use FacebookAds\Cursor;
 use FacebookAds\Object\Ad;
 use FacebookAds\Object\Values\ArchivableCrudObjectEffectiveStatuses;
 class lib{
+    const ERP_TEST='http://54.199.246.177/api/api/facebook-fee';  //测试环境
+    const ERP_LINE='http://52.199.219.172/api/api/facebook-fee';  //正式环境
     function __construct($id="") {
     	$this->model=new model();
     }
 	function flushAccountsInsights(){
         $ad_timespace=I('request.ad_timespace','today');
-
+        $breakdowns=I('request.breakdowns','');
         $ac_id=I('request.ac_id');
         if(!$ac_id) return;
         $ac=FBC($ac_id);
@@ -115,6 +117,7 @@ END;
                 array(
                     'time_range'=>array('since'=>$today,'until'=>$today),
                     'action_attribution_windows'=>['1d_click','1d_view'],
+                    'breakdowns'=> $breakdowns,
                 )
             );
         }else{
@@ -123,8 +126,13 @@ END;
                 array(
                     'time_range'=>array('since'=>$$ad_timespace,'until'=>$yestoday),
                     'action_attribution_windows'=>['1d_click','1d_view'],
+                    'breakdowns'=> $breakdowns,
                 )
             );
+        }
+        $breakdowns_data=[];
+        if($breakdowns){
+            array_push($fields,'device_platform');
         }
         while ($adsets->valid()) {
             $campaigns_data['accounts_insights_action_types']=array();
@@ -161,25 +169,53 @@ END;
                     $campaigns_data['id']=md5($campaigns_data['account_id'].$campaigns_data['date_start']);
                     $campaigns_data['type']=model::INSIGHT_TYPE_YESTODAY;
             }
-            M('accounts_insights')->where("id='{$campaigns_data['id']}'")->delete();
-            M('accounts_insights_action_types')->where("accounts_insights_id='{$campaigns_data['id']}'")->delete();
             $adsets->next();
+            if($breakdowns){
+                array_push($breakdowns_data,array(
+                    'accounts_insights_id'=>$campaigns_data['id'],
+                    'insight_key'=>'breakdowns.'.$breakdowns,
+                    'action_type'=>$campaigns_data['device_platform'].'.spend',
+                    'value'=>  $campaigns_data['spend'],
+                    '1d_click'=>  $campaigns_data['spend'],
+                    '1d_view'=>  $campaigns_data['spend'],
+                ));
+                if($campaigns_data['device_platform']=='desktop'){
+                    $pc_fee=$campaigns_data['spend']*100;
+                }
+                if($campaigns_data['device_platform']=='mobile'){
+                    $mb_fee=$campaigns_data['spend']*100;
+                }
+            }
         }
         //return $campaigns_data;
-        if ($campaigns_data) {
-            $this->model->relation(true)->add($campaigns_data);
-
+        if($breakdowns){
+            M('accounts_insights_action_types')->addAll($breakdowns_data);
+            $erpData=array(
+                'date'=> $campaigns_data['date_stop'],
+                'account_id'=>$campaigns_data['account_id'],
+                'account_name'=>$campaigns_data['account_name'],
+                'pc_fee'=>$pc_fee+0,
+                'mb_fee'=>$mb_fee+0,
+                'fee'=>$pc_fee+$mb_fee,
+            );
+            $this->postERP(self::ERP_TEST,$erpData);
+            $this->postERP(self::ERP_LINE,$erpData);
+        }else{
+            if ($campaigns_data) {
+                M('accounts_insights')->where("id='{$campaigns_data['id']}'")->delete();
+                M('accounts_insights_action_types')->where("accounts_insights_id='{$campaigns_data['id']}'")->delete();
+                $this->model->relation(true)->add($campaigns_data);
+            }
+            asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>$ad_timespace,'ac_id'=>$ac_id,'breakdowns'=>'device_platform'));
         }
-        if($ad_timespace=='today') {
+        if($ad_timespace=='today' && !$breakdowns) {
             //其它Insights
             asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>'yestoday','ac_id'=>$ac_id),null,
                 getDayTime("00:01:00"),0);
-//            asyn('apido/asyn.flushAccountsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_7day','ac_id'=>$ac_id),null,
-//                getDayTime("03:00:00"));
-//            asyn('apido/asyn.flushAccountsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_14day','ac_id'=>$ac_id),null,
-//                getDayTime("03:00:00"));
-
         }
-        return $campaigns_data;
+        return $breakdowns_data?$breakdowns_data:$campaigns_data;
+    }
+    function postERP($url,$data){
+	    asyn_implement($url,$data,'POST');
     }
 }

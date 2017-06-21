@@ -42,6 +42,8 @@ function getDayClick($type,$id){
         'cost_per_action_type::offsite_conversion.fb_pixel_add_to_cart'=>'CostperWebsiteAddtoCart',
         'action_values::offsite_conversion.fb_pixel_purchase'=>'WebsitePurchasesConversionValue',
         'cost_per_action_type::link_click'=>'CPC',
+        'breakdowns.device_platform::desktop.spend'=>'DesktopSpend',
+        'breakdowns.device_platform::mobile.spend'=>'MobileSpend',
     );
     $data=M($type.'s_insights_action_types')->where("{$type}s_insights_id='$id'")->select();
     $dayData=array();
@@ -89,7 +91,9 @@ function formatInsightsData($data,$type='campaign'){
                     #'Budget'=>  '$'.number_format($r['daily_budget']/100,2),
                     'Date' => array($r['date_start']),
                     'List' => array() ,
-                    #'RuleRuntime'=>$r['rule_runtime']
+                    #'RuleRuntime'=>$r['rule_runtime'],
+                    'DesktopSpend' => $day_click['DesktopSpend']+0,
+                    'MobileSpend' => $day_click['MobileSpend']+0,
                 );
                 if($i==0){
                     $that=array_merge($that,$dr,array(
