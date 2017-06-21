@@ -115,7 +115,7 @@ class exec
                  if($newBudget!=$oldBudget){
                      $spend_put=($newBudget-$oldBudget);
                      if($spend_put<0){
-                         $spend_cut=$spend_put;
+                         $spend_cut=abs($spend_put);
                          $spend_put=0;
                      }
                      $this->implement_str.="==>[oldBudget:$oldBudget=>newBudget:$newBudget]";
