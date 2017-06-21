@@ -15,6 +15,7 @@ class lib{
     const CRON_RENEW_TIMEOUT=3600;
     const CRON_RENEW_TIMEOUT_7Y14=21600;
     const CRON_ERROR_ACID='CRON_ERROR_ACID';
+    const CRON_CLEAR_FLAG='CRON_CLEAR_FLAG';
 
     const CRON_TIMEOUT=86400;//不再使用retry进行判断，每次执行错误，对cron降低优先级（priority）
 
@@ -22,6 +23,19 @@ class lib{
 
     }
     function demon(){
+        $time_s=getDayTime("07:59:00",0);
+        $time_e=getDayTime("08:00:00",0);
+        if(NOW_TIME > $time_s && NOW_TIME < $time_e) {
+            $ymd=date("Y-m-d",NOW_TIME);
+            $CRON_CLEAR_FLAG=S('CRON_CLEAR_FLAG');
+            if($ymd==$CRON_CLEAR_FLAG) return;
+            M('x_cron')->where('`status`=2')->delete();
+            $count=M('x_cron')->count();
+            if($count<1){
+                M()->query('TRUNCATE TABLE `x_cron`');
+            }
+            S('CRON_CLEAR_FLAG',$ymd);
+        }
         $this->implement();
     }
     function getErrorACID(){

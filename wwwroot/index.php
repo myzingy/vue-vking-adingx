@@ -18,7 +18,7 @@ ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
 
 // 开启调试模式 建议开发阶段开启 部署阶段注释或者设为false
-define('APP_DEBUG',True);
+define('APP_DEBUG',false);
 
 
 // 绑定Home模块
