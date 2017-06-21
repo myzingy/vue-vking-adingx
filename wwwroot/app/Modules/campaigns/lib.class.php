@@ -136,7 +136,7 @@ class lib{
         if($keyword_type=='campaign'){
             $keyword=trim(I('request.keyword'));
             if($keyword){
-                $where.=" and AI.`{$keyword_type}_name` like '%{$keyword}%' ";
+                $where.=" and ( AI.`{$keyword_type}_id` like '%{$keyword}%' OR AI.`{$keyword_type}_name` like '%{$keyword}%' ) ";
             }
         }
         $data=$this->model

@@ -26,9 +26,9 @@
 		<el-form :inline="true" :model="formSearch" class="demo-form-inline">
 			<el-form-item label="类型">
 				<el-select v-model="formSearch.keyword_type" placeholder="请选择">
-					<el-option label="系列名称" value="campaign"></el-option>
-					<el-option label="组名称" value="adset"></el-option>
-					<el-option label="广告名称" value="ad"></el-option>
+					<el-option label="系列 ID/名称" value="campaign"></el-option>
+					<el-option label="组 ID/名称" value="adset"></el-option>
+					<el-option label="广告 ID/名称" value="ad"></el-option>
 				</el-select>
 			</el-form-item>
 			<el-form-item>

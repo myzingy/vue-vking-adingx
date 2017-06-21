@@ -3,7 +3,7 @@
 </style>
 <template>
 	<div>
-	<el-table :data="adsData" border style="width: 100%" max-height="750" :default-sort =
+	<el-table :data="adsData" border style="width: 100%" max-height="700" :default-sort =
 			"{prop: 'AmountSpent', order: 'descending'}" :summary-method="getSummaries"
 			  show-summary>
 		<el-table-column type="expand" fixed>

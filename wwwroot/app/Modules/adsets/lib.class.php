@@ -131,7 +131,8 @@ class lib{
         if($keyword_type=='campaign' || $keyword_type=='adset'){
             $keyword=trim(I('request.keyword'));
             if($keyword){
-                $where.=" and AI.`{$keyword_type}_name` like '%{$keyword}%' ";
+                //$where.=" and AI.`{$keyword_type}_name` like '%{$keyword}%' ";
+                $where.=" and ( AI.`{$keyword_type}_id` like '%{$keyword}%' OR AI.`{$keyword_type}_name` like '%{$keyword}%' ) ";
             }
         }
         if($checked_campaigns=I('request.checked_campaigns')){
