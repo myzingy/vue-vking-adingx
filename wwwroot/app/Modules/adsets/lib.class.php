@@ -162,7 +162,7 @@ class lib{
         $api = Api::instance();
 
         $adset_id=I('request.adset_id');
-        $budget=I('request.budget')*100;
+        $budget=(int)(I('request.budget')*100);
         $adset=new AdSet($adset_id);
         $adset->save(array(
             'daily_budget'=>$budget
