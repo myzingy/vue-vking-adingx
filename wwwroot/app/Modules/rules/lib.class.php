@@ -58,7 +58,7 @@ class lib
         $ac_id=I('request.ac_id');
         $where=" 1=1 ";
         if($ac_id){
-            $where.=" AND target_data like '%\"AccountId\":\"$ac_id\"%' ";
+            $where.=" AND account_id='$ac_id' ";
         }
         $data=M('rules_exec_log')->where($where)->order('id desc')->limit(100)->select();
         foreach ($data as &$r){
