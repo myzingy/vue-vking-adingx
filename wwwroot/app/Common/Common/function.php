@@ -74,6 +74,7 @@ function formatInsightsData($data,$type='campaign'){
                     "AdId"=>$r['ad_id'],
                     "AdName"=>$r['ad_name'],
                     "AccountId"=>$r['account_id'],
+                    "AccountName"=>$r['account_name'],
 
                     #"Delivery" => $r['effective_status'],
                     'WebsiteAddstoCart'=>(int)$day_click['WebsiteAddstoCart'],

@@ -79,6 +79,8 @@ class exec
     function implement($field,$do,$type,$number){ //执行
         if(strtoupper($this->type)=='AD' && 'Budget'==$field) return;
         $this->implement_str="[$field,$do,$type,$number]";
+        $spend_cut=0;
+        $spend_put=0;
         if('Budget'==$field){
             $is_bai=false;
             if(strpos($number,'%')!==false){
@@ -111,6 +113,11 @@ class exec
                      $newBudget=$newBudget<$this->BudgetLimitMIN?$this->BudgetLimitMIN:$newBudget;
                  }
                  if($newBudget!=$oldBudget){
+                     $spend_put=($newBudget-$oldBudget);
+                     if($spend_put<0){
+                         $spend_cut=$spend_put;
+                         $spend_put=0;
+                     }
                      $this->implement_str.="==>[oldBudget:$oldBudget=>newBudget:$newBudget]";
                      asyn('apido/asyn.setBudget',array(
                          'ac_id'=>$this->ad->AccountId,
@@ -130,6 +137,10 @@ class exec
             'target_id'=>$this->ad->Id,
             'target_data'=>json_encode($this->ad),
             'rule_exec'=>$this->expression_str."==>".$this->implement_str,
+            'account_id'=>$this->ad->AccountId,
+            'account_name'=>$this->ad->AccountName,
+            'spend_cut'=>$spend_cut,
+            'spend_put'=>$spend_put,
         ));
 
     }

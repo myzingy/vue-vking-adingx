@@ -120,7 +120,7 @@
                     if($1==0) return 'X%';
                     var n=$2/$1;
 				}
-                return (n.toFixed(4)*100)+'%';
+                return (n*100).toFixed(2)+'%';
 			},
             formatROI(row){
                 return this.roias('ROI',row);
