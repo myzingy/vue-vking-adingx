@@ -30,15 +30,15 @@ class lib{
             asyn('apido/asyn.flushCampaigns',array(
                 'ac_id'=>$ac['account_id'],
                 'active'=>'active'
-            ),null,null,90);
+            ),null,null,2);
             asyn('apido/asyn.flushAdsets',array(
                 'ac_id'=>$ac['account_id'],
                 'active'=>'active'
-            ),null,null,90);
+            ),null,null,2);
             asyn('apido/asyn.flushAds',array(
                 'ac_id'=>$ac['account_id'],
                 'active'=>'active'
-            ),null,null,90);
+            ),null,null,2);
             asyn('apido/asyn.flushAccounts',array(
                 'ac_id'=>$ac['account_id'],
                 'active'=>'active'
