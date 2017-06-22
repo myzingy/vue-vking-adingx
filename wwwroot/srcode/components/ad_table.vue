@@ -111,7 +111,7 @@
         props: ['adsData','dataType','rulesLog'],
         methods:{
             roias(type,row){
-            	var $1=parseFloat(row.WebsitePurchasesConversionValue.replace(/[\$,]+/,''));
+            	var $1=parseFloat(row.WebsitePurchasesConversionValue.replace(/[\$,]+/g,''));
                 var $2=row.AmountSpent;
                 if(type=='ROI'){
 					var n=$1/($2==0?1:$2);
