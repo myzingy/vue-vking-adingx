@@ -216,6 +216,7 @@ END;
         return $breakdowns_data?$breakdowns_data:$campaigns_data;
     }
     function postERP($url,$data){
+        if(__APP__POS=='CC__DEV') return;
 	    asyn_implement($url,$data,'POST');
     }
 }
