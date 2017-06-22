@@ -157,7 +157,7 @@
 					}
 
 					const values = data.map(item =>
-						Number(item[column.property]?item[column.property].toString().replace(/[\$,]+/,''):item[column.property]));
+						Number(item[column.property]?item[column.property].toString().replace(/[\$,]+/g,''):item[column.property]));
 					//console.log('values',values);
 
 
