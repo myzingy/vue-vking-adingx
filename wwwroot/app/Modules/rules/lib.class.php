@@ -29,7 +29,7 @@ class lib
         if ($this->model->id) {//update
             I('request.code')?$this->model->code=I('request.code','','trim'):"";
             I('request.xml')?$this->model->xml=I('request.xml','','trim'):"";
-            I('request.name')?$this->model->name=I('request.name'):"";
+            I('request.name')?$this->model->name=I('request.name','','trim'):"";
             (I('request.type')!="")?$this->model->type=I('request.type'):"";
             I('request.status')?$this->model->status=I('request.status'):"";
             $this->model->save();
@@ -38,7 +38,7 @@ class lib
             if(!I('request.code')) return "规则内容必须填写!";
             $this->model->code=I('request.code','','trim');
             $this->model->xml=I('request.xml','','trim');
-            $this->model->name=I('request.name');
+            $this->model->name=I('request.name','','trim');
             if(I('request.type')!=""){
                 $this->model->type=I('request.type');
             }else{
