@@ -32,7 +32,7 @@
 					</el-option>
 				</el-select>
 			</router-link>
-			<router-link slot="right" to="/signout">退出</router-link>
+			<router-link slot="right" to="/signout">{{user.name}} 退出</router-link>
 		</v-header>
 		<div>
 			<el-row :style="{ height:height +'px' }" v-if="ac_idx">
