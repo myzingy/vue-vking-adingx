@@ -2,6 +2,8 @@
 namespace Home\Controller;
 set_time_limit(0);
 use FacebookAds\Object\AdSet;
+use Facebook\Facebook;
+use FacebookAds\Object\Fields\AdAccountFields;
 use Think\Controller;
 use Facebook\FacebookBatchRequest;
 use FacebookAds\Api;
@@ -28,7 +30,25 @@ class TestController extends Controller {
 	}
     function index()
     {
-	    //die("<h2>facebook ads server!</h2>");
+        $user=(object)[];
+        $user->id='1906750516239673';
+        $user->token='EAABeuMl0aOwBAEf0xSi6TkO89hHsD0IMTZC0xl2ZApStoZBkSh2pYsIU5p5mUTocn8gEE6nGVOzJcrxt8L316ZAFZBqiG6rW8AO0ZASxm8OHsZCjxLQgl10NWT9HGqTZA62qWLyN1ZCGpIzZB8zEkPGkQZAHZBWcQR1fooSJgNoB6DxFKPS6hOrUkIog';
+        $ac=FBC();
+        $ac=FBC($ac[0]['account_id']);
+        vendor("vendor.autoload");
+//        $fba=Api::init($ac['app_id'],$ac['app_secret'],$user->token);
+//        $api = Api::instance();
+
+        $fb=new Facebook(array(
+            'app_id'=>$ac['app_id'],
+            'app_secret'=>$ac['app_secret']
+        ));
+        $res=$fb->get($user->id.'/adaccounts?fields=account_id,name',$user->token);
+        $data=$res->getDecodedBody();
+        dump($res);
+
+        return;
+        //die("<h2>facebook ads server!</h2>");
         vendor("vendor.autoload");
         $fb_conf=FBC('769185746596586');
         $fba=Api::init($fb_conf['app_id'],$fb_conf['app_secret'],$fb_conf['access_tokens']);

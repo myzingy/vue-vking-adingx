@@ -3,6 +3,8 @@
 define('__APP__POS',$_SERVER['__APP__POS']?$_SERVER['__APP__POS']:'CC__TEST');
 $conf['db']=include(CONF_PATH.'db.'.strtolower(__APP__POS).'.php');
 $conf['fb']=include(CONF_PATH.'facebookads.php');
+$conf['fbapp']=include(CONF_PATH.'facebookapp.php');
+$conf['group_rules']=include(CONF_PATH.'group_rules.php');
 //'配置项'=>'配置值'
 $conf['think']=array(
 	"URL_MODEL"=>2,

@@ -26,7 +26,7 @@
 		<v-header title="登录">
 			<router-link slot="left" to="/">返回</router-link>
 		</v-header>
-		<div class="login">
+		<div class="login" v-show="!btn">
 			<fb-signin-button
 					:params="fbSignInParams"
 					@success="onSignInSuccess"
@@ -70,35 +70,47 @@
     import { USER_SIGNIN } from '../../store/user.js'
     import FBSignInButton from 'vue-facebook-signin-button'
     Vue.use(FBSignInButton)
+	import vk from '../../vk.js'
+	import uri from '../../uri.js'
     export default {
         data() {
 			return {
 				btn: false, //true 已经提交过， false没有提交过
 				form: {
 					id: '',
-					name: ''
+					name: '',
+					email:'',
+					token:'',
 				},
                 fbSignInParams: {
-                    scope: 'email,ads_management,ads_read',
+                    scope: 'email,ads_management,ads_read,manage_pages,read_insights',
                     return_scopes: true
                 }
 			}
 		},
 		methods: {
 			...mapActions([USER_SIGNIN]),
+			then(json,code){
+			    switch (code){
+					case uri.login.code:
+                        this.USER_SIGNIN(this.form)
+                        this.$router.replace({ path: '/home' })
+					break;
+				}
+			},
             submit() {
 				this.btn = true
 				if(!this.form.id || !this.form.name) return
-				this.USER_SIGNIN(this.form)
-				this.$router.replace({ path: '/home' })
+				vk.http(uri.login,this.form,this.then);
 			},
             onSignInSuccess (response) {
                 console.log('login', response)
+				var token=response.authResponse.accessToken;
                 FB.api('/me?fields=id,name,email', dude => {
                     console.log(`Good to see you, ${dude.name}.`,dude)
                     this.form=dude;
+                    this.form.token= token;
                     this.submit();
-
                 })
 
             },

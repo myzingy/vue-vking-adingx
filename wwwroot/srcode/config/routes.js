@@ -39,6 +39,14 @@ export default [
                 component: resolve => require(['../pages/home/index.vue?rulesLog'], resolve)
             },
             {
+                path: 'accounts*', //规则列表
+                component: resolve => require(['../pages/home/index.vue?accounts'], resolve)
+            },
+            {
+                path: 'users*', //规则列表
+                component: resolve => require(['../pages/home/index.vue?users'], resolve)
+            },
+            {
                 path: '*', //其他页面，强制跳转到登录页面
                 redirect: '/login'
             },

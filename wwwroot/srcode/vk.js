@@ -30,8 +30,16 @@ let vk={
     http:function(uri,data,callback){
         var url=this.cgi(uri);
         var that=this;
-        var ac_id = store.state.data.ac_id;
-        data.ac_id=ac_id;
+        try{
+            var ac_id = store.state.data.ac_id;
+            data.ac_id=ac_id;
+        }catch(e){}
+        if(!data.token){
+            try{
+                var token = store.state.user.token;
+                data.token=token;
+            }catch(e){}
+        }
         console.log('postdata',data);
         Vue.http.post(url,data,{emulateJSON: true}).then(
             (response) => {

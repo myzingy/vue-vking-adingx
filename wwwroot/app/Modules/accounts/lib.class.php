@@ -4,6 +4,7 @@
  * 文章
  */
 namespace Modules\accounts;
+use Facebook\Facebook;
 use FacebookAds\Api;
 use FacebookAds\Object\AdAccount;
 use FacebookAds\Cursor;
@@ -127,5 +128,48 @@ END;
             ->select();
         $formatData=formatInsightsData($data,'campaign');
         return array('data'=>$formatData);
+    }
+    function getFBAccounts($user){
+        vendor("vendor.autoload");
+        $fbapp=C('fbapp');
+        $fb=new Facebook(array(
+            'app_id'=>$fbapp['app_id'],
+            'app_secret'=>$fbapp['app_secret']
+        ));
+        $res=$fb->get($user->id.'/adaccounts?fields=account_id,name',$user->token);
+        return $res->getDecodedBody();
+    }
+    function addAccounts($user){
+        $checked=I('request.checked');
+        $data=[];
+        //$account_ids=[];
+        foreach ($checked as $r){
+            $data[]=array(
+                'account_id'=>$r['account_id'],
+                'account_name'=>$r['name'],
+                'user_id'=>$user->id,
+            );
+            //$account_ids[]=$r['account_id'];
+        }
+        if($data){
+//            M('user_accounts')->where(array(
+//                'user_id'=>$user->id,
+//                'account_id'=>array('in',$account_ids),
+//            ))->delete();
+            M('user_accounts')->addAll($data,null,true);
+        }
+    }
+    function delAccounts($user){
+        $account_id=I('request.account_id');
+        if(!$account_id) return;
+        M('user_accounts')->where(array(
+            'account_id'=>$account_id
+        ))->delete();
+    }
+    function getAccounts($user){
+        $user_id=$user->id;
+        $mod=M('user_accounts');
+        $data=$mod->where("user_id='{$user_id}' or account_id in (select account_id from user_accounts_links where user_id='{$user_id}')")->select();
+        return ['data'=>$data];
     }
 }

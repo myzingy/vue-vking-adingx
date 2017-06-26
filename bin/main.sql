@@ -1,6 +1,6 @@
 /*
 SQLyog Ultimate v11.27 (32 bit)
-MySQL - 5.5.47-MariaDB-log : Database - facebook_ads
+MySQL - 5.6.20 : Database - facebook_ads
 *********************************************************************
 */
 
@@ -553,6 +553,29 @@ CREATE TABLE `campaigns_insights_action_types` (
   KEY `campaign_id` (`campaigns_insights_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+/*Table structure for table `group` */
+
+DROP TABLE IF EXISTS `group`;
+
+CREATE TABLE `group` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Table structure for table `group_rules` */
+
+DROP TABLE IF EXISTS `group_rules`;
+
+CREATE TABLE `group_rules` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) DEFAULT NULL,
+  `fid` int(11) DEFAULT '0',
+  `name` varchar(20) DEFAULT NULL,
+  `path` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 /*Table structure for table `rules` */
 
 DROP TABLE IF EXISTS `rules`;
@@ -561,13 +584,13 @@ CREATE TABLE `rules` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `code` text,
-  `xml` text,
+  `xml` longtext,
   `stime` int(10) DEFAULT NULL,
   `etime` int(10) DEFAULT NULL,
   `status` tinyint(1) DEFAULT '0',
   `type` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `rules_exec_log` */
 
@@ -576,14 +599,18 @@ DROP TABLE IF EXISTS `rules_exec_log`;
 CREATE TABLE `rules_exec_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `time` int(10) DEFAULT NULL,
+  `account_id` varchar(50) DEFAULT NULL,
+  `account_name` varchar(50) DEFAULT NULL,
   `rule_id` int(11) DEFAULT NULL,
   `rule_name` varchar(255) DEFAULT NULL,
   `target` varchar(20) DEFAULT NULL,
   `target_id` varchar(50) DEFAULT NULL,
   `target_data` text,
   `rule_exec` varchar(2000) DEFAULT NULL,
+  `spend_cut` float(6,2) DEFAULT '0.00',
+  `spend_put` float(6,2) DEFAULT '0.00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `rules_link` */
 
@@ -597,7 +624,58 @@ CREATE TABLE `rules_link` (
   `exec_hour_minute` varchar(5) DEFAULT NULL,
   `runtime` int(10) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+
+/*Table structure for table `user` */
+
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user` (
+  `id` varchar(20) NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `token` varchar(255) DEFAULT NULL,
+  `time` int(10) DEFAULT NULL,
+  `group_id` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `token` (`token`(191))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Table structure for table `user_accounts` */
+
+DROP TABLE IF EXISTS `user_accounts`;
+
+CREATE TABLE `user_accounts` (
+  `user_id` varchar(20) DEFAULT NULL,
+  `account_id` varchar(50) NOT NULL,
+  `account_name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`account_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Table structure for table `user_accounts_links` */
+
+DROP TABLE IF EXISTS `user_accounts_links`;
+
+CREATE TABLE `user_accounts_links` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(20) DEFAULT NULL,
+  `account_id` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Table structure for table `user_children` */
+
+DROP TABLE IF EXISTS `user_children`;
+
+CREATE TABLE `user_children` (
+  `user_id` varchar(20) DEFAULT NULL,
+  `email` varchar(50) NOT NULL,
+  `group_id` tinyint(1) DEFAULT '-1',
+  PRIMARY KEY (`email`),
+  KEY `user_id` (`user_id`),
+  KEY `child_email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `x_cron` */
 
@@ -621,7 +699,7 @@ CREATE TABLE `x_cron` (
   PRIMARY KEY (`id`),
   KEY `hash` (`hash`),
   KEY `ac_id` (`ac_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=123012 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=16541 DEFAULT CHARSET=utf8mb4;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

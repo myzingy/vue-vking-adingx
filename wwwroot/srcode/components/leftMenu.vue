@@ -5,26 +5,16 @@
   <div class="leftMenu">
     <el-row class="tac">
       <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" router="router">
-        <!--
-        <el-submenu index="1">
-          <template slot="title"><i class="el-icon-message"></i>导航一</template>
+        <el-submenu index="?" v-show="nav.system" >
+          <template slot="title"><i class="el-icon-message"></i>系统管理</template>
           <el-menu-item-group>
-            <template slot="title">分组一</template>
-            <el-menu-item index="1-1">选项1</el-menu-item>
-            <el-menu-item index="1-2">选项2</el-menu-item>
+            <el-menu-item index="accounts" v-show="nav.system_accounts" >广告账号</el-menu-item>
+            <el-menu-item index="users" v-show="nav.system_users" >员工管理</el-menu-item>
           </el-menu-item-group>
-          <el-menu-item-group title="分组2">
-            <el-menu-item index="1-3">选项3</el-menu-item>
-          </el-menu-item-group>
-          <el-submenu index="1-4">
-            <template slot="title">选项4</template>
-            <el-menu-item index="1-4-1">选项1</el-menu-item>
-          </el-submenu>
         </el-submenu>
-        -->
-        <el-menu-item index="adsList" dataa="a" data-b="b"><i class="el-icon-menu"></i>广告管理</el-menu-item>
-        <el-menu-item index="rulesList" ><i class="el-icon-setting"></i>规则管理</el-menu-item>
-        <el-menu-item index="rulesLog" ><i class="el-icon-setting"></i>优化记录</el-menu-item>
+        <el-menu-item index="adsList" v-show="nav.ads" ><i class="el-icon-menu"></i>广告管理</el-menu-item>
+        <el-menu-item index="rulesList" v-show="nav.rules" ><i class="el-icon-setting"></i>规则管理</el-menu-item>
+        <el-menu-item index="rulesLog" v-show="nav.rules_log" ><i class="el-icon-setting"></i>优化记录</el-menu-item>
       </el-menu>
     </el-row>
   </div>
@@ -36,16 +26,25 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
-
+import vk from '../vk.js'
+import uri from '../uri.js'
 Vue.use(ElementUI)
 export default {
 
   data () {
     return {
-
+        nav:{
+            system:true
+        }
     };
   },
+  mounted(){
+      vk.http(uri.getNavList,{},this.then);
+  },
   methods: {
+      then(json,code){
+          this.nav=json.data;
+      },
       handleOpen(key, keyPath) {
           console.log(key, keyPath);
       },

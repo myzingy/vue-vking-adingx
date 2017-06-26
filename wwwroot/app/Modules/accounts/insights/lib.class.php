@@ -13,7 +13,7 @@ use FacebookAds\Object\Ad;
 use FacebookAds\Object\Values\ArchivableCrudObjectEffectiveStatuses;
 class lib{
     const ERP_TEST='http://54.199.246.177/api/api/facebook-fee';  //测试环境
-    const ERP_LINE='http://52.199.219.172/api/api/facebook-fee';  //正式环境
+    const ERP_LINE='http://54.238.144.67/api/api/facebook-fee';  //正式环境
     function __construct($id="") {
     	$this->model=new model();
     }

@@ -26,24 +26,13 @@ class AppLogic {
 	}
   
 	public function check($acl) {
-		//if(!in_array($acl,array('seller','member','distr')))
-		
-		/*$openid = I('request.openid');
-		$user_lib = new \Modules\member\member_lib();
-		$this -> user = $user_lib -> getOpenid2User($openid);*/
-		return 0;
-		
 		$token = I('request.token');
-		$user_lib = new \Modules\member\member_lib();
-		$this -> user = $user_lib -> getToken2User($token);
+		$user_lib = new \Modules\user\lib();
+		$this -> user = $user_lib -> getUserForToken($token);
 		if ($acl != 'user')
 			return 0;
 		if (!$this -> user -> id)
-			$this -> user = $user_lib -> getOpenid2User();
-		if (!$this -> user -> id)
 			return -1;
-		else if ($this -> user -> status == 0)
-			return -2;
 		return 0;
 	}
 	
@@ -57,7 +46,10 @@ class AppLogic {
 	############################################################
 	# public api 公开，无任何权限认证开始
 	############################################################
-
+    function login(){
+        $lib = new \Modules\user\lib();
+        return $lib->login();
+    }
     ############################################################
     # public api 公开，无任何权限认证结束
     ############################################################
@@ -97,7 +89,40 @@ class AppLogic {
         return $lib -> saveRulesForAd();
     }
     function user__getAcsList(){
-        return array('data'=>FBC());
+        $lib = new \Modules\accounts\lib();
+        return $lib->getAccounts($this->user);
+    }
+    function user__addAccounts(){
+        $lib = new \Modules\accounts\lib();
+        return $lib->addAccounts($this->user);
+    }
+    function user__delAccounts(){
+        $lib = new \Modules\accounts\lib();
+        return $lib->delAccounts($this->user);
+    }
+    function user__getNavList(){
+        $lib = new \Modules\group\lib();
+        return $lib->getGroupRules($this->user);
+    }
+    function user__getFBAccounts(){
+        $lib = new \Modules\accounts\lib();
+        return $lib->getFBAccounts($this->user);
+    }
+    function user__addUsers(){
+        $lib = new \Modules\user\lib();
+        return $lib->addUsers($this->user);
+    }
+    function user__delUsers(){
+        $lib = new \Modules\user\lib();
+        return $lib->delUsers($this->user);
+    }
+    function user__getUsers(){
+        $lib = new \Modules\user\lib();
+        return $lib->getUsers($this->user);
+    }
+    function user__updateUsers(){
+        $lib = new \Modules\user\lib();
+        return $lib->updateUsers($this->user);
     }
 	############################################################
 	# 一些异步接口开始
