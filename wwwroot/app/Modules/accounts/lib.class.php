@@ -166,10 +166,83 @@ END;
             'account_id'=>$account_id
         ))->delete();
     }
-    function getAccounts($user){
-        $user_id=$user->id;
+
+    /**
+     * @param $field
+     *  id
+     *  email
+     * @return array
+     */
+    function _getAccounts($field,$isCount=false){
         $mod=M('user_accounts');
-        $data=$mod->where("user_id='{$user_id}' or account_id in (select account_id from user_accounts_links where user_id='{$user_id}')")->select();
+        $where=" 1=1 ";
+        if($field['id']){
+            $where.=" and user_id='{$field['id']}' ";
+        }
+        if($field['email']){
+            $where.=" and account_id in (select account_id from user_accounts_links where email='{$field['email']}') ";
+        }
+        if( $where==" 1=1 ") return ['data'=>[]];
+        if($isCount) return $mod->where($where)->count();
+        $data=$mod->where($where)->select();
         return ['data'=>$data];
+    }
+    function getAccounts($user){
+        if(!$user->root) return $this->_getAccounts(['id'=>$user->id]);
+        $mydata=$this->_getAccounts(['email'=>$user->email]);
+        if(!$mydata['data'] && $user->group_id==\Modules\group\lib::GROUP_ID_ADMIN){
+            return $this->_getAccounts(['id'=>$user->root]);
+        }
+        return $mydata;
+    }
+    function getAccountsForEmail(){
+        $userlib=new \Modules\user\lib();
+        $user=$userlib->getUserForEmail();
+        if(!$user){
+            $email=I('request.email');
+            $data=$this->_getAccounts(['email'=>$email]);
+            if(!$data['data']){
+                $root=$userlib->getRoot($email,$group_id);
+                if($root && $group_id==\Modules\group\lib::GROUP_ID_ADMIN){
+                    $data=$this->_getAccounts(['id'=>$root]);
+                }
+            }
+        }else{
+            $data=$this->getAccounts($user);
+        }
+        return $data;
+    }
+    function setAccountsForEmail(){
+        $checked=I('request.checked');
+        $email=I('request.email');
+        M('user_accounts_links')->where("email='$email'")->delete();
+        //admin group
+        $admin_flag=false;
+        $userlib=new \Modules\user\lib();
+        $user=$userlib->getUserForEmail();
+        if(!$user){
+            $root=$userlib->getRoot($email,$group_id);
+            if($root && $group_id==\Modules\group\lib::GROUP_ID_ADMIN) {
+                $admin_flag=true;
+            }
+        }else{
+            if(($root=$user->root) && $user->group_id==\Modules\group\lib::GROUP_ID_ADMIN) {
+                $admin_flag=true;
+            }
+        }
+        if($admin_flag && $root){
+            $count=$this->_getAccounts(['id'=>$root],true);
+            if($count==count($checked)) return;
+        }
+        $data=[];
+        foreach ($checked as $r){
+            $data[]=array(
+                'account_id'=>$r['account_id'],
+                'email'=>$email,
+            );
+        }
+        if($data){
+            M('user_accounts_links')->addAll($data);
+        }
     }
 }

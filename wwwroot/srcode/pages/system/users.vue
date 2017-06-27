@@ -16,7 +16,7 @@
 			<el-tab-pane label="用户列表" name="getRulesLog">
 				<el-form :inline="true" :model="form" class="demo-form-inline">
 					<el-form-item label="Email">
-						<el-input v-model="form.email" placeholder="用户facebook注册email"></el-input>
+						<el-input v-model="form.email" placeholder="注册 facebook email"></el-input>
 					</el-form-item>
 					<el-form-item label="用户组">
 						<el-select v-model="form.group_id" placeholder="请选择">
@@ -46,11 +46,22 @@
 							<el-button type="text" size="small" @click="deleteUser(scope.$index, scope.row)">
 								删除
 							</el-button>
+							<el-button type="text" size="small" @click="openDialog(scope.$index, scope.row)">
+								权限
+							</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
 			</el-tab-pane>
 		</el-tabs>
+		<el-dialog ref="accountDialog" title="AD账户列表" :visible.sync="dialogTableVisible" :close-on-click-modal="false"
+				   :close-on-press-escape="false">
+			<accounts_fb ref="accounts_fb" type="nofb"></accounts_fb>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="dialogClose">取 消</el-button>
+				<el-button type="primary" @click="saveAccounts">确 定</el-button>
+			  </span>
+		</el-dialog>
 	</div>
 </template>
 <script>
@@ -60,16 +71,23 @@
     import 'element-ui/lib/theme-default/index.css'
 	import vk from '../../vk.js';
     import uri from '../../uri.js';
+    import accounts_fb from './accounts_fb.vue';
     Vue.use(ElementUI)
     export default {
+        components:{
+            accounts_fb:accounts_fb,
+        },
         data:function(){
             return {
                 activeName: 'getRulesLog',
+                dialogTableVisible:false,
                 rulesLog:[],
 				form:{
                     email:"",
                     group_id:"0"
 				},
+                accountsChecked:[],
+                accountsEmail:"",
 			}
 		},
         computed: mapState({ user: state => state.user }),
@@ -91,6 +109,13 @@
                         vk.toast('操作成功','msg')
 						this.init();
 					    break;
+					case uri.getAccountsForEmail.code:
+					    this.accountsChecked=json.data;
+                        this.$refs.accounts_fb.initChecked(this.accountsChecked);
+					    break;
+					case uri.setAccountsForEmail.code:
+					    this.dialogTableVisible=false;
+					    break;
 
 				}
 
@@ -103,7 +128,10 @@
                 return 'NO-LOGIN';
             },
             deleteUser(index,row){
-                vk.http(uri.delUsers,{email:row.email},this.then);
+                var that=this;
+                vk.confirm("确认要删除此用户吗?",function(){
+                    vk.http(uri.delUsers,{email:row.email},that.then);
+				});
 			},
             addUser(){
                 if(/.*@.*\.[a-z]{2,4}/.test(this.form.email)){
@@ -115,6 +143,18 @@
             changeUser(group_id,row){
                 vk.http(uri.updateUsers,{group_id:group_id,user_id:row.id,email:row.email},this.then);
 			},
+            openDialog(index,row){
+                this.dialogTableVisible=true;
+                this.accountsEmail=row.email;
+                vk.http(uri.getAccountsForEmail,{email:row.email},this.then);
+			},
+            saveAccounts(){
+                var checked=this.$refs.accounts_fb.checked;
+                vk.http(uri.setAccountsForEmail,{email:this.accountsEmail,checked:checked},this.then);
+			},
+            dialogClose(){
+                this.dialogTableVisible=false;
+			}
 		}
     }
 </script>

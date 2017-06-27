@@ -1,6 +1,6 @@
 import Vue  from 'vue'
 import VueResource  from 'vue-resource'
-import { Message } from 'element-ui';
+import { Message,MessageBox } from 'element-ui';
 import store from './store/'
 
 Vue.use(VueResource);
@@ -72,6 +72,17 @@ let vk={
             d.push(r[key])
         })
         return d;
+    },
+    confirm:function(title,confirm,cancel){
+        MessageBox.confirm(title, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }).then(() => {
+            if(confirm) confirm();
+        }).catch(() => {
+            if(cancel) cancel();
+        });
     }
 };
 export default vk;

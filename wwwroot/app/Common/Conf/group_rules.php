@@ -7,15 +7,11 @@ return array(
         ),
         array(
             'name'=>'Power Editor',
-            'rules'=>array(
-                'ads,rules'
-            ),
+            'rules'=>'ads,rules',
         ),
         array(
             'name'=>'Designers',
-            'rules'=>array(
-                'ads'
-            ),
+            'rules'=>'ads',
         ),
     )
 );

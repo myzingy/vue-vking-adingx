@@ -5,6 +5,10 @@
  */
 namespace Modules\group;
 class lib{
+    const GROUP_ID_ADMIN=0;
+    const GROUP_ID_POWER_EDITOR=1;
+    const GROUP_ID_DESIGNERS=2;
+
     function __construct() {
     }
     function getGroupRules($user){

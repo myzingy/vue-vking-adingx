@@ -24,7 +24,6 @@ class lib{
             $this->getRoot($data['email'],$data['group_id']);
             $this->model->add($data);
         }
-        asyn('apido/user.getToken30Day',$data);
     }
     function getUserForToken(){
         $this->model->getByToken(I('request.token'));
@@ -32,9 +31,15 @@ class lib{
         $this->model->root=$this->getRoot($this->model->email);
         return $this->model;
     }
+    function getUserForEmail(){
+        $this->model->getByEmail(I('request.email'));
+        if(!$this->model->id) return false;
+        $this->model->root=$this->getRoot($this->model->email);
+        return $this->model;
+    }
     function getRoot($email,&$group_id){
         $mod=M('user_children');
-        $data=$mod->getByChildEmail($email);
+        $data=$mod->getByEmail($email);
         $group_id=$data['group_id']+0;
         return $data['user_id'];
     }
@@ -56,11 +61,15 @@ class lib{
         M('user')->where("email='{$email}'")->delete();
     }
     function getUsers($user){
+        $user_id=$user->id;
+        if($user->root && $user->group_id==\Modules\group\lib::GROUP_ID_ADMIN){
+            $user_id=$user->root;
+        }
         $data=M('user_children')
             ->alias('UC')
             ->field('UC.email,U.id,U.name,U.group_id,UC.group_id as group_id_old')
             ->join('user U ON U.email=UC.email','left')
-            ->where("UC.user_id={$user->id}")
+            ->where("UC.user_id={$user_id}")
             ->select();
         foreach ($data as &$r){
             $r['group_id']=$r['id']?$r['group_id']:$r['group_id_old'];

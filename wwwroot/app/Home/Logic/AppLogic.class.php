@@ -124,6 +124,14 @@ class AppLogic {
         $lib = new \Modules\user\lib();
         return $lib->updateUsers($this->user);
     }
+    function user__getAccountsForEmail(){
+        $lib = new \Modules\accounts\lib();
+        return $lib->getAccountsForEmail();
+    }
+    function user__setAccountsForEmail(){
+        $lib = new \Modules\accounts\lib();
+        return $lib->setAccountsForEmail();
+    }
 	############################################################
 	# 一些异步接口开始
 	############################################################

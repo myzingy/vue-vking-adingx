@@ -25,4 +25,6 @@ export default {
     delUsers:{act:'user.delUsers',code:13002},
     addUsers:{act:'user.addUsers',code:13003},
     updateUsers:{act:'user.updateUsers',code:13004},
+    getAccountsForEmail:{act:'user.getAccountsForEmail',code:13005},
+    setAccountsForEmail:{act:'user.setAccountsForEmail',code:13006},
 }
