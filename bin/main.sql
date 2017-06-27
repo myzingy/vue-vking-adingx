@@ -647,6 +647,7 @@ CREATE TABLE `user` (
 DROP TABLE IF EXISTS `user_accounts`;
 
 CREATE TABLE `user_accounts` (
+  `root_id` varchar(20) DEFAULT NULL,
   `user_id` varchar(20) DEFAULT NULL,
   `account_id` varchar(50) NOT NULL,
   `account_name` varchar(50) DEFAULT NULL,

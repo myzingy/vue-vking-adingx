@@ -148,6 +148,7 @@ END;
                 'account_id'=>$r['account_id'],
                 'account_name'=>$r['name'],
                 'user_id'=>$user->id,
+                'root_id'=>$user->root?$user->root:$user->id,
             );
             //$account_ids[]=$r['account_id'];
         }
@@ -169,7 +170,8 @@ END;
 
     /**
      * @param $field
-     *  id
+     *  id=>root_id
+     *  user_id
      *  email
      * @return array
      */
@@ -177,7 +179,7 @@ END;
         $mod=M('user_accounts');
         $where=" 1=1 ";
         if($field['id']){
-            $where.=" and user_id='{$field['id']}' ";
+            $where.=" and root_id='{$field['id']}' ";
         }
         if($field['email']){
             $where.=" and account_id in (select account_id from user_accounts_links where email='{$field['email']}') ";

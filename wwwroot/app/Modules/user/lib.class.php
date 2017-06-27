@@ -50,7 +50,7 @@ class lib{
         if($root) return "The mailbox already exists.".$root;
         $group_id=I('request.group_id');
         M('user_children')->add(array(
-            'user_id'=>$user->id,
+            'user_id'=>$user->root?$user->root:$user->id,
             'email'=>$email,
             'group_id'=>$group_id
         ),null,true);
@@ -59,6 +59,7 @@ class lib{
         $email=I('request.email');
         M('user_children')->where("email='{$email}'")->delete();
         M('user')->where("email='{$email}'")->delete();
+        M('user_accounts_links')->where("email='{$email}'")->delete();
     }
     function getUsers($user){
         $user_id=$user->id;
