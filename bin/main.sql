@@ -659,10 +659,12 @@ DROP TABLE IF EXISTS `user_accounts_links`;
 
 CREATE TABLE `user_accounts_links` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(20) DEFAULT NULL,
   `account_id` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `email` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `account_id` (`account_id`),
+  KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `user_children` */
 
@@ -699,7 +701,7 @@ CREATE TABLE `x_cron` (
   PRIMARY KEY (`id`),
   KEY `hash` (`hash`),
   KEY `ac_id` (`ac_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16541 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=16542 DEFAULT CHARSET=utf8mb4;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
