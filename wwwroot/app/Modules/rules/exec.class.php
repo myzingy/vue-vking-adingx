@@ -16,16 +16,20 @@ use FacebookAds\Object\Fields\AdFields;
 class exec
 {
     const EXEC_TIMEOUT=86000;//下次执行时间
-    function __construct($ad_adset,$type='ad')
+    function __construct($ad_adset,$type='ad',$debug=false)
     {
         $this->model = new model();
         $this->ad=(object)$ad_adset;
         $this->adx=[];
+        $this->debug=$debug;
         foreach ($this->ad->List as $list){
             if($list['Type']==99) break;
             $this->adx[$list['Type']]=(object)$list;
         }
         $this->type=$type;
+        if($this->debug){
+            debug('construct',$this->type,$this->ad,$this->adx);
+        }
         $this->setRules();
     }
     function setRules(){
@@ -45,11 +49,17 @@ class exec
             $rule_runtime=strtotime(date("Y-m-d ".$this->rules[0]['exec_hour_minute'].":00",NOW_TIME));
             M($table)->add(array('rule_runtime'=>$rule_runtime,'id'=>$this->ad->Id),null,true);
         }
+        if($this->debug){
+            debug('setRules',$this->rules);
+        }
     }
     function expression($date,$fun,$lt,$value){ //条件
         $this->date=$date;
         $this->expression_str="[".($date!=0?"last $date day":"今日").",$fun,$lt,$value]";
         $firstValue=$this->$fun();
+        if($this->debug){
+            debug('expression',$this->expression_str." PK ".$firstValue);
+        }
         if($lt=="LI" || $lt=="NLI"){
             $flag=stripos($firstValue,$value);
             if($lt=="LI"){
@@ -79,6 +89,9 @@ class exec
     function implement($field,$do,$type,$number){ //执行
         if(strtoupper($this->type)=='AD' && 'Budget'==$field) return;
         $this->implement_str="[$field,$do,$type,$number]";
+        if($this->debug){
+            debug('implement',$this->implement_str);
+        }
         $spend_cut=0;
         $spend_put=0;
         if('Budget'==$field){

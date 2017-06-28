@@ -109,10 +109,19 @@ class lib{
         //$insights=new \Modules\adsets\insights\lib();
         //$data=$insights->getAdsetsInsightsData($adset_id);
         $data=$this->getAdsetsData($adset_id);
+        $debug_ids=explode(',','23842624232450368,23842623980060368,23842622254040368,23842623986200368,23842623983240368,23842623977590368,23842620950830368');
+        $debug_flag=false;
+        if(in_array($adset_id,$debug_ids)!==false){
+            debug("debug.runRules.{$adset_id}########==>START");
+            $debug_flag=true;
+        }
         if(!$data['data']) return;
         $formatData=$data['data'];
-        $exec=new \Modules\rules\exec($formatData[0],'adset');
+        $exec=new \Modules\rules\exec($formatData[0],'adset',$debug_flag);
         $exec->run();
+        if($debug_flag){
+            debug("debug.runRules.{$adset_id}########<==ENDEND");
+        }
         return $formatData;
     }
     //用于替换 getAdsetsInsightsData
