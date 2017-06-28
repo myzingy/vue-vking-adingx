@@ -46,9 +46,11 @@
 							<el-button type="text" size="small" @click="deleteUser(scope.$index, scope.row)">
 								删除
 							</el-button>
+							<!--
 							<el-button type="text" size="small" @click="openDialog(scope.$index, scope.row)">
 								权限
 							</el-button>
+							-->
 						</template>
 					</el-table-column>
 				</el-table>
