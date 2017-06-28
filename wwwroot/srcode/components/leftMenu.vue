@@ -5,16 +5,17 @@
   <div class="leftMenu">
     <el-row class="tac">
       <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" router="router">
-        <el-submenu index="?" v-show="nav.system" >
-          <template slot="title"><i class="el-icon-message"></i>系统管理</template>
-          <el-menu-item-group>
-            <el-menu-item index="accounts" v-show="nav.system_accounts" >广告账号</el-menu-item>
-            <el-menu-item index="users" v-show="nav.system_users" >员工管理</el-menu-item>
-          </el-menu-item-group>
-        </el-submenu>
-        <el-menu-item index="adsList" v-show="nav.ads" ><i class="el-icon-menu"></i>广告管理</el-menu-item>
-        <el-menu-item index="rulesList" v-show="nav.rules" ><i class="el-icon-setting"></i>规则管理</el-menu-item>
-        <el-menu-item index="rulesLog" v-show="nav.rules_log" ><i class="el-icon-setting"></i>优化记录</el-menu-item>
+        <el-menu-item-group v-show="nav.system">
+          <template slot="title">系统管理</template>
+          <el-menu-item index="accounts" v-show="nav.system_accounts" ><i class="el-icon-star-on"></i>广告账号</el-menu-item>
+          <el-menu-item index="users" v-show="nav.system_users" ><i class="el-icon-document"></i>员工管理</el-menu-item>
+        </el-menu-item-group>
+        <el-menu-item-group>
+          <template slot="title">广告优化</template>
+          <el-menu-item index="adsList" v-show="nav.ads" ><i class="el-icon-menu"></i>广告管理</el-menu-item>
+          <el-menu-item index="rulesList" v-show="nav.rules" ><i class="el-icon-setting"></i>规则管理</el-menu-item>
+          <el-menu-item index="rulesLog" v-show="nav.rules_log" ><i class="el-icon-time"></i>优化记录</el-menu-item>
+        </el-menu-item-group>
       </el-menu>
     </el-row>
   </div>

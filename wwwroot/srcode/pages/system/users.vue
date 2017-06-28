@@ -21,8 +21,7 @@
 					<el-form-item label="用户组">
 						<el-select v-model="form.group_id" placeholder="请选择">
 							<el-option label="Admin" value="0"></el-option>
-							<el-option label="Power Editor" value="1"></el-option>
-							<el-option label="Designers" value="2"></el-option>
+							<el-option label="Advertisers" value="1"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item>
@@ -36,8 +35,7 @@
 						<template scope="scope">
 						<el-select v-model="scope.row.group_id" placeholder="请选择" @change="changeUser(scope.row.group_id,scope.row)">
 							<el-option label="Admin" value="0"></el-option>
-							<el-option label="Power Editor" value="1"></el-option>
-							<el-option label="Designers" value="2"></el-option>
+							<el-option label="Advertisers" value="1"></el-option>
 						</el-select>
 						</template>
 					</el-table-column>
