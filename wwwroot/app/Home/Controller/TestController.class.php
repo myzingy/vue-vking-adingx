@@ -30,6 +30,10 @@ class TestController extends Controller {
 	}
     function index()
     {
+        $lib=new \Modules\accounts\lib();
+        $data=$lib->FBC(I('request.ac_id'));
+        dump($data);
+        return;
         $user=(object)[];
         $user->id='1906750516239673';
         $user->token='EAABeuMl0aOwBAEf0xSi6TkO89hHsD0IMTZC0xl2ZApStoZBkSh2pYsIU5p5mUTocn8gEE6nGVOzJcrxt8L316ZAFZBqiG6rW8AO0ZASxm8OHsZCjxLQgl10NWT9HGqTZA62qWLyN1ZCGpIzZB8zEkPGkQZAHZBWcQR1fooSJgNoB6DxFKPS6hOrUkIog';

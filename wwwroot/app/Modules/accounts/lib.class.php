@@ -13,6 +13,7 @@ use FacebookAds\Object\Values\ArchivableCrudObjectEffectiveStatuses;
 use FacebookAds\Object\AdSet;
 use FacebookAds\Object\Fields\AdFields;
 class lib{
+    const FBC_LIMIT_NUM=3;
     function __construct() {
     	$this->model=new model();
     }
@@ -246,5 +247,22 @@ END;
         if($data){
             M('user_accounts_links')->addAll($data);
         }
+    }
+    function FBC($ac_id=""){
+        $mod=M('user_accounts')->alias('UA');
+        if($ac_id){
+            $mod->field('UA.account_id,UA.account_name,U.token as access_tokens,CONCAT(\'act_\',UA.account_id) as act_id');
+            $mod->where(" UA.account_id='$ac_id' ");
+            $mod->join(" user U on U.id=UA.user_id OR U.id=UA.root_id ",'left');
+            $data=$mod->find();
+            $fbapp=C('fbapp');
+            $data=array_merge($data,$fbapp);
+        }else{
+            $offset=I('request.offset',0);
+            $mod->field("UA.account_id,UA.account_name");
+            $mod->limit($offset,self::FBC_LIMIT_NUM);
+            $data=$mod->select();
+        }
+        return $data;
     }
 }

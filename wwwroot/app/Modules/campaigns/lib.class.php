@@ -26,24 +26,33 @@ class lib{
         $time_e=getDayTime("08:00:00",0);
         if(NOW_TIME > $time_s || NOW_TIME < $time_e) return;
         $acs=FBC();
-        foreach ($acs as $ac){
-            asyn('apido/asyn.flushCampaigns',array(
-                'ac_id'=>$ac['account_id'],
-                'active'=>'active'
-            ),null,null,2);
-            asyn('apido/asyn.flushAdsets',array(
-                'ac_id'=>$ac['account_id'],
-                'active'=>'active'
-            ),null,null,2);
-            asyn('apido/asyn.flushAds',array(
-                'ac_id'=>$ac['account_id'],
-                'active'=>'active'
-            ),null,null,2);
-            asyn('apido/asyn.flushAccounts',array(
-                'ac_id'=>$ac['account_id'],
-                'active'=>'active'
-            ));
+        if($acs){
+            foreach ($acs as $ac){
+                asyn('apido/asyn.flushCampaigns',array(
+                    'ac_id'=>$ac['account_id'],
+                    'active'=>'active'
+                ),null,null,2);
+                asyn('apido/asyn.flushAdsets',array(
+                    'ac_id'=>$ac['account_id'],
+                    'active'=>'active'
+                ),null,null,2);
+                asyn('apido/asyn.flushAds',array(
+                    'ac_id'=>$ac['account_id'],
+                    'active'=>'active'
+                ),null,null,2);
+                asyn('apido/asyn.flushAccounts',array(
+                    'ac_id'=>$ac['account_id'],
+                    'active'=>'active'
+                ));
+            }
+            if(count($acs)==\Modules\accounts\lib::FBC_LIMIT_NUM){
+                $offset=I('request.offset',0)+\Modules\accounts\lib::FBC_LIMIT_NUM;
+                asyn('apido/asyn.flushCampaignsInit',array(
+                    'offset'=>$offset,
+                ),null,null,3);
+            }
         }
+
     }
 	function flushCampaigns(){
         $ac_id=I('request.ac_id');
@@ -93,6 +102,7 @@ class lib{
             //limit => 25,
             after=>$after,
         ));
+        //var_dump($campaigns);
         $asyn_param['after']=$campaigns->getAfter();
         while ($campaigns->valid()) {
             $_d=$campaigns->current()->getData();
