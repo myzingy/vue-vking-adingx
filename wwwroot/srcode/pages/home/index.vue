@@ -103,10 +103,22 @@
                         this.acs=json.data;
                         this.ac_idx=this.ac_id;
 					break;
+                    case uri.getFBAccounts.code:
+                        var acs=[];
+                        json.data.forEach(row=>{
+                            acs.push({
+                                account_id:row.account_id,
+                                account_name:row.name
+							});
+						});
+                        this.acs=acs;
+                        this.ac_idx=this.ac_id;
+                        break;
                 }
 			},
 			getAcsList(){
-                vk.http(uri.getAcsList,{},this.then);
+                //vk.http(uri.getAcsList,{},this.then);
+                vk.http(uri.getFBAccounts,{},this.then);
 			}
         },
     }

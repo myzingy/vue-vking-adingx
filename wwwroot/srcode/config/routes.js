@@ -23,8 +23,8 @@ export default [
             },
             {
                 path: '/', //首页
-                meta: { auth: false },
-                component: resolve => require(['../pages/index/index.vue'], resolve)
+                meta: { auth: true },
+                component: resolve => require(['../pages/home/index.vue'], resolve)
             },
             {
                 path: 'adsList*', //广告列表

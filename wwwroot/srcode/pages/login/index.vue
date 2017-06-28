@@ -24,7 +24,7 @@
 <template>
 	<div>
 		<v-header title="登录">
-			<router-link slot="left" to="/">返回</router-link>
+			<router-link slot="left" to="?"></router-link>
 		</v-header>
 		<div class="login" v-show="!btn">
 			<fb-signin-button

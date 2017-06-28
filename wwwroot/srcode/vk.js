@@ -2,7 +2,7 @@ import Vue  from 'vue'
 import VueResource  from 'vue-resource'
 import { Message,MessageBox } from 'element-ui';
 import store from './store/'
-
+import URI from './uri.js'
 Vue.use(VueResource);
 let vk={
     isProduction:function(){
@@ -19,15 +19,27 @@ let vk={
             return Message.error(msg);
         Message(msg);
     },
-    then:function(data,code,callback){
-        console.log('vk-then',data,code);
+    then:function(data,uri,callback){
+        console.log('vk-then',data,uri.code);
+        if(data.code==-1){
+            this.toast(data.message);
+            sessionStorage.clear();
+            location.hash='#/login';
+            return;
+        }
         if(data.code!=200){
             this.toast(data.message);
             return;
         }
-        if(callback) callback(data,code);
+        this.setCache(uri,data);
+        if(callback) callback(data,uri.code);
     },
     http:function(uri,data,callback){
+        var cdata=this.getCache(uri);
+        if(cdata){
+            console.log('cacheData',cdata);
+            return this.then(cdata,uri,callback);
+        }
         var url=this.cgi(uri);
         var that=this;
         try{
@@ -43,12 +55,36 @@ let vk={
         console.log('postdata',data);
         Vue.http.post(url,data,{emulateJSON: true}).then(
             (response) => {
-                that.then(response.body,uri.code,callback);
+                that.then(response.body,uri,callback);
             },
             (response) => {
-
+                that.then(response.body,uri,callback);
             }
         );
+    },
+    catchRule(uri){
+        var rules={
+            10003:{timeout:86400},
+            12001:{timeout:86400},
+        };
+        var line=rules[uri.code];
+        if(line){
+            line.key=uri.act+'_'+uri.code;
+        }
+        return line;
+    },
+    setCache(uri,data){
+        var rule=this.catchRule(uri);
+        if(rule){
+            this.ls(rule.key,data,rule.timeout);
+        }
+    },
+    getCache(uri,callback){
+        var rule=this.catchRule(uri);
+        if(rule){
+            return this.ls(rule.key);
+        }
+        return false;
     },
     ls:function(key,val=false,timeout=-1){
         var old=window.localStorage.getItem(key);

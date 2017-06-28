@@ -262,6 +262,14 @@ class AppLogic {
         $lib = new \Modules\accounts\insights\lib();
         return $lib -> flushAccountsInsights();
     }
+    /**
+     * fb token => fb long live token
+     *
+     */
+    function asyn__getLongToken(){
+        $lib = new \Modules\user\lib();
+        return $lib -> getLongToken();
+    }
 	############################################################
 	# 一些异步接口结束
 	############################################################

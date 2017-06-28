@@ -30,6 +30,21 @@ class TestController extends Controller {
 	}
     function index()
     {
+        vendor("vendor.autoload");
+        $app=C('fbapp');
+        dump($app);
+        $fb=new Facebook(array(
+            'app_id'=>$app['app_id'],
+            'app_secret'=>$app['app_secret']
+        ));
+        $user=(object)[];
+        $user->id='120876045170245';
+        $user->token='EAABeuMl0aOwBANAzeIXNjxhp6oZBS8Al6aE71Pdr8A9w6vNCvdVBl4pk8LwFTEOnPVajYZC0lo6XObVQMwOvNZBqcp84GFovrzS3EoZAquDo7oMN5eojlifWq0BQZCtunEh5e6r5YQTnBxJpALQRzwfPyf0iSJkfs8gJenKUvuznefMgrkYxIh1ukETddg3EZD';
+        //$res=$fb->get('/me?fields=id,name',$user->token);
+        $res=$fb->get("oauth/access_token?client_id={$app['app_id']}&client_secret={$app['app_secret']}&grant_type=fb_exchange_token&fb_exchange_token={$user->token}",$user->token);
+        $res=$res->getDecodedBody();
+        dump($res);
+        return;
         $lib=new \Modules\accounts\lib();
         $data=$lib->FBC(I('request.ac_id'));
         dump($data);

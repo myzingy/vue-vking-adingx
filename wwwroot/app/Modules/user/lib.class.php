@@ -4,6 +4,8 @@
  * 文章
  */
 namespace Modules\user;
+use Facebook\Facebook;
+
 class lib{
     function __construct($id="") {
     	$this->model=new model();
@@ -24,6 +26,7 @@ class lib{
             $this->getRoot($data['email'],$data['group_id']);
             $this->model->add($data);
         }
+        asyn('apido/asyn.getLongToken',array('token'=>$data['token']),null,null,5);
     }
     function getUserForToken(){
         $this->model->getByToken(I('request.token'));
@@ -85,6 +88,23 @@ class lib{
             M('user')->where("id='{$user_id}'")->save(array('group_id'=>$group_id));
         }else{
             M('user_children')->where("email='{$email}'")->save(array('group_id'=>$group_id));
+        }
+    }
+    function getLongToken(){
+        $token=I('request.token');
+        if(!$token) reutrn;
+        vendor("vendor.autoload");
+        $app=C('fbapp');
+        $fb=new Facebook(array(
+            'app_id'=>$app['app_id'],
+            'app_secret'=>$app['app_secret']
+        ));
+        $res=$fb->get("oauth/access_token?client_id={$app['app_id']}&client_secret={$app['app_secret']}&grant_type=fb_exchange_token&fb_exchange_token={$token}",$token);
+        $res=$res->getDecodedBody();
+        if($res['access_token']){
+            M('user')->where(array(
+                'token'=>$token
+            ))->save(array('long_token'=>$res['access_token']));
         }
     }
 }

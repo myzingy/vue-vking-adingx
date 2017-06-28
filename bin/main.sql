@@ -635,6 +635,7 @@ CREATE TABLE `user` (
   `name` varchar(50) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `token` varchar(255) DEFAULT NULL,
+  `long_token` varchar(255) DEFAULT NULL,
   `time` int(10) DEFAULT NULL,
   `group_id` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -665,7 +666,7 @@ CREATE TABLE `user_accounts_links` (
   PRIMARY KEY (`id`),
   KEY `account_id` (`account_id`),
   KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `user_children` */
 
@@ -702,7 +703,7 @@ CREATE TABLE `x_cron` (
   PRIMARY KEY (`id`),
   KEY `hash` (`hash`),
   KEY `ac_id` (`ac_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16542 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
