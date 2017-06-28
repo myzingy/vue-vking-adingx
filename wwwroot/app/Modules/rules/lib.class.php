@@ -24,7 +24,7 @@ class lib
         }
     }
 
-    function updateRulesData()
+    function updateRulesData($user)
     {
         if ($this->model->id) {//update
             I('request.code')?$this->model->code=I('request.code','','trim'):"";
@@ -45,6 +45,8 @@ class lib
                 $size=strlen(I('request.code'));
                 $this->model->type=$size>500?2:($size>200?1:0);
             }
+            $this->model->root_id=$user->root?$user->root:$user->id;
+            $this->model->user_id=$user->id;
             $this->model->add();
         }
     }
@@ -79,7 +81,7 @@ class lib
             ->order('id desc')->where($where)->select();
         return array('data'=>$data);
     }
-    function saveRulesForAd(){
+    function saveRulesForAd($user){
         $target_id= I('request.target_id');
         M('rules_link')->where("`target_id`='$target_id'")->delete();
         $rules_ids= I('request.rules_ids');
@@ -87,6 +89,8 @@ class lib
         $data=array();
         foreach ($rules_ids as $rule_id){
             $data[]=array(
+                'root_id'=>$user->root?$user->root:$user->id,
+                'user_id'=>$user->id,
                 'target_id'=>$target_id,
                 //'target'=>I('request.target')=='getAdsetsData'?'adset':'ad',
                 'target'=>'campaign',

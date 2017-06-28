@@ -70,7 +70,7 @@ class AppLogic {
     }
     function user__updateRulesData(){
         $lib = new \Modules\rules\lib();
-        return $lib -> updateRulesData();
+        return $lib -> updateRulesData($this->user);
     }
     function user__getRulesData(){
         $lib = new \Modules\rules\lib();
@@ -86,7 +86,7 @@ class AppLogic {
     }
     function user__saveRulesForAd(){
         $lib = new \Modules\rules\lib();
-        return $lib -> saveRulesForAd();
+        return $lib -> saveRulesForAd($this->user);
     }
     function user__getAcsList(){
         $lib = new \Modules\accounts\lib();
