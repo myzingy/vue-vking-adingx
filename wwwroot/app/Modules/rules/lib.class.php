@@ -50,9 +50,17 @@ class lib
             $this->model->add();
         }
     }
-    function getRulesData(){
-        $where=array();
-        I('request.status','-1')>-1?$where['status']=I('request.status'):"";
+    function getRulesData($user){
+        $where="";
+        if($user->group_id==\Modules\group\lib::GROUP_ID_ADMIN){
+            $where=" root_id='".($user->root?$user->root:$user->id)."' ";
+        }else{
+            $where=" (user_id='{$user->id}' OR root_id='{$user->id}') ";
+        }
+        $status=I('request.status','-1');
+        if($status>-1){
+            $where.=" and `status`={$status} ";
+        }
         $data=$this->model->order('id desc')->where($where)->select();
         return array('data'=>$data);
     }
