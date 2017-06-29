@@ -57,7 +57,11 @@ class exec
             M($table)->add(array('rule_runtime'=>$rule_runtime,'id'=>$this->ad->Id),null,true);
         }
         if($this->debug){
-            debug('setRules',$this->rules);
+            $rules=[];
+            foreach ($this->rules as $r){
+                $rules[]=$r['id'].'#'.$r['name'].'#'.$r['exec_hour_minute'];
+            }
+            debug('setRules',$rules);
         }
     }
     function expression($date,$fun,$lt,$value){ //条件
