@@ -20,6 +20,7 @@ class exec
     {
         $this->model = new model();
         $this->debug=$debug;
+        $this->type=$type;
         $this->ad=(object)$ad_adset;
         $this->setRules();
         if(count($this->rules)<1) {
@@ -33,7 +34,6 @@ class exec
             if($list['Type']==99) break;
             $this->adx[$list['Type']]=(object)$list;
         }
-        $this->type=$type;
         if($this->debug){
             debug('construct',$this->type,$this->ad,$this->adx);
         }
