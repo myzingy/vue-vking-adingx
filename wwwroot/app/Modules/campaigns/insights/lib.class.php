@@ -170,6 +170,11 @@ END;
 //                getDayTime("03:00:00"));
 
         }
+        //提交数据给erp
+        asyn_implement('apido/asyn.postErpCampaign',array(
+            'ac_id'=>$ac_id,
+            'date_stop'=>$campaigns_data['date_stop']
+        ));
         return $campaigns_data;
     }
 

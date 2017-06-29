@@ -270,6 +270,15 @@ class AppLogic {
         $lib = new \Modules\user\lib();
         return $lib -> getLongToken();
     }
+
+    /**
+     * @return mixed
+     * 提交数据给erp
+     */
+    function asyn__postErpCampaign(){
+        $lib = new \Modules\campaigns\lib();
+        return $lib -> postErpCampaign();
+    }
 	############################################################
 	# 一些异步接口结束
 	############################################################

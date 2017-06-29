@@ -28,4 +28,9 @@ class model extends RelationModel{
         $this->_link['insights']['condition']=" date_stop>='".date('Y-m-d',strtotime('-1 day'))."' ";
 		parent::__construct();
 	}
+    function setDateStop($date_stop){
+        $this->_link['insights']['condition']=" date_stop='".$date_stop."' ";
+        $this->_link['insights']['mapping_limit']=1;
+        parent::__construct();
+    }
 }

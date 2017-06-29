@@ -122,3 +122,10 @@ function FBC($ac_id=""){
     $data=$lib->FBC($ac_id);
     return $data;
 }
+function postERP($uri,$data){
+    if(__APP__POS=='CC__DEV') return;
+    $erp_host=C('erp_host');
+    foreach ($erp_host as $host){
+        asyn_implement($host.$uri,$data,'POST');
+    }
+}

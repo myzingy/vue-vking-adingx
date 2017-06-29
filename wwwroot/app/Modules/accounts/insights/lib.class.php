@@ -12,9 +12,6 @@ use FacebookAds\Cursor;
 use FacebookAds\Object\Ad;
 use FacebookAds\Object\Values\ArchivableCrudObjectEffectiveStatuses;
 class lib{
-    const ERP_TEST='http://54.199.246.177/api/api/facebook-fee';  //测试环境
-    const ERP_LINE='http://54.238.144.67/api/api/facebook-fee';  //正式环境
-    const ERP_LINE2='http://52.199.219.172/api/api/facebook-fee';  //正式环境
     function __construct($id="") {
     	$this->model=new model();
     }
@@ -199,9 +196,7 @@ END;
                 'mb_fee'=>$mb_fee+0,
                 'fee'=>$pc_fee+$mb_fee,
             );
-            $this->postERP(self::ERP_TEST,$erpData);
-            $this->postERP(self::ERP_LINE,$erpData);
-            $this->postERP(self::ERP_LINE2,$erpData);
+            postERP('api/api/facebook-fee',$erpData);
         }else{
             if ($campaigns_data) {
                 M('accounts_insights')->where("id='{$campaigns_data['id']}'")->delete();
@@ -216,9 +211,5 @@ END;
                 getDayTime("00:01:00"),0);
         }
         return $breakdowns_data?$breakdowns_data:$campaigns_data;
-    }
-    function postERP($url,$data){
-        if(__APP__POS=='CC__DEV') return;
-	    asyn_implement($url,$data,'POST');
     }
 }

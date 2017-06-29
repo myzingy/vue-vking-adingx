@@ -136,9 +136,10 @@ class lib{
         return $campaigns_data;
     }
     //用于替换 getCampaignsInsightsData
-    function getCampaignsData(){
-        $where=" AI.date_stop='".date('Y-m-d',NOW_TIME)."' ";
-        $ac_id=I('request.ac_id');
+    function getCampaignsData($ac_id=null,$date_stop=null){
+        $date_stop_str=$date_stop?$date_stop:date('Y-m-d',NOW_TIME);
+        $where=" AI.date_stop='".$date_stop_str."' ";
+        $ac_id=$ac_id?$ac_id:I('request.ac_id');
         if($ac_id){
             $where.=" AND campaigns.account_id='$ac_id' ";
         }
@@ -149,6 +150,9 @@ class lib{
                 $where.=" and ( AI.`{$keyword_type}_id` like '%{$keyword}%' OR AI.`{$keyword_type}_name` like '%{$keyword}%' ) ";
             }
         }
+        if($date_stop){
+            $this->model->setDateStop($date_stop);
+        }
         $data=$this->model
             ->field('campaigns.id,campaigns.name,campaigns.effective_status')
             ->relation(array('insights'))
@@ -158,5 +162,80 @@ class lib{
             ->select();
         $formatData=formatInsightsData($data,'campaign');
         return array('data'=>$formatData);
+    }
+    function postErpCampaign(){
+        //if(__APP__POS=='CC__DEV') return;
+        $ac_ids_rules=array(
+            '561910137324149'=>'戴婷',
+            '836196303228863'=>'权文娟',
+            '564914007023762'=>'王乐',
+            '639275016254327'=>'王乐',
+            '909992302470836'=>'杨超英',
+            '639275062920989'=>'杨蕾',
+            '769185753263252'=>'李婷',
+            '673582062823622'=>'徐健',
+            '836196296562197'=>'何慧敏',
+            '769185746596586'=>[
+                ['徐健','Evan'],['何慧敏','Janet']
+            ],
+            '559461654235664'=>[
+                ['权文娟','US-Q'],['武艳云','US-W']
+            ],
+            '1593565507558990'=>[
+                ['王乐','-mar'],['杨超英','Kelly']
+            ],
+        );
+        $ac_id=I('request.ac_id');
+        $date_stop=I('request.date_stop');
+        $data=$this->getCampaignsData($ac_id,$date_stop);
+        $data=$data['data'];
+        if($data){
+            $pdata=[];
+            $rule=$ac_ids_rules[$ac_id];
+            foreach ($data as $r){
+                if(is_array($rule)){
+                    $key=$ac_id;
+                    foreach ($rule as $rl){
+                        if(stripos($r['CampaignName'],$rl[1])>-1){
+                            $key=$rl[0];
+                        }
+                    }
+                }else{
+                    $key=$rule?$rule:$ac_id;
+                }
+                if(!$pdata[$key]){
+                    $pdata[$key]=array(
+                        'fee_date'=>$r['Date'][0],
+                        'account_id'=>$ac_id,
+                        'account_name'=>$r['AccountName'],
+                        'username'=>$key,
+                        'cost'=>0,
+                        'purchase'=>0,
+                        'add_to_cart'=>0,
+                        'cpm'=>0,
+                        'ctr'=>0,
+                        'link_click'=>0,
+                        'income'=>0,
+                        '__count'=>0,
+                    );
+                }
+                $pdata[$key]['cost']+=$r['AmountSpent']*100;
+                $pdata[$key]['purchase']+=$r['WebsitePurchases'];
+                $pdata[$key]['add_to_cart']+=$r['WebsiteAddstoCart'];
+                $pdata[$key]['cpm']+=preg_replace("/[$,]+/","",$r['CPM1000']);
+                $pdata[$key]['ctr']+=str_replace('%','',$r['CTR']);
+                $pdata[$key]['link_click']+=$r['LinkClicks'];
+                $pdata[$key]['income']+=(preg_replace("/[$,]+/","",$r['WebsitePurchasesConversionValue'])*100);
+                $pdata[$key]['__count']+=1;
+            }
+            foreach ($pdata as &$xd){
+                $xd['cpm']=$xd['cpm']/$xd['__count'];
+                $xd['ctr']=$xd['ctr']/$xd['__count'];
+                unset($xd['__count']);
+                //post erp ...
+                #postERP('api/api/facebook-fee-xxxxxxxxxxx',$xd);
+            }
+            return $pdata;
+        }
     }
 }

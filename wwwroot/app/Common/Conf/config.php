@@ -11,6 +11,11 @@ $conf['think']=array(
 	//"SESSION_AUTO_START"=>true,
     'DEFAULT_TIMEZONE'=>__APP__POS=='CC__DEV'?'PRC':'UTC+8',
 );
+$conf['erp_host']=array('erp_host'=>array(
+        'http://54.199.246.177/',//测试环境
+        'http://54.238.144.67/',
+        'http://52.199.219.172/',
+));
 $_conf=array();
 foreach ($conf as $_c) {
 	$_conf=array_merge($_conf,$_c);
