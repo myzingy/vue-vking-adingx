@@ -24,6 +24,7 @@ let vk={
         if(data.code==-1){
             this.toast(data.message);
             sessionStorage.clear();
+            window.localStorage.clear();
             location.hash='#/login';
             return;
         }

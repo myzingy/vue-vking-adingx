@@ -25,6 +25,7 @@
             ...mapActions([USER_SIGNOUT]),
             submit() {
                 this.USER_SIGNOUT()
+                window.localStorage.clear();
 				this.$router.replace({ path: '/login' })
             }
         }
