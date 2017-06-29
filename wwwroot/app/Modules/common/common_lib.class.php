@@ -93,12 +93,13 @@ class common_lib {
                     $title=array_shift($args);
                     $title=" <== $title ==> ";
                 }
-                $str.="#########{$title}#########\n"
-                    .(
-                    (count($args)>0)?
-                        var_export($args,true)."\n" ."#########{$title}#########\n"
-                        :""
-                    );
+                $str.="#########{$title}#########\n";
+                if(count($args)>0){
+                    if(is_array($args[0]) && count($args[0])<1){
+                        break;
+                    }
+                    $str.=var_export($args,true)."\n" ."#########{$title}#########\n";
+                }
                 if(!$traceFlag) break;
             }else{
                 $str.="\t$pt".(!empty($r['class'])?($r['class'].$r['type']):"")."{$r['function']}("
