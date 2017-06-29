@@ -33,6 +33,10 @@ class TestController extends Controller {
         vendor("vendor.autoload");
         $app=C('fbapp');
         dump($app);
+        $lib=new \Modules\adsets\lib();
+        $data=$lib->getAdsetsData('23842624232450368');
+        dump($data);
+        return;
         $fb=new Facebook(array(
             'app_id'=>$app['app_id'],
             'app_secret'=>$app['app_secret']
