@@ -175,8 +175,11 @@ END;
             $this->model->relation(true)->add($campaigns_data);
         }
         if($adset_timespace=='today') {
-            //立即执行规则
-            asyn_implement('apido/asyn.runRules', array('id' => $adset_id, 'type' => 'adset'));
+            //执行规则
+            $rule=M('rules_link')->field('exec_hour_minute')->where("target_id='{$campaigns_data['campaign_id']}'")->find();
+            if($rule['exec_hour_minute']){
+                asyn('apido/asyn.runRules', array('id' => $adset_id, 'type' => 'adset'),null,getDayTime($rule['exec_hour_minute'].'00',0));
+            }
             //其它Insights
             asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'yestoday','ac_id'=>$ac_id),null,
                 getDayTime("00:01:00"),0);

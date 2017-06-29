@@ -181,8 +181,9 @@ END;
             $this->model->relation(true)->add($campaigns_data);
         }
         if($ad_timespace=='today') {
+            //目前只调整预算，暂时关闭ad rule
             //立即执行规则
-            asyn_implement('apido/asyn.runRules', array('id' => $ad_id, 'type' => 'ad'));
+            //asyn_implement('apido/asyn.runRules', array('id' => $ad_id, 'type' => 'ad'));
             //其它Insights
             asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'yestoday','ac_id'=>$ac_id),null,
                 getDayTime("00:01:00"),0);
