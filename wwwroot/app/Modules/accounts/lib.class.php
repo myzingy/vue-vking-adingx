@@ -13,7 +13,7 @@ use FacebookAds\Object\Values\ArchivableCrudObjectEffectiveStatuses;
 use FacebookAds\Object\AdSet;
 use FacebookAds\Object\Fields\AdFields;
 class lib{
-    const FBC_LIMIT_NUM=3;
+    const FBC_LIMIT_NUM=30;
     function __construct() {
     	$this->model=new model();
     }

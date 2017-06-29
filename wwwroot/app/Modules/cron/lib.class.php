@@ -124,7 +124,7 @@ class lib{
             'hash'=>$hash,
             'path'=>$path,
             'param'=>$param,
-            'ac_id'=> $params['ac_id'],
+            'ac_id'=> $params['ac_id']?$params['ac_id']:0,
             'method'=>is_null($method)?'GET':$method,
             'addtime'=>NOW_TIME,
             'crontime'=>$crontime+0,
