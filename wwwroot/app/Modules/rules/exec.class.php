@@ -65,7 +65,7 @@ class exec
         $this->expression_str="[".($date!=0?"last $date day":"今日").",$fun,$lt,$value]";
         $firstValue=$this->$fun();
         if($this->debug){
-            debug('expression',$this->expression_str." PK ".$firstValue);
+            debug('expression-->'.$this->expression_str." PK ".$firstValue);
         }
         if($lt=="LI" || $lt=="NLI"){
             $flag=stripos($firstValue,$value);
@@ -97,7 +97,7 @@ class exec
         if(strtoupper($this->type)=='AD' && 'Budget'==$field) return;
         $this->implement_str="[$field,$do,$type,$number]";
         if($this->debug){
-            debug('implement',$this->implement_str);
+            debug('implement-->'.$this->implement_str);
         }
         $spend_cut=0;
         $spend_put=0;
