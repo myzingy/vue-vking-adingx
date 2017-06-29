@@ -19,9 +19,16 @@ class exec
     function __construct($ad_adset,$type='ad',$debug=false)
     {
         $this->model = new model();
-        $this->ad=(object)$ad_adset;
-        $this->adx=[];
         $this->debug=$debug;
+        $this->ad=(object)$ad_adset;
+        $this->setRules();
+        if(count($this->rules)<1) {
+            if($this->debug){
+                debug('construct::setRules is null');
+            }
+            return;
+        };
+        $this->adx=[];
         foreach ($this->ad->List as $list){
             if($list['Type']==99) break;
             $this->adx[$list['Type']]=(object)$list;
@@ -30,7 +37,7 @@ class exec
         if($this->debug){
             debug('construct',$this->type,$this->ad,$this->adx);
         }
-        $this->setRules();
+
     }
     function setRules(){
         $this->rules=[];
@@ -158,6 +165,7 @@ class exec
 
     }
     function run(){
+        if(count($this->rules)<1) return;
         foreach ($this->rules as $r){
             $this->rule=$r;
             $r['code']=str_replace('$',"\$",$r['code']);
