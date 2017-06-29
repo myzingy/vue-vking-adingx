@@ -5,7 +5,8 @@ function console(){
 }
 function debug(){
 	$param=func_get_args();
-	return \Modules\common\common_lib::debug($param[0],$param);
+    $title=array_shift($param);
+	return \Modules\common\common_lib::debug($title,$param);
 }
 function url($path=""){
 	return \Modules\common\common_lib::url($path);
