@@ -13,7 +13,6 @@ $conf['think']=array(
 );
 $conf['erp_host']=array('erp_host'=>array(
         'http://54.199.246.177/',//测试环境
-        'http://54.238.144.67/',
         'http://52.199.219.172/',
 ));
 $_conf=array();
