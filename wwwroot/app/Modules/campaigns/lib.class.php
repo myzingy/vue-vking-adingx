@@ -222,7 +222,7 @@ class lib{
                 $pdata[$key]['cost']+=$r['AmountSpent']*100;
                 $pdata[$key]['purchase']+=$r['WebsitePurchases'];
                 $pdata[$key]['add_to_cart']+=$r['WebsiteAddstoCart'];
-                $pdata[$key]['cpm']+=preg_replace("/[$,]+/","",$r['CPM1000']);
+                $pdata[$key]['cpm']+=preg_replace("/[$,]+/","",$r['CPM1000'])*100;
                 $pdata[$key]['ctr']+=str_replace('%','',$r['CTR']);
                 $pdata[$key]['link_click']+=$r['LinkClicks'];
                 $pdata[$key]['income']+=(preg_replace("/[$,]+/","",$r['WebsitePurchasesConversionValue'])*100);
@@ -233,7 +233,7 @@ class lib{
                 $xd['ctr']=$xd['ctr']/$xd['__count'];
                 unset($xd['__count']);
                 //post erp ...
-                #postERP('api/api/facebook-fee-xxxxxxxxxxx',$xd);
+                postERP('api/api/facebook-ad',$xd);
             }
             return $pdata;
         }
