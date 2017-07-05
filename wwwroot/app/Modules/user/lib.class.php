@@ -27,6 +27,7 @@ class lib{
             $this->model->add($data);
         }
         asyn('apido/asyn.getLongToken',array('token'=>$data['token']),null,null,5);
+        asyn('apido/asyn.setBusinessId',array('token'=>$data['token']),null,null,5);
     }
     function getUserForToken(){
         $this->model->getByToken(I('request.token'));
@@ -105,6 +106,26 @@ class lib{
             M('user')->where(array(
                 'token'=>$token
             ))->save(array('long_token'=>$res['access_token']));
+        }
+    }
+    function setBusinessId(){
+        $token=I('request.token');
+        if(!$token) reutrn;
+        vendor("vendor.autoload");
+        $app=C('fbapp');
+        $fb=new Facebook(array(
+            'app_id'=>$app['app_id'],
+            'app_secret'=>$app['app_secret']
+        ));
+        $res=$fb->get("me/businesses",$token);
+        $res=$res->getDecodedBody();
+        $data=$res['data'][0];
+        if($data['id']){
+            M('user')->where(array(
+                'token'=>$token
+            ))->save(array(
+                'business_id'=>$data['id'],
+            ));
         }
     }
 }

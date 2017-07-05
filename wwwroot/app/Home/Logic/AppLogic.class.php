@@ -270,7 +270,10 @@ class AppLogic {
         $lib = new \Modules\user\lib();
         return $lib -> getLongToken();
     }
-
+    function asyn__setBusinessId(){
+        $lib = new \Modules\user\lib();
+        return $lib -> setBusinessId();
+    }
     /**
      * @return mixed
      * 提交数据给erp
