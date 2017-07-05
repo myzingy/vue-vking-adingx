@@ -137,7 +137,7 @@ END;
             'app_id'=>$fbapp['app_id'],
             'app_secret'=>$fbapp['app_secret']
         ));
-        $res=$fb->get($user->id.'/adaccounts?fields=account_id,name',$user->token);
+        $res=$fb->get($user->id.'/adaccounts?fields=account_id,name',$user->long_token?$user->long_token:$user->token);
         return $res->getDecodedBody();
     }
     function addAccounts($user){
