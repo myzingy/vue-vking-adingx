@@ -164,7 +164,7 @@ class lib{
         return array('data'=>$formatData);
     }
     function postErpCampaign(){
-        //if(__APP__POS=='CC__DEV') return;
+        if(__APP__POS=='CC__DEV') return;
         $ac_ids_rules=array(
             '561910137324149'=>'戴婷',
             '836196303228863'=>'权文娟',
