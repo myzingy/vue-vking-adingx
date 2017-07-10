@@ -4,10 +4,10 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit35c439803c4cf10ff992ad8e915292b6
+class ComposerStaticInit39e4002ea37185d4d87ee9ecb78a432c
 {
     public static $files = array (
-        '7e702cccdb9dd904f2ccf22e5f37abae' => __DIR__ . '/..' . '/facebook/php-sdk-v4/src/Facebook/polyfills.php',
+        'c65d09b6820da036953a371c8c73a9b1' => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook/polyfills.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -21,7 +21,7 @@ class ComposerStaticInit35c439803c4cf10ff992ad8e915292b6
     public static $prefixDirsPsr4 = array (
         'Facebook\\' => 
         array (
-            0 => __DIR__ . '/..' . '/facebook/php-sdk-v4/src/Facebook',
+            0 => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook',
         ),
         'FacebookAds\\' => 
         array (
@@ -32,8 +32,8 @@ class ComposerStaticInit35c439803c4cf10ff992ad8e915292b6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit35c439803c4cf10ff992ad8e915292b6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit35c439803c4cf10ff992ad8e915292b6::$prefixDirsPsr4;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit39e4002ea37185d4d87ee9ecb78a432c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit39e4002ea37185d4d87ee9ecb78a432c::$prefixDirsPsr4;
 
         }, null, ClassLoader::class);
     }

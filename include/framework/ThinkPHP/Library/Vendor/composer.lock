@@ -4,47 +4,10 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "916e7db5d8f8645adae02201043e8398",
+    "content-hash": "36015560e34543018ce1aa5cbece2fd2",
     "packages": [
         {
-            "name": "facebook/php-ads-sdk",
-            "version": "2.9.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/facebook/facebook-php-ads-sdk.git",
-                "reference": "613d89fbe0424d017a5156658b4e324fbfb5be68"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://files.phpcomposer.com/files/facebook/facebook-php-ads-sdk/613d89fbe0424d017a5156658b4e324fbfb5be68.zip",
-                "reference": "613d89fbe0424d017a5156658b4e324fbfb5be68",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.6",
-                "symfony/finder": "~2.6"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "FacebookAds\\": "src/FacebookAds/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Facebook Platform"
-            ],
-            "description": "PHP SDK for Facebook ads",
-            "homepage": "https://developers.facebook.com/",
-            "keywords": [
-                "ads",
-                "facebook",
-                "sdk"
-            ],
-            "time": "2017-04-24T18:24:16+00:00"
-        },
-        {
-            "name": "facebook/php-sdk-v4",
+            "name": "facebook/graph-sdk",
             "version": "5.5.0",
             "source": {
                 "type": "git",
@@ -99,8 +62,44 @@
                 "facebook",
                 "sdk"
             ],
-            "abandoned": "facebook/graph-sdk",
             "time": "2017-04-20T14:15:02+00:00"
+        },
+        {
+            "name": "facebook/php-ads-sdk",
+            "version": "2.9.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/facebook/facebook-php-ads-sdk.git",
+                "reference": "d7fefc0b3da320d0d6255eaadc937a2bc30bb30b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/facebook/facebook-php-ads-sdk/d7fefc0b3da320d0d6255eaadc937a2bc30bb30b.zip",
+                "reference": "d7fefc0b3da320d0d6255eaadc937a2bc30bb30b",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.6",
+                "symfony/finder": "~2.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FacebookAds\\": "src/FacebookAds/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Facebook Platform"
+            ],
+            "description": "PHP SDK for Facebook ads",
+            "homepage": "https://developers.facebook.com/",
+            "keywords": [
+                "ads",
+                "facebook",
+                "sdk"
+            ],
+            "time": "2017-06-23T19:10:23+00:00"
         }
     ],
     "packages-dev": [],
