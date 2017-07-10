@@ -3,8 +3,11 @@ namespace Home\Controller;
 set_time_limit(0);
 use FacebookAds\Object\AdSet;
 use Facebook\Facebook;
+use FacebookAds\Object\AdsPixel;
 use FacebookAds\Object\Business;
+use FacebookAds\Object\CustomAudience;
 use FacebookAds\Object\Fields\AdAccountFields;
+use FacebookAds\Object\Values\AdPreviewAdFormatValues;
 use Think\Controller;
 use Facebook\FacebookBatchRequest;
 use FacebookAds\Api;
@@ -202,6 +205,24 @@ END;
         ["website_clicks"] => NULL
         ["website_ctr"] => NULL
 END;
+        $str=<<<END
+["account_id"] => string(6) "string"
+      ["approximate_count"] => string(3) "int"
+      ["data_source"] => string(24) "CustomAudienceDataSource"
+      ["delivery_status"] => string(20) "CustomAudienceStatus"
+      ["description"] => string(6) "string"
+      ["external_event_source"] => string(8) "AdsPixel"
+      ["id"] => string(6) "string"
+      ["is_value_based"] => string(4) "bool"
+      ["lookalike_audience_ids"] => string(12) "list<string>"
+      ["lookalike_spec"] => string(13) "LookalikeSpec"
+      ["name"] => string(6) "string"
+      ["operation_status"] => string(20) "CustomAudienceStatus"
+      ["opt_out_link"] => string(6) "string"
+      ["permission_for_actions"] => string(24) "CustomAudiencePermission"
+      ["pixel_id"] => string(6) "string"
+END;
+
 
         preg_match_all("/\[\"(.*)\"\]/",$str,$match);
         $fields=$match[1];
@@ -211,18 +232,31 @@ END;
 //        //$res=$ac->getAdVideos($fields);
 //        dump($res);
 //        exit;
+        //$ac=new AdAccount('act_1593565507558990');
         //$ad=new Campaign('6084032058764');
-        //$ad=new AdSet('6084839602964');
-        $ad=new Ad('6084839602764');
+        //$ad=new AdSet('6084652424764');
+        //$ad=new Ad('6084839602764');
+        //$ad=new CustomAudience('6085459889364');
+        $ad=new AdsPixel('1593577174232007');
         //$res=$ad->getSelf($fields);
         //dump($ad->getAdCreatives($fields));
+        //dump($ad->getTargetingSentenceLines());
+//        dump($ac->getAdsPixels(['id','code','creation_time'
+//            ,'is_created_by_business','last_fired_time','name'
+//        ,'owner_ad_account','owner_business']));
+        dump($ad->getStats(array(), array(
+            'aggregation' => 'custom_data_field',
+            'event' => 'product_info',
+        )));
+        return;
         dump($ad->getInsights($fields,array(
             'time_range'=>array('since'=>'2017-07-05','until'=>'2017-07-06'),
             'action_attribution_windows'=>['1d_click','1d_view'],
-            'breakdowns'=> 'hourly_stats_aggregated_by_advertiser_time_zone,household_income',
+            'breakdowns'=> 'hourly_stats_aggregated_by_audience_time_zone',
             //creative_fingerprint,household_composition,
             //household_income,platform_position
         )));
+
         return;
         $lib=new \Modules\adsets\lib();
         $data=$lib->getAdsetsData('23842626413470368');
