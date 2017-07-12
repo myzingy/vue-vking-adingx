@@ -2,7 +2,7 @@ import Blockly from 'node-blockly/browser';
 export default {
     json:{
         "type": "implement",
-        "message0": "%1 %2 %3 %4 %5",
+        "message0": "%1 %2 %3 %4",
         "args0": [
             {
                 "type": "field_dropdown",
@@ -58,10 +58,6 @@ export default {
                 "type": "field_input",
                 "name": "value",
                 "text": "0%    "
-            },
-            {
-                "type": "input_value",
-                "name": "implement"
             }
         ],
         "previousStatement": null,
@@ -82,7 +78,7 @@ export default {
             var dropdown_do = block.getFieldValue('do');
             var dropdown_type = block.getFieldValue('type');
             var text_value = block.getFieldValue('value');
-            var value_implement = Blockly.JavaScript.valueToCode(block, 'implement', Blockly.JavaScript.ORDER_ATOMIC);
+            //var value_implement = Blockly.JavaScript.valueToCode(block, 'implement', Blockly.JavaScript.ORDER_ATOMIC);
             // TODO: Assemble PHP into code variable.
             //var code = dropdown_do+'#'+text_value+';\n';
             var code = 'return $this->implement("'+dropdown_field+'","'+dropdown_do+'","'+dropdown_type+'","'+text_value.replace(/[ $]/g,'')+'");';
