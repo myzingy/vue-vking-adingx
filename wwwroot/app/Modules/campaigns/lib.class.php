@@ -200,6 +200,7 @@ class lib{
                     foreach ($rule as $rl){
                         if(stripos($r['CampaignName'],$rl[1])>-1){
                             $key=$rl[0];
+                            break;
                         }
                     }
                 }else{
