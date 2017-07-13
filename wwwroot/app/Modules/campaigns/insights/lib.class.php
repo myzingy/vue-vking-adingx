@@ -158,6 +158,8 @@ END;
 
         //return $campaigns_data;
         if ($campaigns_data) {
+            setDayClick($campaigns_data['campaigns_insights_action_types'],$campaigns_data);
+            //unset($campaigns_data['campaigns_insights_action_types']);
             $this->model->relation(true)->add($campaigns_data);
         }
         if ($campaign_timespace == 'today') {

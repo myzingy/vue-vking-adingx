@@ -201,6 +201,9 @@ END;
             if ($campaigns_data) {
                 M('accounts_insights')->where("id='{$campaigns_data['id']}'")->delete();
                 M('accounts_insights_action_types')->where("accounts_insights_id='{$campaigns_data['id']}'")->delete();
+
+                setDayClick($campaigns_data['accounts_insights_action_types'],$campaigns_data);
+                //unset($campaigns_data['accounts_insights_action_types']);
                 $this->model->relation(true)->add($campaigns_data);
             }
             asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>$ad_timespace,'ac_id'=>$ac_id,'breakdowns'=>'device_platform'));

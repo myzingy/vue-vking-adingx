@@ -57,6 +57,24 @@ function getDayClick($type,$id){
     }
     return $dayData;
 }
+function setDayClick($action_data,&$data){
+    $data_key=array(
+        'actions::offsite_conversion.fb_pixel_add_to_cart'=>'WebsiteAddstoCart',
+        'actions::offsite_conversion.fb_pixel_purchase'=>'WebsitePurchases',
+        'cost_per_action_type::offsite_conversion.fb_pixel_add_to_cart'=>'CostperWebsiteAddtoCart',
+        'action_values::offsite_conversion.fb_pixel_purchase'=>'WebsitePurchasesConversionValue',
+        'cost_per_action_type::link_click'=>'CPC',
+        'breakdowns.device_platform::desktop.spend'=>'DesktopSpend',
+        'breakdowns.device_platform::mobile.spend'=>'MobileSpend',
+    );
+    if($action_data){
+        foreach ($action_data as  $r){
+            if($key=$data_key[$r['insight_key'].'::'.$r['action_type']]){
+                $data['CLICK1D_'.$key]=$r['1d_click'];
+            }
+        }
+    }
+}
 function formatInsightsData($data,$type='campaign'){
     $formatData=[];
     $campaign_id= $type."_id";
