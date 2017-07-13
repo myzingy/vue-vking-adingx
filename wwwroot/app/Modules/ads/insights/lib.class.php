@@ -128,6 +128,14 @@ END;
                     'action_attribution_windows'=>['1d_click','1d_view'],
                 )
             );
+        }elseif($ad_timespace=='lifetime'){
+            $adsets = $campaign->getInsights(
+                $fields,
+                array(
+                    'date_preset'=>'lifetime',
+                    'action_attribution_windows'=>['1d_click','1d_view'],
+                )
+            );
         }else{
             $adsets = $campaign->getInsights(
                 $fields,
@@ -169,8 +177,13 @@ END;
                     $campaigns_data['type']=model::INSIGHT_TYPE_YESTODAY;
                     break;
                 default:
-                    $campaigns_data['id']=md5($campaigns_data['ad_id'].$campaigns_data['date_start']);
-                    $campaigns_data['type']=model::INSIGHT_TYPE_YESTODAY;
+                    if($ad_timespace=='lifetime'){
+                        $campaigns_data['id']=$campaigns_data['ad_id'].'.lifetime';
+                        $campaigns_data['type']=model::INSIGHT_TYPE_LIFETIME;
+                    }else{
+                        $campaigns_data['id']=md5($campaigns_data['ad_id'].$campaigns_data['date_start']);
+                        $campaigns_data['type']=model::INSIGHT_TYPE_YESTODAY;
+                    }
             }
             M('ads_insights')->where("id='{$campaigns_data['id']}'")->delete();
             M('ads_insights_action_types')->where("ads_insights_id='{$campaigns_data['id']}'")->delete();
@@ -193,6 +206,8 @@ END;
                 getDayTime("00:01:00"),-1);
             asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_14day','ac_id'=>$ac_id),null,
                 getDayTime("00:01:00"),-2);
+            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'lifetime','ac_id'=>$ac_id),null,
+                getDayTime("04:01:00"),0);
 
         }
         return $campaigns_data;

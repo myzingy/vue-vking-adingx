@@ -10,6 +10,7 @@ class model extends RelationModel{
     const INSIGHT_TYPE_YESTODAY=99;
     const INSIGHT_TYPE_LAST_7DAY=7;
     const INSIGHT_TYPE_LAST_14DAY=14;
+    const INSIGHT_TYPE_LIFETIME=100;
 
     protected $tableName = 'ads_insights';
 	protected $pk     = 'id';
