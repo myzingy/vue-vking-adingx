@@ -207,7 +207,7 @@ END;
             asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_14day','ac_id'=>$ac_id),null,
                 getDayTime("00:01:00"),-2);
             asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'lifetime','ac_id'=>$ac_id),null,
-                getDayTime("04:01:00"),0);
+                getDayTime("02:01:00"),0);
 
         }
         return $campaigns_data;
