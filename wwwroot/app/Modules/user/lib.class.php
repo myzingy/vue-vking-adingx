@@ -26,8 +26,8 @@ class lib{
             $this->getRoot($data['email'],$data['group_id']);
             $this->model->add($data);
         }
-        asyn('apido/asyn.getLongToken',array('token'=>$data['token']),null,null,5);
-        asyn('apido/asyn.setBusinessId',array('token'=>$data['token']),null,null,5);
+        asyn_implement('apido/asyn.getLongToken',array('token'=>$data['token']));
+        asyn_implement('apido/asyn.setBusinessId',array('token'=>$data['token']));
     }
     function getUserForToken(){
         $this->model->getByToken(I('request.token'));
