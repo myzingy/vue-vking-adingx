@@ -36,7 +36,28 @@ function asyn($path,$params=array('__t'=>''),$method="GET",$crontime=0,$priority
 function cronResult($result=true,$message=''){
     \Modules\cron\lib::result($result,$message);
 }
-function getDayClick($type,$id,$data){
+function getDayClick($type,$id){
+    $data_key=array(
+        'actions::offsite_conversion.fb_pixel_add_to_cart'=>'WebsiteAddstoCart',
+        'actions::offsite_conversion.fb_pixel_purchase'=>'WebsitePurchases',
+        'cost_per_action_type::offsite_conversion.fb_pixel_add_to_cart'=>'CostperWebsiteAddtoCart',
+        'action_values::offsite_conversion.fb_pixel_purchase'=>'WebsitePurchasesConversionValue',
+        'cost_per_action_type::link_click'=>'CPC',
+        'breakdowns.device_platform::desktop.spend'=>'DesktopSpend',
+        'breakdowns.device_platform::mobile.spend'=>'MobileSpend',
+    );
+    $data=M($type.'s_insights_action_types')->where("{$type}s_insights_id='$id'")->select();
+    $dayData=array();
+    if($data){
+        foreach ($data as  $r){
+            if($key=$data_key[$r['insight_key'].'::'.$r['action_type']]){
+                $dayData[$key]=$r['1d_click'];
+            }
+        }
+    }
+    return $dayData;
+}
+function getDayClickX($type,$id,$data){
     $data_key=array(
         'actions::offsite_conversion.fb_pixel_add_to_cart'=>'WebsiteAddstoCart',
         'actions::offsite_conversion.fb_pixel_purchase'=>'WebsitePurchases',
