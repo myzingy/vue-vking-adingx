@@ -282,6 +282,22 @@ class AppLogic {
         $lib = new \Modules\campaigns\lib();
         return $lib -> postErpCampaign();
     }
+    function asyn__getAssetForAd(){
+        $lib = new \Modules\assets\lib();
+        return $lib -> getAssetForAd();
+    }
+    function asyn__setAssetsImageInfo(){
+        $lib = new \Modules\assets\lib();
+        return $lib -> setAssetsImageInfo();
+    }
+    function asyn__setAssetsVideoInfo(){
+        $lib = new \Modules\assets\lib();
+        return $lib -> setAssetsVideoInfo();
+    }
+    function asyn__setAssetsFileHash(){
+        $lib = new \Modules\assets\lib();
+        return $lib -> setAssetsFileHash();
+    }
 	############################################################
 	# 一些异步接口结束
 	############################################################
