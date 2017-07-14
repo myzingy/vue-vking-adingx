@@ -149,6 +149,12 @@ END;
             $campaigns_data['ads_insights_action_types']=array();
             $_d=$adsets->current()->getData();
             foreach ($fields as $i=>$fk){
+                if('relevance_score'==$fk){
+                    $campaigns_data['relevance_score']=$_d[$fk]['score'];
+                    $campaigns_data['positive_feedback']=$_d[$fk]['positive_feedback'];
+                    $campaigns_data['negative_feedback']=$_d[$fk]['negative_feedback'];
+                    continue;
+                }
                 if(is_array($_d[$fk])){
                     foreach ($_d[$fk] as $v){
                         if(!$v['action_type']) continue;
