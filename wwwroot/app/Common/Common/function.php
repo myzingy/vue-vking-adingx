@@ -36,7 +36,7 @@ function asyn($path,$params=array('__t'=>''),$method="GET",$crontime=0,$priority
 function cronResult($result=true,$message=''){
     \Modules\cron\lib::result($result,$message);
 }
-function getDayClick($type,$id){
+function getDayClick($type,$id,$data){
     $data_key=array(
         'actions::offsite_conversion.fb_pixel_add_to_cart'=>'WebsiteAddstoCart',
         'actions::offsite_conversion.fb_pixel_purchase'=>'WebsitePurchases',
@@ -46,13 +46,10 @@ function getDayClick($type,$id){
         'breakdowns.device_platform::desktop.spend'=>'DesktopSpend',
         'breakdowns.device_platform::mobile.spend'=>'MobileSpend',
     );
-    $data=M($type.'s_insights_action_types')->where("{$type}s_insights_id='$id'")->select();
     $dayData=array();
     if($data){
-        foreach ($data as  $r){
-            if($key=$data_key[$r['insight_key'].'::'.$r['action_type']]){
-                $dayData[$key]=$r['1d_click'];
-            }
+        foreach ($data_key as $key){
+            $dayData[$key]=$data['CLICK1D_'.$key];
         }
     }
     return $dayData;
@@ -81,7 +78,7 @@ function formatInsightsData($data,$type='campaign'){
     if(count($data)>0){
         foreach ($data as &$that){
             foreach ($that['insights'] as $i=>$r){
-                $day_click=getDayClick($type,$r['id']);
+                $day_click=getDayClick($type,$r['id'],$r);
                 $dr = array(
                     "Id" => $r[$campaign_id],
                     "Type" =>  $r['type'],
