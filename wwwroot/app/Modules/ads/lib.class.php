@@ -119,7 +119,7 @@ class lib{
     }
     //用于替换 getAdsInsightsData
     function getAdsData($ad_id=""){
-        $where=" AI.date_stop='".date('Y-m-d',NOW_TIME)."' ";
+        $where=" AI.type!=100 AND AI.date_stop='".date('Y-m-d',NOW_TIME)."' ";
         $ac_id=I('request.ac_id');
         if($ac_id){
             $where.=" AND ads.account_id='$ac_id' ";

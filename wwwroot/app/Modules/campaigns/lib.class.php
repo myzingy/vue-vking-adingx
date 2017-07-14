@@ -138,7 +138,7 @@ class lib{
     //用于替换 getCampaignsInsightsData
     function getCampaignsData($ac_id=null,$date_stop=null){
         $date_stop_str=$date_stop?$date_stop:date('Y-m-d',NOW_TIME);
-        $where=" AI.date_stop='".$date_stop_str."' ";
+        $where=" AI.type!=100 AND AI.date_stop='".$date_stop_str."' ";
         $ac_id=$ac_id?$ac_id:I('request.ac_id');
         if($ac_id){
             $where.=" AND campaigns.account_id='$ac_id' ";

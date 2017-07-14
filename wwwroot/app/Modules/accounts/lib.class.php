@@ -112,7 +112,7 @@ END;
         return $campaigns_data;
     }
     function getAccountData($account_id=""){
-        $where=" AI.date_stop='".date('Y-m-d',NOW_TIME)."' ";
+        $where=" AI.type!=100 AND AI.date_stop='".date('Y-m-d',NOW_TIME)."' ";
         $ac_id=I('request.ac_id');
         if($ac_id){
             $where.=" AND account.account_id='$ac_id' ";
