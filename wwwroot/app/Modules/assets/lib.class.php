@@ -251,6 +251,8 @@ END;
         if(count($assets)>1) asyn_implement('apido/asyn.setAssetsFileHash');
     }
     function getData(){
+        $offset=I('request.offset',0);
+        $limit=I('request.limit',30);
         $where=[];
         $fields="A.*"
             .",sum(ADI.CLICK1D_WebsiteAddstoCart) as WebsiteAddstoCart"
@@ -264,6 +266,10 @@ END;
             .",sum(ADI.cpm)as CPM1000"
             .",sum(ADI.reach)as Reach"
             .",sum(ADI.CLICK1D_WebsitePurchases)as Results"
+            .",avg(ADI.frequency)as frequency"
+            .",avg(ADI.relevance_score)as relevance_score"
+            .",(ADI.positive_feedback)as positive_feedback"
+            .",(ADI.negative_feedback)as negative_feedback"
             ;
 
         $data=$this->model->alias('A')
@@ -273,8 +279,8 @@ END;
             ->where($where)
             ->group('A.filehash,A.account_id')
             ->order('A.updated_time desc')
-            ->limit(30)
+            ->limit($offset,$limit)
             ->select();
-        return ['data'=>$data];
+        return ['data'=>$data,'total'=>$this->model->count()];
     }
 }

@@ -121,8 +121,17 @@ let vk={
             if(cancel) cancel();
         });
     },
-    numberFormat(number,floatNumber=2,numberSplit=',',pre='$'){
-        number=number.toFix(2)
+    numberFormat(num,floatNumber=2,pre='$'){
+        var numberSplit=',';
+        var number=(num/1).toFixed(floatNumber).toString();
+        return number.replace(/([\d]{1,3})([\d]{3})?([\d]{3})?([\d]{3})?(\.[\d]{2})/,function(){
+            var str=pre;
+            for (var i=1;i<5;i++){
+                str+=typeof arguments[i]!='undefined'?(arguments[i]+numberSplit):'';
+            }
+            str=str.substr(0,str.length-1);
+            return str+arguments[5];
+        });
     },
 };
 export default vk;
