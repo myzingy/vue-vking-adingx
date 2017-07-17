@@ -70,7 +70,7 @@ class lib
         if($ac_id){
             $where.=" AND account_id='$ac_id' ";
         }
-        $data=M('rules_exec_log')->where($where)->order('id desc')->limit(100)->select();
+        $data=M('rules_exec_log')->where($where)->order('id desc')->limit(400)->select();
         foreach ($data as &$r){
             $r['time_format']=date('m-d H:i',$r['time']);
         }
