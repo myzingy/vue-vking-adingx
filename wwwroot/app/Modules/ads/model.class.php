@@ -31,7 +31,7 @@ class model extends RelationModel{
         ),
 	);
 	function __construct(){
-        $this->_link['insights']['condition']=" date_stop>='".date('Y-m-d',strtotime('-1 day'))."' ";
+        $this->_link['insights']['condition']=" type!=100 and date_stop>='".date('Y-m-d',strtotime('-1 day'))."' ";
 		parent::__construct();
 	}
 }
