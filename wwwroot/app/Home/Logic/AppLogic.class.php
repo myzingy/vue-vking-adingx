@@ -132,6 +132,10 @@ class AppLogic {
         $lib = new \Modules\accounts\lib();
         return $lib->setAccountsForEmail();
     }
+    function assets__getData(){
+        $lib = new \Modules\assets\lib();
+        return $lib->getData();
+    }
 	############################################################
 	# 一些异步接口开始
 	############################################################
@@ -297,6 +301,14 @@ class AppLogic {
     function asyn__setAssetsFileHash(){
         $lib = new \Modules\assets\lib();
         return $lib -> setAssetsFileHash();
+    }
+    function asyn__pauseAdset(){
+        $lib = new \Modules\adsets\lib();
+        return $lib -> pause();
+    }
+    function asyn__pauseAd(){
+        $lib = new \Modules\ads\lib();
+        return $lib -> pause();
     }
 	############################################################
 	# 一些异步接口结束

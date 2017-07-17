@@ -5,6 +5,7 @@
  */
 namespace Modules\ads;
 use FacebookAds\Api;
+use FacebookAds\Object\Ad;
 use FacebookAds\Object\AdAccount;
 use FacebookAds\Cursor;
 use FacebookAds\Object\Values\ArchivableCrudObjectEffectiveStatuses;
@@ -158,5 +159,20 @@ class lib{
             ->select();
         $formatData=formatInsightsData($data,'ad');
         return array('data'=>$formatData);
+    }
+    //停止投放
+    function pause(){
+        if(__APP__POS=='CC__DEV') return;
+        $ac_id=I('request.ac_id');
+        if(!$ac_id) return;
+        $ac=FBC($ac_id);
+        vendor("vendor.autoload");
+        $fba=Api::init($ac['app_id'],$ac['app_secret'],$ac['access_tokens']);
+        $api = Api::instance();
+
+        $ad_id=I('request.ad_id');
+        $ad=new Ad($ad_id);
+        $ad->configured_status=Ad::STATUS_PAUSED;
+        $ad->update();
     }
 }

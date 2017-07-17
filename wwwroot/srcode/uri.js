@@ -27,4 +27,7 @@ export default {
     updateUsers:{act:'user.updateUsers',code:13004},
     getAccountsForEmail:{act:'user.getAccountsForEmail',code:13005},
     setAccountsForEmail:{act:'user.setAccountsForEmail',code:13006},
+
+    //assets
+    assetsGetData:{act:'assets.getData',code:14000},
 }

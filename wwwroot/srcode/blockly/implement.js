@@ -13,8 +13,12 @@ export default {
                         "Budget"
                     ],
                     [
-                        "暂停投放",
-                        "Pause"
+                        "暂停投放(Ad Set)",
+                        "PauseAdset"
+                    ],
+                    [
+                        "暂停投放(Ad)",
+                        "PauseAd"
                     ]
                 ]
             },

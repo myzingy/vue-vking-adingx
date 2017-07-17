@@ -120,6 +120,9 @@ let vk={
         }).catch(() => {
             if(cancel) cancel();
         });
-    }
+    },
+    numberFormat(number,floatNumber=2,numberSplit=',',pre='$'){
+        number=number.toFix(2)
+    },
 };
 export default vk;

@@ -47,6 +47,11 @@ export default [
                 component: resolve => require(['../pages/home/index.vue?users'], resolve)
             },
             {
+                path: 'assets*', //登录
+                meta: { auth: false },
+                component: resolve => require(['../pages/assets/index.vue'], resolve)
+            },
+            {
                 path: '*', //其他页面，强制跳转到登录页面
                 redirect: '/login'
             },

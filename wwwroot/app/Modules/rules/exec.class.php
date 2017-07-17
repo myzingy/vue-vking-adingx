@@ -148,25 +148,42 @@ class exec
                          'adset_id'=>$this->ad->Id,
                          'budget'=>$newBudget,
                      ),null,null,99);
+                 }else{
+                     $this->implement_str="";
                  }
             }
-        }elseif('Pause'==$field){
+        }elseif('PauseAdset'==$field){
+            if(strtoupper($this->type)!='ADSET') return;
             $this->implement_str="[$field]";
+            asyn('apido/asyn.pauseAdset',array(
+                'ac_id'=>$this->ad->AccountId,
+                'ad_id'=>$this->ad->Id,
+            ),null,null,99);
+        }elseif('PauseAd'==$field){
+            if(strtoupper($this->type)!='AD') return;
+            $this->implement_str="[$field]";
+            asyn('apido/asyn.pauseAd',array(
+                'ac_id'=>$this->ad->AccountId,
+                'ad_id'=>$this->ad->Id,
+            ),null,null,99);
+        }elseif('Pause'==$field){
+            $this->implement_str="[$field]!!!已废弃,请重新编辑（确认要暂停 AdSet/Ad）后保存下规则";
         }
-        M('rules_exec_log')->add(array(
-            'time'=>NOW_TIME,
-            'rule_id'=>$this->rule['id'],
-            'rule_name'=>$this->rule['name'],
-            'target'=>strtoupper($this->type),
-            'target_id'=>$this->ad->Id,
-            'target_data'=>json_encode($this->ad),
-            'rule_exec'=>$this->expression_str."==>".$this->implement_str,
-            'account_id'=>$this->ad->AccountId,
-            'account_name'=>$this->ad->AccountName,
-            'spend_cut'=>$spend_cut,
-            'spend_put'=>$spend_put,
-        ));
-
+        if($this->implement_str){
+            M('rules_exec_log')->add(array(
+                'time'=>NOW_TIME,
+                'rule_id'=>$this->rule['id'],
+                'rule_name'=>$this->rule['name'],
+                'target'=>strtoupper($this->type),
+                'target_id'=>$this->ad->Id,
+                'target_data'=>json_encode($this->ad),
+                'rule_exec'=>$this->expression_str."==>".$this->implement_str,
+                'account_id'=>$this->ad->AccountId,
+                'account_name'=>$this->ad->AccountName,
+                'spend_cut'=>$spend_cut,
+                'spend_put'=>$spend_put,
+            ));
+        }
     }
     function run(){
         if(count($this->rules)<1) return;
