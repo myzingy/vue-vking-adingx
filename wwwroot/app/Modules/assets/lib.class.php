@@ -77,13 +77,15 @@ END;
                 $assets_insights=[];
                 foreach ($child as $r){
                     $id=$r['video_id']?$r['video_id']:"{$ac_id}:{$r['image_hash']}";
-                    array_push($assets_insights,array(
+                    $ex_count=$this->model->where("id='{$id}'")->count();
+                    if($ex_count>0) continue;
+                    $assets_insights[$id]=array(
                         'asset_id'=>$id,
                         'insight_id'=>$insight_id
-                    ));
+                    );
                     $count=$this->model->where("id='{$id}'")->count();
                     if($count<1){
-                        array_push($assets,array(
+                        $assets[$id]=array(
                             'account_id'=>$ac_id,
                             'hash'=>$r['image_hash'],
                             'id'=>$id,
@@ -91,7 +93,7 @@ END;
                             'filehash'=>md5($id),
                             'type'=>$r['video_id']?1:0,
                             'permalink_url'=>$r['picture']
-                        ));
+                        );
                     }
                 }
                 if(count($assets)>0){
@@ -248,17 +250,29 @@ END;
         }
         if(count($assets)>1) asyn_implement('apido/asyn.setAssetsFileHash');
     }
-    function getData($filehash=''){
+    function getData(){
         $where=[];
-        if($filehash){
-            $where['A.filehash']=$filehash;
-        }
+        $fields="A.*"
+            .",sum(ADI.CLICK1D_WebsiteAddstoCart) as WebsiteAddstoCart"
+            .",sum(ADI.CLICK1D_CostperWebsiteAddtoCart) as CostperWebsiteAddtoCart"
+            .",sum(ADI.spend) as AmountSpent"
+            .",sum(ADI.CLICK1D_WebsitePurchases)as WebsitePurchases"
+            .",sum(ADI.CLICK1D_WebsitePurchasesConversionValue)as WebsitePurchasesConversionValue"
+            .",sum(ADI.inline_link_clicks)as LinkClicks"
+            .",sum(ADI.CLICK1D_CPC)as CPC"
+            .",sum(ADI.inline_link_click_ctr)as CTR"
+            .",sum(ADI.cpm)as CPM1000"
+            .",sum(ADI.reach)as Reach"
+            .",sum(ADI.CLICK1D_WebsitePurchases)as Results"
+            ;
+
         $data=$this->model->alias('A')
-            ->field('A.*,sum(ADI.*)')
+            ->field($fields)
             ->join('assets_insights AI ON AI.asset_id=A.id')
             ->join('ads_insights ADI ON ADI.id=AI.insight_id','left')
             ->where($where)
-            ->group('A.account_id')
+            ->group('A.filehash,A.account_id')
+            ->order('A.updated_time desc')
             ->limit(30)
             ->select();
         return ['data'=>$data];
