@@ -83,25 +83,24 @@ END;
                         'asset_id'=>$id,
                         'insight_id'=>$insight_id
                     );
-                    $count=$this->model->where("id='{$id}'")->count();
-                    if($count<1){
-                        $assets[$id]=array(
-                            'account_id'=>$ac_id,
-                            'hash'=>$r['image_hash'],
-                            'id'=>$id,
-                            'name'=>$r['name'],
-                            'filehash'=>md5($id),
-                            'type'=>$r['video_id']?1:0,
-                            'permalink_url'=>$r['picture']
-                        );
-                    }
+                    $assets[$id]=array(
+                        'account_id'=>$ac_id,
+                        'hash'=>$r['image_hash'],
+                        'id'=>$id,
+                        'name'=>$r['name'],
+                        'filehash'=>md5($id),
+                        'type'=>$r['video_id']?1:0,
+                        'permalink_url'=>$r['picture']
+                    );
                 }
                 if(count($assets)>0){
+                    $assets=array_values($assets);
                     $this->model->addAll($assets);
                     asyn('apido/asyn.setAssetsImageInfo',array('ac_id'=>$ac_id));
                     asyn('apido/asyn.setAssetsVideoInfo',array('ac_id'=>$ac_id));
                 }
                 if(count($assets_insights)>0){
+                    $assets_insights=array_values($assets_insights);
                     M('assets_insights')->addAll($assets_insights);
                 }
             }

@@ -174,7 +174,6 @@
                 const { columns, data } = param;
                 const sums = [];
                 if(data.length<2) return [];
-                //console.log('columns', columns);
                 columns.forEach((column, index) => {
                     if (index === 0) {
                         return;
@@ -187,9 +186,6 @@
                     const values = data.map(item =>
                         Number(item[column.columnKey] ? item[column.columnKey].toString().replace(/[\$,]+/g, '') : item[column.columnKey])
                     );
-                    //console.log('values....', values)
-
-
                     if (!values.every(value => isNaN(value))) {
                         sums[index] = values.reduce((prev, curr) => {
                             const value = Number(curr);
@@ -210,16 +206,6 @@
                         sums[index] = '';
                     }
                 });
-//                setTimeout(function(){
-//                    var el=document.getElementsByClassName('el-table__fixed');
-//                    var el_r=document.getElementsByClassName('el-table__fixed-right');
-//                    for(var i in el){
-//                        if(typeof el[i]!='undefined' && typeof el[i].style!='undefined')
-//                            el[i].style.bottom=0;
-//                        if(typeof el_r[i]!='undefined' && typeof el_r[i].style!='undefined')
-//                            el_r[i].style.bottom=0;
-//                    }
-//                },1000);
                 return sums;
             },
             handleSizeChange(){
