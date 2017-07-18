@@ -233,7 +233,7 @@ class common_lib {
         //var_dump(array($url_array['host'],$port,$getPath,$data));
         $fp = fsockopen($url_array['host'],$port,$errno,$errstr,5);
         if(!$fp){
-            console(__CLASS__,"http_asyn fsockopen::$errstr ($errno)");
+            console(__CLASS__,"http_asyn fsockopen::$errstr ($errno)",$path,$params);
             return;
         }
 
