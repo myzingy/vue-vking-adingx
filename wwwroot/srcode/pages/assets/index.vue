@@ -13,6 +13,13 @@
         display: inline-block;
         padding-right: 20px;
     }
+    tth:hover div.cell{
+        position: fixed;
+        z-index: 99;
+        color:#33f;
+        margin-top: -15px;
+        left:15px;
+    }
 </style>
 <template>
     <div>
@@ -23,26 +30,26 @@
                 <template scope="props">
                     <span>Updated Time:<span class="val">{{props.row.updated_time}}</span></span>
                     <span>Size:<span class="val">{{props.row.original_width}} x {{props.row.original_height}}</span></span>
-                    <el-table :data="props.row.List" border style="width: 100%">
-                        <el-table-column :formatter="formatChildDate" label="Ad Account" width="150"></el-table-column>
-                        <el-table-column prop="websiteaddstocart" label="Website Adds to Cart" width="80"></el-table-column>
-                        <el-table-column prop="costperwebsiteaddtocart" label="Cost per Website Add to Cart" width="80"></el-table-column>
-                        <el-table-column prop="amountspent" label="Spent"
+                    <el-table :data="props.row.list" border style="width: 100%">
+                        <el-table-column prop="account_id" label="Ad Account" width="150"></el-table-column>
+                        <el-table-column :formatter="numberFormatInt" columnKey="websiteaddstocart" label="Website Adds to Cart" width="80"></el-table-column>
+                        <el-table-column :formatter="moneyFormat" columnKey="costperwebsiteaddtocart" label="Cost per Website Add to Cart" width="80"></el-table-column>
+                        <el-table-column :formatter="moneyFormat" columnKey="amountspent" label="Spent"
                                          width="60"></el-table-column>
-                        <el-table-column prop="websitepurchases" label="Website Purchases" width="80"></el-table-column>
-                        <el-table-column prop="websitepurchasesconversionvalue" label="Website Purchases Conversion Value" width="80"></el-table-column>
-                        <el-table-column prop="linkclicks" label="Link Clicks" width="80"></el-table-column>
-                        <el-table-column prop="cpc" label="CPC (Cost per Link Click)" width="80"></el-table-column>
-                        <el-table-column prop="ctr" label="CTR (Link Click-Through Rate)" width="80"></el-table-column>
-                        <el-table-column prop="cpm1000" label="CPM (Cost per 1,000 Impressions)"
+                        <el-table-column :formatter="numberFormatInt" columnKey="websitepurchases" label="Website Purchases" width="80"></el-table-column>
+                        <el-table-column :formatter="moneyFormat" columnKey="websitepurchasesconversionvalue" label="Website Purchases Conversion Value" width="80"></el-table-column>
+                        <el-table-column :formatter="numberFormatInt" columnKey="linkclicks" label="Link Clicks" width="80"></el-table-column>
+                        <el-table-column :formatter="moneyFormat" columnKey="cpc" label="CPC (Cost per Link Click)" width="80"></el-table-column>
+                        <el-table-column :formatter="numberFormatPer" columnKey="ctr" label="CTR (Link Click-Through Rate)" width="80"></el-table-column>
+                        <el-table-column :formatter="moneyFormat" columnKey="cpm1000" label="CPM (Cost per 1,000 Impressions)"
                                          width="80"></el-table-column>
-                        <el-table-column prop="reach" label="Reach" width="80"></el-table-column>
-                        <el-table-column prop="results" label="Results" width="80"></el-table-column>
-                        <el-table-column prop="costperresult" label="Cost per Result" width="80"></el-table-column>
+                        <el-table-column :formatter="numberFormatInt" columnKey="reach" label="Reach" width="80"></el-table-column>
+                        <el-table-column :formatter="numberFormatInt" columnKey="results" label="Results" width="80"></el-table-column>
+                        <el-table-column :formatter="CostperResult" columnKey="costperresult" label="Cost per Result" width="80"></el-table-column>
                     </el-table>
                 </template>
             </el-table-column>
-            <el-table-column width="200" label="Name">
+            <el-table-column width="200" label="Name" :showTooltipWhenOverflow="true">
                 <template scope="scope">
                     <el-popover placement="right" title="" width="400" trigger="hover">
                         <div>
@@ -57,7 +64,7 @@
                 </template>
             </el-table-column>
             <el-table-column :formatter="numberFormatInt" columnKey="websiteaddstocart" label="Website Adds to Cart"
-                             width="80"></el-table-column>
+                             width="80" className="autotooltip"></el-table-column>
             <el-table-column :formatter="moneyFormat" columnKey="costperwebsiteaddtocart" label="Cost per Website Add to Cart" width="80"></el-table-column>
             <el-table-column :formatter="moneyFormat" columnKey="amountspent"
                              label="Spent" width="80"

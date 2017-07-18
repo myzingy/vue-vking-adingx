@@ -236,6 +236,7 @@ class lib{
                 $xd['ctr']=$xd['ctr']/$xd['__count'];
                 unset($xd['__count']);
                 //post erp ...
+                debug('POST==>ERP'.date("Y-m-d H:i:s",NOW_TIME),$xd);
                 postERP('api/api/facebook-ad',$xd);
             }
             return $pdata;

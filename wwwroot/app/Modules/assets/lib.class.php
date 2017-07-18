@@ -276,10 +276,19 @@ END;
             ->join('assets_insights AI ON AI.asset_id=A.id')
             ->join('ads_insights ADI ON ADI.id=AI.insight_id','left')
             ->where($where)
-            ->group('A.filehash,A.account_id')
+            ->group('A.filehash')
             ->order('A.updated_time desc')
             ->limit($offset,$limit)
             ->select();
-        return ['data'=>$data,'total'=>$this->model->count()];
+        $fdata=[];
+        foreach ($data as $r){
+            if(!$fdata[$r['filehash']]){
+                $r['list']=[$r];
+                $fdata[$r['filehash']]=$r;
+            }else{
+                array_push($fdata[$r['filehash']]['list'],$r);
+            }
+        }
+        return ['data'=>array_values($fdata),'total'=>$this->model->count()];
     }
 }
