@@ -9,7 +9,7 @@ let vk={
         return process.env.NODE_ENV === 'production';
     },
     cgi:function(uri){
-        var base_url=this.isProduction()?"/facebook/wwwroot/apido":"/apido";
+        var base_url=this.isProduction()?"/wwwroot/apido":"/apido";
         base_url+='/'+uri.act;
         console.log('isProduction',this.isProduction(),base_url);
         return base_url;
