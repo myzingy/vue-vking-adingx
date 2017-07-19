@@ -49,7 +49,7 @@
                     </el-table>
                 </template>
             </el-table-column>
-            <el-table-column width="200" label="Name" :showTooltipWhenOverflow="true">
+            <el-table-column width="200" label="Name" :showTooltipWhenOverflow="true" fixed>
                 <template scope="scope">
                     <el-popover placement="right" title="" width="400" trigger="hover">
                         <div>
@@ -61,22 +61,6 @@
                         </div>
                         <a :href="scope.row.url" target="_blank" slot="reference">{{ scope.row.name }}</a>
                     </el-popover>
-                </template>
-            </el-table-column>
-            <el-table-column label="Author"  width="100">
-                <template scope="scope">
-                    <el-select
-                            v-model="scope.row.author"
-                            filterable
-                            allow-create
-                            placeholder="请选择" @change="setAuthor(scope.row.author,scope.row)">
-                        <el-option
-                                v-for="item in ['HTML']"
-                                :key="item"
-                                :label="item"
-                                :value="item">
-                        </el-option>
-                    </el-select>
                 </template>
             </el-table-column>
             <el-table-column :formatter="numberFormatInt" columnKey="websiteaddstocart" label="Website Adds to Cart"
@@ -107,8 +91,29 @@
                              width="80"></el-table-column>
             <el-table-column prop="negative_feedback" label="Negative Feedback"
                              width="80"></el-table-column>
+            <el-table-column prop="ads_num" label="广告数"
+                             width="80"></el-table-column>
+            <el-table-column label="Author"  width="100">
+                <template scope="scope" >
+                    <el-select
+                            v-if="editor"
+                            v-model="scope.row.author"
+                            filterable
+                            allow-create
+                            placeholder="请选择" @change="setAuthor(scope.row.author,scope.row)">
+                        <el-option
+                                v-for="item in ['HTML']"
+                                :key="item"
+                                :label="item"
+                                :value="item">
+                        </el-option>
+                    </el-select>
+                    <span v-else="">{{scope.row.author}}</span>
+                </template>
+            </el-table-column>
             <el-table-column label="SKUS" width="250">
                 <template scope="scope">
+                    <div v-if="editor">
                     <el-tag style=" margin: 3px;"
                             :key="tag"
                             v-for="tag in scope.row.skus"
@@ -130,6 +135,12 @@
                     </el-input>
                     <el-button v-else class="button-new-tag" size="small" @click="showTagInput(scope.row.id)">+
                         Sku</el-button>
+                    </div>
+                    <el-tag v-else="" style=" margin: 3px;"
+                            :key="tag"
+                            v-for="tag in scope.row.skus">
+                        {{tag}}
+                    </el-tag>
                 </template>
             </el-table-column>
         </el-table>
@@ -160,11 +171,13 @@
                 limit:30,
                 offset:0,
                 inputTagValue:'',
+                editor:false,
             }
         },
         computed: mapState({ user: state => state.user }),
         mounted(){
-              this.getData();
+            this.editor=location.hash.indexOf('editor')>0; 
+            this.getData();
         },
         methods:{
             getData(){

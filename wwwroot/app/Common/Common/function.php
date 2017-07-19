@@ -45,6 +45,7 @@ function getDayClick($data){
         'cost_per_action_type::link_click'=>'CPC',
         'breakdowns.device_platform::desktop.spend'=>'DesktopSpend',
         'breakdowns.device_platform::mobile.spend'=>'MobileSpend',
+        'action_values::offsite_conversion.fb_pixel_add_to_cart'=>'WebsiteAddstoCartConversionValue',
     );
     $dayData=array();
     if($data){
@@ -63,6 +64,7 @@ function setDayClick($action_data,&$data){
         'cost_per_action_type::link_click'=>'CPC',
         'breakdowns.device_platform::desktop.spend'=>'DesktopSpend',
         'breakdowns.device_platform::mobile.spend'=>'MobileSpend',
+        'action_values::offsite_conversion.fb_pixel_add_to_cart'=>'WebsiteAddstoCartConversionValue',
     );
     if($action_data){
         foreach ($action_data as  $r){

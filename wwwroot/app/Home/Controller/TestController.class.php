@@ -134,80 +134,80 @@ END;
 //          ["dynamic_ad_voice"] => string(14) "DynamicAdVoice"
 //          ["image_file"] => string(6) "string"
 //END;
-//        $str=<<<END
-//        ["account_id"] => string(16) "1593565507558990"
-//        ["account_name"] => NULL
-//        ["action_values"] => NULL
-//        ["actions"] => NULL
-//        ["ad_id"] => string(13) "6034369571964"
-//        ["ad_name"] => NULL
-//        ["adset_id"] => string(13) "6034369558164"
-//        ["adset_name"] => NULL
-//        ["app_store_clicks"] => NULL
-//        ["buying_type"] => NULL
-//        ["call_to_action_clicks"] => NULL
-//        ["campaign_id"] => string(13) "6033795518964"
-//        ["campaign_name"] => NULL
-//        ["canvas_avg_view_percent"] => NULL
-//        ["canvas_avg_view_time"] => NULL
-//        ["canvas_component_avg_pct_view"] => NULL
-//        ["clicks"] => NULL
-//        ["cost_per_10_sec_video_view"] => NULL
-//        ["cost_per_action_type"] => NULL
-//        ["cost_per_estimated_ad_recallers"] => NULL
-//        ["cost_per_inline_link_click"] => NULL
-//        ["cost_per_inline_post_engagement"] => NULL
-//        ["cost_per_total_action"] => NULL
-//        ["cost_per_unique_action_type"] => NULL
-//        ["cost_per_unique_click"] => NULL
-//        ["cost_per_unique_inline_link_click"] => NULL
-//        ["cpc"] => NULL
-//        ["cpm"] => NULL
-//        ["cpp"] => NULL
-//        ["ctr"] => NULL
-//        ["date_start"] => string(10) "2017-05-26"
-//        ["date_stop"] => string(10) "2017-05-26"
-//        ["deeplink_clicks"] => NULL
-//        ["estimated_ad_recall_rate"] => NULL
-//        ["estimated_ad_recallers"] => NULL
-//        ["frequency"] => NULL
-//        ["impressions"] => string(5) "22150"
-//        [`"impressions_dummy"] => NULL
-//        ["inline_link_click_ctr"] => NULL
-//        ["inline_link_clicks"] => NULL
-//        ["inline_post_engagement"] => NULL
-//        ["objective"] => NULL
-//        ["place_page_name"] => NULL
-//        ["reach"] => NULL
-//        ["relevance_score"] => NULL
-//        ["social_clicks"] => NULL
-//        ["social_impressions"] => NULL
-//        ["social_reach"] => NULL
-//        ["social_spend"] => NULL
-//        ["spend"] => string(6) "600.55"
-//        ["total_action_value"] => NULL
-//        ["total_actions"] => NULL
-//        ["total_unique_actions"] => NULL
-//        ["unique_actions"] => NULL
-//        ["unique_clicks"] => NULL
-//        ["unique_ctr"] => NULL
-//        ["unique_inline_link_click_ctr"] => NULL
-//        ["unique_inline_link_clicks"] => NULL
-//        ["unique_link_clicks_ctr"] => NULL
-//        ["unique_social_clicks"] => NULL
-//        ["video_10_sec_watched_actions"] => NULL
-//        ["video_15_sec_watched_actions"] => NULL
-//        ["video_30_sec_watched_actions"] => NULL
-//        ["video_avg_percent_watched_actions"] => NULL
-//        ["video_avg_time_watched_actions"] => NULL
-//        ["video_p100_watched_actions"] => NULL
-//        ["video_p25_watched_actions"] => NULL
-//        ["video_p50_watched_actions"] => NULL
-//        ["video_p75_watched_actions"] => NULL
-//        ["video_p95_watched_actions"] => NULL
-//        ["website_clicks"] => NULL
-//        ["website_ctr"] => NULL
-//END;
+        $str=<<<END
+        ["account_id"] => string(16) "1593565507558990"
+        ["account_name"] => NULL
+        ["action_values"] => NULL
+        ["actions"] => NULL
+        ["ad_id"] => string(13) "6034369571964"
+        ["ad_name"] => NULL
+        ["adset_id"] => string(13) "6034369558164"
+        ["adset_name"] => NULL
+        ["app_store_clicks"] => NULL
+        ["buying_type"] => NULL
+        ["call_to_action_clicks"] => NULL
+        ["campaign_id"] => string(13) "6033795518964"
+        ["campaign_name"] => NULL
+        ["canvas_avg_view_percent"] => NULL
+        ["canvas_avg_view_time"] => NULL
+        ["canvas_component_avg_pct_view"] => NULL
+        ["clicks"] => NULL
+        ["cost_per_10_sec_video_view"] => NULL
+        ["cost_per_action_type"] => NULL
+        ["cost_per_estimated_ad_recallers"] => NULL
+        ["cost_per_inline_link_click"] => NULL
+        ["cost_per_inline_post_engagement"] => NULL
+        ["cost_per_total_action"] => NULL
+        ["cost_per_unique_action_type"] => NULL
+        ["cost_per_unique_click"] => NULL
+        ["cost_per_unique_inline_link_click"] => NULL
+        ["cpc"] => NULL
+        ["cpm"] => NULL
+        ["cpp"] => NULL
+        ["ctr"] => NULL
+        ["date_start"] => string(10) "2017-05-26"
+        ["date_stop"] => string(10) "2017-05-26"
+        ["deeplink_clicks"] => NULL
+        ["estimated_ad_recall_rate"] => NULL
+        ["estimated_ad_recallers"] => NULL
+        ["frequency"] => NULL
+        ["impressions"] => string(5) "22150"
+        [`"impressions_dummy"] => NULL
+        ["inline_link_click_ctr"] => NULL
+        ["inline_link_clicks"] => NULL
+        ["inline_post_engagement"] => NULL
+        ["objective"] => NULL
+        ["place_page_name"] => NULL
+        ["reach"] => NULL
+        ["relevance_score"] => NULL
+        ["social_clicks"] => NULL
+        ["social_impressions"] => NULL
+        ["social_reach"] => NULL
+        ["social_spend"] => NULL
+        ["spend"] => string(6) "600.55"
+        ["total_action_value"] => NULL
+        ["total_actions"] => NULL
+        ["total_unique_actions"] => NULL
+        ["unique_actions"] => NULL
+        ["unique_clicks"] => NULL
+        ["unique_ctr"] => NULL
+        ["unique_inline_link_click_ctr"] => NULL
+        ["unique_inline_link_clicks"] => NULL
+        ["unique_link_clicks_ctr"] => NULL
+        ["unique_social_clicks"] => NULL
+        ["video_10_sec_watched_actions"] => NULL
+        ["video_15_sec_watched_actions"] => NULL
+        ["video_30_sec_watched_actions"] => NULL
+        ["video_avg_percent_watched_actions"] => NULL
+        ["video_avg_time_watched_actions"] => NULL
+        ["video_p100_watched_actions"] => NULL
+        ["video_p25_watched_actions"] => NULL
+        ["video_p50_watched_actions"] => NULL
+        ["video_p75_watched_actions"] => NULL
+        ["video_p95_watched_actions"] => NULL
+        ["website_clicks"] => NULL
+        ["website_ctr"] => NULL
+END;
 //        $str=<<<END
 //["account_id"] => string(6) "string"
 //      ["approximate_count"] => string(3) "int"
@@ -225,24 +225,24 @@ END;
 //      ["permission_for_actions"] => string(24) "CustomAudiencePermission"
 //      ["pixel_id"] => string(6) "string"
 //END;
-        $str=<<<END
-["created_time"] => NULL
-    ["description"] => NULL
-    ["embed_html"] => NULL
-    ["embeddable"] => NULL
-    ["format"] => NULL
-    ["from"] => NULL
-    ["icon"] => NULL
-    ["id"] => string(16) "1928026167434181"
-    ["is_instagram_eligible"] => NULL
-    [`"name"] => NULL
-    ["picture"] => NULL
-    ["published"] => NULL
-    [`"slideshow_spec"] => NULL
-    ["source"] => NULL
-    ["thumbnails"] => NULL
-    ["updated_time"] => string(24) "2017-06-22T07:02:47+0000"
-END;
+//        $str=<<<END
+//["created_time"] => NULL
+//    ["description"] => NULL
+//    ["embed_html"] => NULL
+//    ["embeddable"] => NULL
+//    ["format"] => NULL
+//    ["from"] => NULL
+//    ["icon"] => NULL
+//    ["id"] => string(16) "1928026167434181"
+//    ["is_instagram_eligible"] => NULL
+//    [`"name"] => NULL
+//    ["picture"] => NULL
+//    ["published"] => NULL
+//    [`"slideshow_spec"] => NULL
+//    ["source"] => NULL
+//    ["thumbnails"] => NULL
+//    ["updated_time"] => string(24) "2017-06-22T07:02:47+0000"
+//END;
 
         preg_match_all("/\[\"(.*)\"\]/",$str,$match);
         $fields=$match[1];
@@ -255,25 +255,26 @@ END;
         //$ac=new AdAccount('act_1593565507558990');
         //$ad=new Campaign('6084032058764');
         //$ad=new AdSet('6084652424764');
-        //$ad=new Ad('6084839602764');
+        $ad=new Ad('6061113967197');
         //$ad=new CustomAudience('6085459889364');
         //$ad=new AdsPixel('1593577174232007');
         //$res=$ad->getSelf($fields);
         //dump($ad->getAdCreatives($fields));
         //$ad=new AdImage("ec5ae30157667320218078b5949735e8",'6084839602764');
-        $ad=new AdVideo("1928026167434181");
-        dump($ad->read($fields)->getData());
-        return;
-        dump($ac->getAdImages($fields,array(
-            'hashes'=>array(
-                'ec5ae30157667320218078b5949735e8',
-                'b8f5bcbce22ed55c99af3b249c63da48',
-                'f4c70dae90f6b51440e17eef70dc17b4',
-            )
-        ))->current()->getData());
-        return;
+//        $ad=new AdVideo("1928026167434181");
+//        dump($ad->read($fields)->getData());
+//        return;
+//        dump($ac->getAdImages($fields,array(
+//            'hashes'=>array(
+//                'ec5ae30157667320218078b5949735e8',
+//                'b8f5bcbce22ed55c99af3b249c63da48',
+//                'f4c70dae90f6b51440e17eef70dc17b4',
+//            )
+//        ))->current()->getData());
+//        return;
         dump($ad->getInsights($fields,array(
-            'time_range'=>array('since'=>'2017-07-13','until'=>'2017-07-13'),
+            'date_preset'=>'today',
+            //'time_range'=>array('since'=>'2017-07-18','until'=>'2017-07-18'),
             'action_attribution_windows'=>['1d_click','1d_view'],
             //'breakdowns'=> 'hourly_stats_aggregated_by_audience_time_zone',
             //creative_fingerprint,household_composition,

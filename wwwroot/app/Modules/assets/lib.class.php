@@ -249,11 +249,21 @@ END;
         }
         if(count($assets)>1) asyn_implement('apido/asyn.setAssetsFileHash');
     }
+    function formatAccAssets(&$asset){
+        $asset['amountspent']+=0;
+        $asset['skus']=$asset['skus']?explode(',',$asset['skus']):[];
+        $asset['inputVisible']=false;
+
+        $asset['conversion_rate']=$asset['websitepurchases']/($asset['linkclicks']?$asset['linkclicks']:1);
+        $asset['roas']=$asset['websitepurchasesconversionvalue']?
+            $asset['amountspent']/$asset['websitepurchasesconversionvalue']
+            :'X';
+    }
     function getData(){
         $offset=I('request.offset',0);
         $limit=I('request.limit',30);
         $where=[];
-        $fields="A.*"
+        $fields="count(*) as ads_num,A.*"
             .",sum(ADI.CLICK1D_WebsiteAddstoCart) as WebsiteAddstoCart"
             .",sum(ADI.CLICK1D_CostperWebsiteAddtoCart) as CostperWebsiteAddtoCart"
             .",sum(ADI.spend) as AmountSpent"
@@ -261,7 +271,7 @@ END;
             .",sum(ADI.CLICK1D_WebsitePurchasesConversionValue)as WebsitePurchasesConversionValue"
             .",sum(ADI.inline_link_clicks)as LinkClicks"
             .",sum(ADI.CLICK1D_CPC)as CPC"
-            .",sum(ADI.inline_link_click_ctr)as CTR"
+            .",avg(ADI.inline_link_click_ctr)as CTR"
             .",sum(ADI.cpm)as CPM1000"
             .",sum(ADI.reach)as Reach"
             .",sum(ADI.CLICK1D_WebsitePurchases)as Results"
@@ -282,11 +292,8 @@ END;
             ->select();
         $fdata=[];
         foreach ($data as $r){
-            $r['amountspent']+=0;
-            $r['skus']=$r['skus']?explode(',',$r['skus']):[];
-            $r['inputVisible']=false;
+            $this->formatAccAssets($r);
             if(!$fdata[$r['filehash']]){
-
                 $r['list']=[$r];
                 $fdata[$r['filehash']]=$r;
             }else{
