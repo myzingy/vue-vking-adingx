@@ -259,48 +259,97 @@ END;
             $asset['amountspent']/$asset['websitepurchasesconversionvalue']
             :'X';
     }
-    function getData(){
-        $offset=I('request.offset',0);
-        $limit=I('request.limit',30);
-        $where=[];
+    function _getDataChild($filehash){
+        $where=[
+            'A.filehash'=>$filehash
+        ];
         $fields="count(*) as ads_num,A.*"
-            .",sum(ADI.CLICK1D_WebsiteAddstoCart) as WebsiteAddstoCart"
-            .",sum(ADI.CLICK1D_CostperWebsiteAddtoCart) as CostperWebsiteAddtoCart"
-            .",sum(ADI.spend) as AmountSpent"
-            .",sum(ADI.CLICK1D_WebsitePurchases)as WebsitePurchases"
-            .",sum(ADI.CLICK1D_WebsitePurchasesConversionValue)as WebsitePurchasesConversionValue"
-            .",sum(ADI.inline_link_clicks)as LinkClicks"
-            .",sum(ADI.CLICK1D_CPC)as CPC"
-            .",avg(ADI.inline_link_click_ctr)as CTR"
-            .",sum(ADI.cpm)as CPM1000"
-            .",sum(ADI.reach)as Reach"
-            .",sum(ADI.CLICK1D_WebsitePurchases)as Results"
+            .",sum(ADI.CLICK1D_WebsiteAddstoCart) as websiteaddstocart"
+            .",avg(ADI.CLICK1D_CostperWebsiteAddtoCart) as costperwebsiteaddtocart"
+            .",sum(ADI.spend) as amountspent"
+            .",sum(ADI.CLICK1D_WebsitePurchases)as websitepurchases"
+            .",sum(ADI.CLICK1D_WebsitePurchasesConversionValue)as websitepurchasesconversionvalue"
+            .",sum(ADI.inline_link_clicks)as linkclicks"
+            .",avg(ADI.CLICK1D_CPC)as cpc"
+            .",avg(ADI.inline_link_click_ctr)as ctr"
+            .",avg(ADI.cpm)as cpm1000"
+            .",sum(ADI.reach)as reach"
+            .",sum(ADI.CLICK1D_WebsitePurchases)as results"
             .",avg(ADI.frequency)as frequency"
             .",avg(ADI.relevance_score)as relevance_score"
             .",(ADI.positive_feedback)as positive_feedback"
             .",(ADI.negative_feedback)as negative_feedback"
-            ;
-
+            .",sum(ADI.CLICK1D_WebsiteAddstoCartConversionValue)as websiteaddstocartconversionvalue"
+        ;
         $data=$this->model->alias('A')
             ->field($fields)
             ->join('assets_insights AI ON AI.asset_id=A.id')
             ->join('ads_insights ADI ON ADI.id=AI.insight_id','left')
             ->where($where)
-            ->group('A.filehash')
-            ->order('A.updated_time desc')
-            ->limit($offset,$limit)
+            ->group('A.account_id')
             ->select();
-        $fdata=[];
-        foreach ($data as $r){
-            $this->formatAccAssets($r);
-            if(!$fdata[$r['filehash']]){
-                $r['list']=[$r];
-                $fdata[$r['filehash']]=$r;
-            }else{
-                array_push($fdata[$r['filehash']]['list'],$r);
+        return $data;
+    }
+    function _sumAccAssets(&$par,$chi){
+          foreach ($par as $key=>$value){
+              if(is_numeric($value) && is_numeric($chi[$key])){
+                  $par[$key]= $value+$chi[$key];
+              }elseif(is_numeric($value)){
+                  $par[$key]= $value;
+              }elseif(is_numeric($chi[$key])){
+                  $par[$key]= $chi[$key];
+              }
+          }
+
+    }
+    function _avgAccAssets(&$par){
+        $avg=['costperwebsiteaddtocart','cpc','ctr','cpm1000'
+            ,'relevance_score','frequency','conversion_rate'
+            ,'roas'];
+        foreach ($avg as $key){
+            if(is_numeric($par[$key])){
+                $par[$key]= $par[$key]/$par['list_count'];
             }
         }
-        return ['data'=>array_values($fdata),'total'=>$this->model->count()];
+    }
+    function getData(){
+        $offset=I('request.offset',0);
+        $limit=I('request.limit',30);
+        $keyword=I('request.keyword');
+        $where=[];
+        if($keyword){
+            $where=" account_id like '%$keyword%' "
+                ." or author like '%$keyword%' "
+                ." or skus like '%$keyword%' "
+                ." or name like '%$keyword%' ";
+        }
+        $filehashs=$this->model
+            ->where($where)
+            ->group('filehash')
+            ->order('updated_time desc')
+            ->limit($offset,$limit)
+            ->getField('filehash',true);
+        $fdata=[];
+        foreach ($filehashs as $filehash){
+            $data=$this->_getDataChild($filehash);
+            foreach ($data as $i=>$r){
+                $this->formatAccAssets($r);
+                if($i==0){
+                    $r['list']=[$r];
+                    $r['list_count']=1;
+                    $fdata[$filehash]=$r;
+                }else{
+                    $this->_sumAccAssets($fdata[$filehash],$r);
+                    array_push($fdata[$filehash]['list'],$r);
+                    $fdata[$filehash]['list_count']+=1;
+                }
+            }
+        }
+        foreach ($fdata as &$x){
+            $this->_avgAccAssets($x);
+        }
+        $cc=M()->query('SELECT COUNT(DISTINCT `filehash`) AS tp_count FROM `assets`;');
+        return ['data'=>array_values($fdata),'total'=>$cc[0]['tp_count']];
     }
     function setAuthor(){
         $author=I('request.author','');

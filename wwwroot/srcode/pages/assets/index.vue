@@ -23,6 +23,16 @@
 </style>
 <template>
     <div>
+        <el-form :inline="true" :model="formSearch" class="demo-form-inline">
+            <el-form-item>
+                <el-input style="width:500px;" v-model="formSearch.keyword"
+                          placeholder="AccountId / Author / SKU / Filename"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="onFormSearch">查询</el-button>
+                <a href="javascript://" @click="onClearFormSearch">清空条件</a>
+            </el-form-item>
+        </el-form>
         <el-table :data="rulesLog" border style="width: 100%" max-height="700" :default-sort =
                 "{prop: 'amountspent', order: 'descending'}" :summary-method="getSummaries"
                   show-summary>
@@ -46,6 +56,18 @@
                         <el-table-column :formatter="numberFormatInt" columnKey="reach" label="Reach" width="80"></el-table-column>
                         <el-table-column :formatter="numberFormatInt" columnKey="results" label="Results" width="80"></el-table-column>
                         <el-table-column :formatter="CostperResult" columnKey="costperresult" label="Cost per Result" width="80"></el-table-column>
+                        <el-table-column :formatter="numberFormat" columnKey="frequency" label="Frequency"
+                                         width="80"></el-table-column>
+                        <el-table-column :formatter="numberFormat" columnKey="relevance_score" label="Relevent Score"
+                                         width="80"></el-table-column>
+                        <el-table-column prop="positive_feedback" label="Positive Feedback"
+                                         width="80"></el-table-column>
+                        <el-table-column prop="negative_feedback" label="Negative Feedback"
+                                         width="80"></el-table-column>
+                        <el-table-column :formatter="numberFormatPer" columnKey="conversion_rate" prop="conversion_rate" label="转化率"
+                                         width="50"></el-table-column>
+                        <el-table-column :formatter="numberFormatPer" columnKey="roas" prop="roas" label="ROAS"
+                                         width="50"></el-table-column>
                     </el-table>
                 </template>
             </el-table-column>
@@ -59,13 +81,19 @@
                             <br>
                             <img width="400" :src="scope.row.permalink_url">
                         </div>
-                        <a :href="scope.row.url" target="_blank" slot="reference">{{ scope.row.name }}</a>
+                        <a :href="scope.row.url" target="_blank" slot="reference">
+                            <i class="el-icon-star-on" v-if="scope.row.type == 1"></i>
+                            <i class="el-icon-picture" v-else=""></i>
+                            {{ scope.row.name }}
+                        </a>
                     </el-popover>
                 </template>
             </el-table-column>
             <el-table-column :formatter="numberFormatInt" columnKey="websiteaddstocart" label="Website Adds to Cart"
                              width="80" className="autotooltip"></el-table-column>
             <el-table-column :formatter="moneyFormat" columnKey="costperwebsiteaddtocart" label="Cost per Website Add to Cart" width="80"></el-table-column>
+            <el-table-column :formatter="moneyFormat" columnKey="websiteaddstocartconversionvalue"
+                             label="Website Adds to Cart Conversion Value" width="80"></el-table-column>
             <el-table-column :formatter="moneyFormat" columnKey="amountspent"
                              prop="amountspent" label="Spent" width="80"
                              sortable></el-table-column>
@@ -91,8 +119,12 @@
                              width="80"></el-table-column>
             <el-table-column prop="negative_feedback" label="Negative Feedback"
                              width="80"></el-table-column>
-            <el-table-column prop="ads_num" label="广告数"
-                             width="80"></el-table-column>
+            <el-table-column prop="ads_num" columnKey="ads_num" label="广告数"
+                             width="50"></el-table-column>
+            <el-table-column :formatter="numberFormatPer" columnKey="conversion_rate" prop="conversion_rate" label="转化率"
+                             width="50"></el-table-column>
+            <el-table-column :formatter="numberFormatPer" columnKey="roas" prop="roas" label="ROAS"
+                             width="50"></el-table-column>
             <el-table-column label="Author"  width="100">
                 <template scope="scope" >
                     <el-select
@@ -102,7 +134,7 @@
                             allow-create
                             placeholder="请选择" @change="setAuthor(scope.row.author,scope.row)">
                         <el-option
-                                v-for="item in ['HTML']"
+                                v-for="item in authors"
                                 :key="item"
                                 :label="item"
                                 :value="item">
@@ -147,7 +179,7 @@
         <el-pagination style=" margin: 20px auto; width:300px;"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :page-size="limit"
+                :page-size="formSearch.limit"
                 layout="total, prev, pager, next"
                 :total="total">
         </el-pagination>
@@ -168,10 +200,16 @@
                 rulesLog:[],
                 popover_img_src:"",
                 total:0,
-                limit:30,
-                offset:0,
+                //limit:30,
+                //offset:0,
                 inputTagValue:'',
                 editor:false,
+                formSearch:{
+                    keyword:'',
+                    limit:30,
+                    offset:0,
+                },
+                authors:[],
             }
         },
         computed: mapState({ user: state => state.user }),
@@ -181,11 +219,7 @@
         },
         methods:{
             getData(){
-                var params={
-                    limit:this.limit,
-                    offset:this.offset,
-                };
-                vk.http(uri.assetsGetData,params,this.then);
+                vk.http(uri.assetsGetData,this.formSearch,this.then);
             },
             then:function(json,code){
                 switch(code){
@@ -212,6 +246,7 @@
             },
             numberFormatPer:function(row, column){
                 var columnKey=arguments[1].columnKey;
+                if(!isFinite(row[columnKey])) return row[columnKey];
                 return vk.numberFormat(row[columnKey],2,'')+'%';
             },
             numberFormatInt:function(row, column){
@@ -252,7 +287,7 @@
                                 return prev;
                             }
                         }, 0);
-                        if([3,6,8].indexOf(index)>-1){//int
+                        if([2,6,8,12,13,19].indexOf(index)>-1){//int
                             sums[index] = vk.numberFormat(sums[index],0,'');
                         }else if([5,7].indexOf(index)>-1){
                             sums[index] = vk.numberFormat(sums[index]);
@@ -269,7 +304,7 @@
                 console.log(arguments);
             },
             handleCurrentChange(page){
-                this.offset=(page-1)*this.limit;
+                this.formSearch.offset=(page-1)*this.formSearch.limit;
                 this.getData();
             },
             setAuthor(author,obj){
@@ -326,6 +361,13 @@
                         return item;
                     }
                 });
+            },
+            onClearFormSearch(){
+                this.formSearch.keyword="";
+                this.getData();
+            },
+            onFormSearch(){
+                this.getData();
             },
         }
     }

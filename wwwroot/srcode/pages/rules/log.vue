@@ -14,7 +14,7 @@
 	<div>
 		<el-tabs v-model="activeName" @tab-click="handleTabClick">
 			<el-tab-pane label="优化记录" name="getRulesLog">
-				<el-table :data="rulesLog" border style="width: 100%" max-height="750">
+				<el-table :data="rulesLog" border style="width: 100%" max-height="700">
 					<el-table-column type="expand" fixed>
 						<template scope="scope">
 							<v-ad_table :adsData="scope.row.expandTabData" :dataType="scope.row.expandTabDataType"
@@ -26,6 +26,13 @@
 					<el-table-column :formatter="formatExecRule" label="执行规则"  ></el-table-column>
 					<el-table-column prop="rule_exec" label="执行结果"  ></el-table-column>
 				</el-table>
+				<el-pagination style=" margin: 20px auto; width:300px;"
+							   @size-change="handleSizeChange"
+							   @current-change="handleCurrentChange"
+							   :page-size="formSearch.limit"
+							   layout="total, prev, pager, next"
+							   :total="total">
+				</el-pagination>
 			</el-tab-pane>
 			<el-tab-pane label="优化统计" name="RulesExecTotal">
 				优化统计
@@ -46,14 +53,21 @@
             return {
                 activeName: 'getRulesLog',
                 rulesLog:[],
+                total:0,
+                formSearch:{
+                    limit:30,
+                    offset:0,
+                },
 			}
 		},
         computed: mapState({ user: state => state.user }),
         mounted(){
-            var params={};
-            vk.http(uri.getRulesLog,params,this.then);
+            this.getData();
         },
         methods:{
+            getData(){
+                vk.http(uri.getRulesLog,this.formSearch,this.then);
+            },
             then:function(json,code){
                 switch(code){
 					case uri.getRulesLog.code:
@@ -62,17 +76,18 @@
                             json.data[i].expandTabDataType=json.data[i].target.toLowerCase();
 						}
 					    this.rulesLog=json.data;
+                        this.total=json.total;
                         break;
 				}
 
 
 			},
             handleTabClick:function(dom){
-                var uriKey=dom.name;
-                var params={};
-                if(uriKey=='getRulesLog') {
-                    vk.http(uri[uriKey],params,this.then);
-				}
+//                var uriKey=dom.name;
+//                var params={};
+//                if(uriKey=='getRulesLog') {
+//                    vk.http(uri[uriKey],params,this.then);
+//				}
 			},
             formatExecTarget:function(row, column){
                 return '['+row.target+']'+row.target_id;
@@ -80,11 +95,13 @@
             formatExecRule:function(row){
                 return '['+row.rule_id+']'+row.rule_name;
 			},
-//            expandTab:function(row, expanded){
-//            	this.expandTabData=[JSON.parse(row.target_data)];
-//                this.expandTabDataType=row.target.toLowerCase();
-//                console.log(this.expandTabDataType);
-//			}
+            handleSizeChange(){
+                console.log(arguments);
+            },
+            handleCurrentChange(page){
+                this.formSearch.offset=(page-1)*this.formSearch.limit;
+                this.getData();
+            },
 		}
     }
 </script>

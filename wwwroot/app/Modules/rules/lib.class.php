@@ -66,15 +66,19 @@ class lib
     }
     function getRulesLog(){
         $ac_id=I('request.ac_id');
+        $offset=I('request.offset',0);
+        $limit=I('request.limit',30);
         $where=" 1=1 ";
         if($ac_id){
             $where.=" AND account_id='$ac_id' ";
         }
-        $data=M('rules_exec_log')->where($where)->order('id desc')->limit(400)->select();
+        $data=M('rules_exec_log')->where($where)->order('id desc')
+            ->limit($offset,$limit)->select();
         foreach ($data as &$r){
             $r['time_format']=date('m-d H:i',$r['time']);
         }
-        return array('data'=>$data);
+        $total=M('rules_exec_log')->where($where)->count();
+        return array('data'=>$data,'total'=>$total+0);
     }
     function getRulesForAd(){
         $where=array(
