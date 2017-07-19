@@ -63,11 +63,27 @@
                     </el-popover>
                 </template>
             </el-table-column>
+            <el-table-column label="Author"  width="100">
+                <template scope="scope">
+                    <el-select
+                            v-model="scope.row.author"
+                            filterable
+                            allow-create
+                            placeholder="请选择" @change="setAuthor(scope.row.author,scope.row)">
+                        <el-option
+                                v-for="item in ['HTML']"
+                                :key="item"
+                                :label="item"
+                                :value="item">
+                        </el-option>
+                    </el-select>
+                </template>
+            </el-table-column>
             <el-table-column :formatter="numberFormatInt" columnKey="websiteaddstocart" label="Website Adds to Cart"
                              width="80" className="autotooltip"></el-table-column>
             <el-table-column :formatter="moneyFormat" columnKey="costperwebsiteaddtocart" label="Cost per Website Add to Cart" width="80"></el-table-column>
             <el-table-column :formatter="moneyFormat" columnKey="amountspent"
-                             label="Spent" width="80"
+                             prop="amountspent" label="Spent" width="80"
                              sortable></el-table-column>
             <el-table-column :formatter="numberFormatInt" columnKey="websitepurchases" label="Website Purchases"
                              width="80"></el-table-column>
@@ -91,13 +107,29 @@
                              width="80"></el-table-column>
             <el-table-column prop="negative_feedback" label="Negative Feedback"
                              width="80"></el-table-column>
-            <el-table-column label="操作" width="80" fixed="right">
+            <el-table-column label="SKUS" width="250">
                 <template scope="scope">
-                    <el-button @click="openRulesDialog(scope.row)"
-                               type="text"
-                               size="small">
-                        编辑
-                    </el-button>
+                    <el-tag style=" margin: 3px;"
+                            :key="tag"
+                            v-for="tag in scope.row.skus"
+                            :closable="true"
+                            :close-transition="false"
+                            @close="handleCloseTag(scope.row.id,tag)"
+                    >
+                        {{tag}}
+                    </el-tag>
+                    <el-input
+                            class="input-new-tag"
+                            v-if="!!scope.row.inputVisible"
+                            v-model="inputTagValue"
+                            ref="saveTagInput"
+                            size="mini"
+                            @keyup.enter.native="handleInputConfirm(scope.row.id)"
+                            @blur="handleInputConfirm(scope.row.id)"
+                    >
+                    </el-input>
+                    <el-button v-else class="button-new-tag" size="small" @click="showTagInput(scope.row.id)">+
+                        Sku</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -127,6 +159,7 @@
                 total:0,
                 limit:30,
                 offset:0,
+                inputTagValue:'',
             }
         },
         computed: mapState({ user: state => state.user }),
@@ -146,6 +179,10 @@
                     case uri.assetsGetData.code:
                         this.rulesLog=json.data;
                         this.total=parseInt(json.total);
+                        break;
+                    case uri.assetsSetAuthor.code:
+                        break;
+                    case uri.assetsSetSkus.code:
                         break;
                 }
             },
@@ -202,9 +239,9 @@
                                 return prev;
                             }
                         }, 0);
-                        if([2,5,7].indexOf(index)>-1){//int
+                        if([3,6,8].indexOf(index)>-1){//int
                             sums[index] = vk.numberFormat(sums[index],0,'');
-                        }else if([4,6].indexOf(index)>-1){
+                        }else if([5,7].indexOf(index)>-1){
                             sums[index] = vk.numberFormat(sums[index]);
                         }else{
                             sums[index] = '';
@@ -221,6 +258,61 @@
             handleCurrentChange(page){
                 this.offset=(page-1)*this.limit;
                 this.getData();
+            },
+            setAuthor(author,obj){
+                 vk.http(uri.assetsSetAuthor,{
+                     'author':author,
+                     'id':obj.id,
+                 },this.then)
+            },
+            handleCloseTag(id,tag) {
+                //console.log('handleCloseTag',id,tag);
+                var that=this;
+                this.rulesLog.map(item=>{
+                    if(item.id==id){
+                        console.log('handleCloseTag-item',item.id);
+                        item.skus.splice(item.skus.indexOf(tag),1);
+                        vk.http(uri.assetsSetSkus,{
+                            'skus':item.skus.join(','),
+                            'id':id,
+                        },that.then);
+                        return item;
+                    }
+                });
+                //this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+            },
+
+            showTagInput(id) {
+                this.rulesLog.map(item=>{
+                    if(item.id==id){
+                        console.log('showTagInput-item',item.id);
+                        item.inputVisible=true;
+                        return item;
+                    }
+                });
+//                this.$nextTick(_ => {
+//                    this.$refs.saveTagInput.$refs.input.focus();
+//                });
+            },
+
+            handleInputConfirm(id) {
+                var that=this;
+                let inputValue = this.inputTagValue;
+                this.rulesLog.map(item=>{
+                    if(item.id==id){
+                        console.log('handleInputConfirm-item',item.id,inputValue);
+                        if (inputValue) {
+                            item.skus.push(inputValue);
+                            vk.http(uri.assetsSetSkus,{
+                                'skus':item.skus.join(','),
+                                'id':id,
+                            },that.then);
+                        }
+                        item.inputVisible = false;
+                        this.inputTagValue = '';
+                        return item;
+                    }
+                });
             },
         }
     }

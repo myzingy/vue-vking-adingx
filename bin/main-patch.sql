@@ -4,5 +4,6 @@ ALTER TABLE `facebook_ads`.`rules_link` ADD COLUMN `root_id` VARCHAR(20) NULL AF
 
 ALTER TABLE `facebook_ads`.`rules_link` ADD INDEX (`target_id`);
 
-####
-ALTER TABLE `facebook_ads`.`user` ADD COLUMN `business_id` VARCHAR(20) NULL AFTER `group_id`; 
+ALTER TABLE `facebook_ads`.`user` ADD COLUMN `business_id` VARCHAR(20) NULL AFTER `group_id`;
+
+ALTER TABLE `facebook_ads`.`assets` ADD COLUMN `author` VARCHAR(20) NULL AFTER `uptime`;

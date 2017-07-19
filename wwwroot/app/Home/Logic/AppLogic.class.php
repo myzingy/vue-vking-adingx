@@ -136,6 +136,14 @@ class AppLogic {
         $lib = new \Modules\assets\lib();
         return $lib->getData();
     }
+    function assets__setAuthor(){
+        $lib = new \Modules\assets\lib();
+        return $lib->setAuthor();
+    }
+    function assets__setSkus(){
+        $lib = new \Modules\assets\lib();
+        return $lib->setSkus();
+    }
 	############################################################
 	# 一些异步接口开始
 	############################################################

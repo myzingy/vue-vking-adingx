@@ -30,4 +30,6 @@ export default {
 
     //assets
     assetsGetData:{act:'assets.getData',code:14000},
+    assetsSetAuthor:{act:'assets.setAuthor',code:14001},
+    assetsSetSkus:{act:'assets.setSkus',code:14002},
 }

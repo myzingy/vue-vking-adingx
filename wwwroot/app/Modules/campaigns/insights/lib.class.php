@@ -173,10 +173,10 @@ END;
 
         }
         //提交数据给erp
-        asyn_implement('apido/asyn.postErpCampaign',array(
+        asyn('apido/asyn.postErpCampaign',array(
             'ac_id'=>$ac_id,
             'date_stop'=>$campaigns_data['date_stop']
-        ));
+        ),null,NOW_TIME+1200);
         return $campaigns_data;
     }
 

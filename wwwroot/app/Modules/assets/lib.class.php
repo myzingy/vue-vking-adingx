@@ -282,7 +282,11 @@ END;
             ->select();
         $fdata=[];
         foreach ($data as $r){
+            $r['amountspent']+=0;
+            $r['skus']=$r['skus']?explode(',',$r['skus']):[];
+            $r['inputVisible']=false;
             if(!$fdata[$r['filehash']]){
+
                 $r['list']=[$r];
                 $fdata[$r['filehash']]=$r;
             }else{
@@ -290,5 +294,19 @@ END;
             }
         }
         return ['data'=>array_values($fdata),'total'=>$this->model->count()];
+    }
+    function setAuthor(){
+        $author=I('request.author','');
+        $id=I('request.id');
+        if($id){
+            $this->model->where("id='{$id}'")->save(array('author'=>$author));
+        }
+    }
+    function setSkus(){
+        $skus=I('request.skus','');
+        $id=I('request.id');
+        if($id){
+            $this->model->where("id='{$id}'")->save(array('skus'=>$skus));
+        }
     }
 }
