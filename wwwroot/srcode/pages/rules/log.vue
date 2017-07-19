@@ -34,9 +34,6 @@
 							   :total="total">
 				</el-pagination>
 			</el-tab-pane>
-			<el-tab-pane label="优化统计" name="RulesExecTotal">
-				优化统计
-			</el-tab-pane>
 		</el-tabs>
 	</div>
 </template>

@@ -15,13 +15,6 @@
 		<el-tabs v-model="activeName" @tab-click="handleTabClick">
 			<el-tab-pane label="规则列表" name="getRulesData">
 				<el-table :data="rulesData" border style="width: 100%" max-height="100%">
-					<el-table-column type="expand">
-						<template scope="props">
-							<el-table :data="props.row.List" border style="width: 100%">
-								<el-table-column prop="CTR" label="关联的广告会显示在这里"></el-table-column>
-							</el-table>
-						</template>
-					</el-table-column>
 					<el-table-column prop="id" label="ID" width="60"></el-table-column>
 					<el-table-column prop="name" label="规则名称"  ></el-table-column>
 					<el-table-column prop="type" label="规则大小" width="80">
@@ -37,6 +30,7 @@
 							</template>
 						</template>
 					</el-table-column>
+					<!--
 					<el-table-column prop="status" label="规则状态" width="80">
 						<template scope="scope">
 							<template v-if=" scope.row.status == 0 ">
@@ -57,6 +51,7 @@
 
 						</template>
 					</el-table-column>
+					-->
 					<el-table-column label="操作" width="120">
 						<template scope="scope">
 							<el-button @click.native.prevent="deleteRow(scope.$index, rulesData)"
