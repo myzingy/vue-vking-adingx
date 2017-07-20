@@ -322,7 +322,7 @@ END;
         $offset=I('request.offset',0);
         $limit=I('request.limit',30);
         $keyword=I('request.keyword');
-        $where=[];
+        $where="";
         if($keyword){
             $where=" account_id like '%$keyword%' "
                 ." or author like '%$keyword%' "
@@ -354,7 +354,10 @@ END;
         foreach ($fdata as &$x){
             $this->_avgAccAssets($x);
         }
-        $cc=M()->query('SELECT COUNT(DISTINCT `filehash`) AS tp_count FROM `assets`;');
+        $cc=M()->query(
+            'SELECT COUNT(DISTINCT `filehash`) AS tp_count FROM `assets` '
+            .($where?" where $where":"")
+        );
         return ['data'=>array_values($fdata),'total'=>$cc[0]['tp_count']];
     }
     function setAuthor(){
