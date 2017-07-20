@@ -122,6 +122,7 @@ let vk={
         });
     },
     numberFormat(num,floatNumber=2,pre='$'){
+        if(!isFinite(num)) return num;
         var numberSplit=',';
         var number=(num/1).toFixed(floatNumber).toString();
         return number.replace(/([\d]{1,3})([\d]{3})?([\d]{3})?([\d]{3})?(\.[\d]{2})/,function(){
