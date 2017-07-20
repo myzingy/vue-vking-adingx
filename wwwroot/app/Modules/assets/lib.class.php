@@ -96,14 +96,14 @@ END;
                 if(count($assets)>0){
                     $assets=array_values($assets);
                     $this->model->addAll($assets);
-                    asyn('apido/asyn.setAssetsImageInfo',array('ac_id'=>$ac_id));
-                    asyn('apido/asyn.setAssetsVideoInfo',array('ac_id'=>$ac_id));
                 }
                 if(count($assets_insights)>0){
                     $assets_insights=array_values($assets_insights);
                     M('assets_insights')->addAll($assets_insights);
                 }
             }
+            asyn('apido/asyn.setAssetsImageInfo',array('ac_id'=>$ac_id));
+            asyn('apido/asyn.setAssetsVideoInfo',array('ac_id'=>$ac_id));
             return $data;
         }
 
