@@ -165,7 +165,7 @@ END;
         if ($campaign_timespace == 'today') {
             //其它Insights
             asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'yestoday','ac_id'=>$ac_id),null,
-                getDayTime("00:01:00"),0);
+                getDayTime("00:06:00"),0);
 //            asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'last_7day','ac_id'=>$ac_id),null,
 //                getDayTime("03:00:00"));
 //            asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'last_14day','ac_id'=>$ac_id),null,

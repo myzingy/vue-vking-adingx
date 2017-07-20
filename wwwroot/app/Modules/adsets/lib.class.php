@@ -156,6 +156,7 @@ class lib{
             ->relation(array('insights','rules_run'))
             ->join('adsets_insights AI ON AI.adset_id=adsets.id')
             ->where($where)
+            ->group('adsets.id')
             ->order('adsets.updated_time desc')
             ->select();
         $formatData=formatInsightsData($data,'adset');

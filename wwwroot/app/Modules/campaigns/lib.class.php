@@ -151,7 +151,7 @@ class lib{
             }
         }
         if($date_stop){
-            $this->model->setDateStop($date_stop);
+            $this->model->setDateStop($date_stop,date('Y-m-d',NOW_TIME)==$date_stop?0:99);
         }
         $data=$this->model
             ->field('campaigns.id,campaigns.name,campaigns.effective_status')
@@ -159,12 +159,13 @@ class lib{
             ->join('campaigns_insights AI ON AI.campaign_id=campaigns.id')
             ->where($where)
             ->order('campaigns.updated_time desc')
+            ->group('campaigns.id')
             ->select();
         $formatData=formatInsightsData($data,'campaign');
         return array('data'=>$formatData);
     }
     function postErpCampaign(){
-        if(__APP__POS=='CC__DEV') return;
+        //if(__APP__POS=='CC__DEV') return;
         $ac_ids_rules=array(
             '561910137324149'=>'戴婷',
             '836196303228863'=>'权文娟',
