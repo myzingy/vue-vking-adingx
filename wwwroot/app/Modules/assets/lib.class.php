@@ -260,6 +260,11 @@ END;
             :'X';
     }
     function _getDataChild($filehash){
+        $dataType=I('request.dataType','lifetime');
+        $dataType=strtolower(str_replace(" ","",$dataType));
+        if('lifetime'!=$dataType) {
+            $dataType = str_replace("last", "last_",$dataType);
+        }
         $where=[
             'A.filehash'=>$filehash
         ];
@@ -280,11 +285,12 @@ END;
             .",(ADI.positive_feedback)as positive_feedback"
             .",(ADI.negative_feedback)as negative_feedback"
             .",sum(ADI.CLICK1D_WebsiteAddstoCartConversionValue)as websiteaddstocartconversionvalue"
+            .",sum(ADI.impressions)as impressions"
         ;
         $data=$this->model->alias('A')
             ->field($fields)
             ->join('assets_insights AI ON AI.asset_id=A.id')
-            ->join('ads_insights ADI ON ADI.id=AI.insight_id','left')
+            ->join("ads_insights ADI ON ADI.id=replace(AI.insight_id,'lifetime','{$dataType}')",'left')
             ->where($where)
             ->group('A.account_id')
             ->select();

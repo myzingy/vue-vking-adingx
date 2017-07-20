@@ -32,6 +32,13 @@
                 <el-button type="primary" @click="onFormSearch">查询</el-button>
                 <a href="javascript://" @click="onClearFormSearch">清空条件</a>
             </el-form-item>
+            <el-form-item>
+                <el-radio-group v-model="formSearch.dataType" @change="onFormSearch">
+                    <el-radio-button label="Lifetime"></el-radio-button>
+                    <el-radio-button label="Last 7 Day"></el-radio-button>
+                    <el-radio-button label="Last 14 Day"></el-radio-button>
+                </el-radio-group>
+            </el-form-item>
         </el-form>
         <el-table :data="rulesLog" border style="width: 100%" max-height="700" :default-sort =
                 "{prop: 'amountspent', order: 'descending'}" :summary-method="getSummaries"
@@ -56,6 +63,8 @@
                         <el-table-column :formatter="numberFormatInt" columnKey="reach" label="Reach" width="80"></el-table-column>
                         <el-table-column :formatter="numberFormatInt" columnKey="results" label="Results" width="80"></el-table-column>
                         <el-table-column :formatter="CostperResult" columnKey="costperresult" label="Cost per Result" width="80"></el-table-column>
+                        <el-table-column :formatter="numberFormatInt" columnKey="impressions" label="Impressions"
+                                         width="80"></el-table-column>
                         <el-table-column :formatter="numberFormat" columnKey="frequency" label="Frequency"
                                          width="80"></el-table-column>
                         <el-table-column :formatter="numberFormat" columnKey="relevance_score" label="Relevent Score"
@@ -71,7 +80,7 @@
                     </el-table>
                 </template>
             </el-table-column>
-            <el-table-column width="200" label="Name" :showTooltipWhenOverflow="true" fixed>
+            <el-table-column width="110" label="Thumb" fixed>
                 <template scope="scope">
                     <el-popover placement="right" title="" width="400" trigger="hover">
                         <div>
@@ -82,9 +91,8 @@
                             <img width="400" :src="scope.row.permalink_url">
                         </div>
                         <a :href="scope.row.url" target="_blank" slot="reference">
-                            <i class="el-icon-star-on" v-if="scope.row.type == 1"></i>
-                            <i class="el-icon-picture" v-else=""></i>
-                            {{ scope.row.name }}
+                            <img height="100" :src="scope.row.permalink_url" v-if="scope.row.permalink_url"/>
+                            <span v-else="">{{scope.row.name}}</span>
                         </a>
                     </el-popover>
                 </template>
@@ -110,6 +118,8 @@
             <el-table-column :formatter="numberFormatInt" columnKey="reach" label="Reach" width="80"></el-table-column>
             <el-table-column :formatter="numberFormatInt" columnKey="results" label="Results" width="80"></el-table-column>
             <el-table-column :formatter="CostperResult" columnKey="costperresult" label="Cost per Result"
+                             width="80"></el-table-column>
+            <el-table-column :formatter="numberFormatInt" columnKey="impressions" label="Impressions"
                              width="80"></el-table-column>
             <el-table-column :formatter="numberFormat" columnKey="frequency" label="Frequency"
                              width="80"></el-table-column>
@@ -208,6 +218,7 @@
                     keyword:'',
                     limit:30,
                     offset:0,
+                    dataType:'Lifetime'
                 },
                 authors:[],
             }
