@@ -50,7 +50,7 @@ class lib{
             AdFields::ADSET_ID,
             AdFields::BID_AMOUNT,
             AdFields::BID_INFO,
-            AdFields::BID_TYPE,
+            //AdFields::BID_TYPE,
             //AdFields::CAMPAIGN,
             AdFields::CAMPAIGN_ID,
             AdFields::CONFIGURED_STATUS,
