@@ -80,7 +80,6 @@ class lib{
                 after=>$after,
             )
         );
-
         $asyn_param['after']=$adsets->getAfter();
         while ($adsets->valid()) {
             $_d=$adsets->current()->getData();
@@ -90,14 +89,13 @@ class lib{
             }
             array_push($campaigns_data,$_campaigns_data);
             $adsets->next();
-            if(ArchivableCrudObjectEffectiveStatuses::ACTIVE==$_campaigns_data[AdFields::EFFECTIVE_STATUS]) {
+            //if(ArchivableCrudObjectEffectiveStatuses::ACTIVE==$_campaigns_data[AdFields::EFFECTIVE_STATUS]) {
                 asyn('apido/asyn.flushAdsInsights', array(
                     'ad_id' => $_campaigns_data['id'],
                     'ac_id'=>$ac_id
                 ));
-            }
+            //}
         }
-
         if(count($campaigns_data)>0){
             $this->model->addAll($campaigns_data,null,true);
         }

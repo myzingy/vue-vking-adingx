@@ -154,9 +154,16 @@ class AppLogic {
         $lib = new \Modules\cron\lib();
         return $lib -> demon();
     }
-    function cron__demon_test(){
-        $this->cron__demon();
-        die('<meta http-equiv="refresh" content="15;url='.url('apido/cron.demon_test?t=').rand(1,22222222).'"> ');
+    function cron__demonAdsInit(){
+        $acs=FBC();
+        if($acs){
+            foreach ($acs as $ac){
+                asyn('apido/asyn.flushAds',array(
+                    'ac_id'=>$ac['account_id'],
+                    //'active'=>'active'
+                ),null,null,0);
+            }
+        }
     }
     /**
      * <ok class="异步"/> 刷新广告系列
