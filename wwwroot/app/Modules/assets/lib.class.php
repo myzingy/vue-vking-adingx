@@ -115,7 +115,7 @@ END;
         if(!$ac_id) return;
         $hashes=[];
         $assets=$this->model->field('hash')
-            ->where("account_id='{$ac_id}' and type=0 and created_time is null")
+            ->where("account_id='{$ac_id}' and type=0 and `hash` is not null and created_time is null")
             ->limit(10)
             ->select();
         foreach ($assets as $r){
