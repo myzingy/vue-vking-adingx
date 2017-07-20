@@ -73,17 +73,17 @@ END;
         if($adsets->valid()){
             $data=$adsets->current()->getData();
             if($child=$data['object_story_spec']['link_data']['child_attachments']){
-                $assets=[];
-                $assets_insights=[];
+                //$assets=[];
+                //$assets_insights=[];
                 foreach ($child as $r){
                     $id=$r['video_id']?$r['video_id']:"{$ac_id}:{$r['image_hash']}";
                     $ex_count=$this->model->where("id='{$id}'")->count();
                     if($ex_count>0) continue;
-                    $assets_insights[$id]=array(
+                    $assets_insights=array(
                         'asset_id'=>$id,
                         'insight_id'=>$insight_id
                     );
-                    $assets[$id]=array(
+                    $assets=array(
                         'account_id'=>$ac_id,
                         'hash'=>$r['image_hash'],
                         'id'=>$id,
@@ -92,15 +92,17 @@ END;
                         'type'=>$r['video_id']?1:0,
                         'permalink_url'=>$r['picture']
                     );
+                    $this->model->add($assets);
+                    M('assets_insights')->add($assets_insights);
                 }
-                if(count($assets)>0){
-                    $assets=array_values($assets);
-                    $this->model->addAll($assets);
-                }
-                if(count($assets_insights)>0){
-                    $assets_insights=array_values($assets_insights);
-                    M('assets_insights')->addAll($assets_insights);
-                }
+//                if(count($assets)>0){
+//                    $assets=array_values($assets);
+//                    $this->model->addAll($assets);
+//                }
+//                if(count($assets_insights)>0){
+//                    $assets_insights=array_values($assets_insights);
+//                    M('assets_insights')->addAll($assets_insights);
+//                }
             }
             asyn('apido/asyn.setAssetsImageInfo',array('ac_id'=>$ac_id));
             asyn('apido/asyn.setAssetsVideoInfo',array('ac_id'=>$ac_id));
