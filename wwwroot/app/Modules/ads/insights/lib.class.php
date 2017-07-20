@@ -218,9 +218,9 @@ END;
                 getDayTime("20:01:00",0),0);
 
         }
-        if($ad_timespace=='lifetime'){
+        //if($ad_timespace=='lifetime'){
             asyn('apido/asyn.getAssetForAd',array('ad_id' => $ad_id,'ac_id'=>$ac_id));
-        }
+        //}
         return $campaigns_data;
     }
     function getAdsInsightsData($ad_id=""){
