@@ -78,21 +78,23 @@ END;
                 foreach ($child as $r){
                     $id=$r['video_id']?$r['video_id']:"{$ac_id}:{$r['image_hash']}";
                     $ex_count=$this->model->where("id='{$id}'")->count();
-                    if($ex_count>0) continue;
+                    if($ex_count<1){
+                        $assets=array(
+                            'account_id'=>$ac_id,
+                            'hash'=>$r['image_hash'],
+                            'id'=>$id,
+                            'name'=>$r['name'],
+                            'filehash'=>md5($id),
+                            'type'=>$r['video_id']?1:0,
+                            'permalink_url'=>$r['picture']
+                        );
+                        $this->model->add($assets);
+                    }
                     $assets_insights=array(
                         'asset_id'=>$id,
                         'insight_id'=>$insight_id
                     );
-                    $assets=array(
-                        'account_id'=>$ac_id,
-                        'hash'=>$r['image_hash'],
-                        'id'=>$id,
-                        'name'=>$r['name'],
-                        'filehash'=>md5($id),
-                        'type'=>$r['video_id']?1:0,
-                        'permalink_url'=>$r['picture']
-                    );
-                    $this->model->add($assets);
+                    M('assets_insights')->where($assets_insights)->delete();
                     M('assets_insights')->add($assets_insights);
                 }
 //                if(count($assets)>0){
