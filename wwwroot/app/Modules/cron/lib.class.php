@@ -10,7 +10,7 @@ class lib{
     const CRON_STATUS_RUN_FIL=-1;
     const CRON_STATUS_RUN_OK=2;
     
-    const CRON_RETRY_COUNT=10;//断定不可访问
+    const CRON_RETRY_COUNT=100;//断定不可访问
     const CRON_RETRY_TIME=300;//通话将被阻止一分钟;在这段时间内，最大分数会衰减，最多5分钟后降至0
     const CRON_RENEW_TIMEOUT=3000;
     const CRON_RENEW_TIMEOUT_7Y14=21600;
