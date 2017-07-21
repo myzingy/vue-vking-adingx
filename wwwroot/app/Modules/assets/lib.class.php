@@ -296,6 +296,20 @@ END;
             }
         }
         if(count($assets)>1) asyn_implement('apido/asyn.setAssetsFileHash');
+        
+        $video=$this->model->field('id,url')
+            ->where("type=1 and url_128 is null and status is null")
+            ->order('uptime desc')
+            ->find();
+        if($video){
+            $filename='uploads/'.$video['id'].'.mp4';
+            $this->model->where()->save(array(
+                'url_128'=>$filename,
+                'status'=>'VIDEO'
+            ));
+            $cc=http($video['url']);
+            file_put_contents($filename,$cc);
+        }
     }
     function formatAccAssets(&$asset){
         $asset['amountspent']+=0;
