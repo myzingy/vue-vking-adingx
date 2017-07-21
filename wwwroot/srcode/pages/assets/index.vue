@@ -20,12 +20,19 @@
         margin-top: -15px;
         left:15px;
     }
+    .el-table .caret-wrapper {
+        position: initial;
+    }
+    .el-table th > .cell {
+        text-indent:15px;
+    }
+    .debug{ display:none;}
 </style>
 <template>
     <div>
         <el-form :inline="true" :model="formSearch" class="demo-form-inline">
             <el-form-item>
-                <el-input style="width:500px;" v-model="formSearch.keyword"
+                <el-input style="width:300px;" v-model="formSearch.keyword"
                           placeholder="AccountId / Author / SKU / Filename"></el-input>
             </el-form-item>
             <el-form-item>
@@ -34,9 +41,16 @@
             </el-form-item>
             <el-form-item>
                 <el-radio-group v-model="formSearch.dataType" @change="onFormSearch">
-                    <el-radio-button label="Lifetime"></el-radio-button>
-                    <el-radio-button label="Last 7 Day"></el-radio-button>
-                    <el-radio-button label="Last 14 Day"></el-radio-button>
+                    <el-radio-button label="lifetime">Lifetime</el-radio-button>
+                    <el-radio-button label="last_7day">Last 7 Day</el-radio-button>
+                    <el-radio-button label="last_14day">Last 14 Day</el-radio-button>
+                </el-radio-group>
+            </el-form-item>
+            <el-form-item>
+                <el-radio-group v-model="formSearch.assetType" @change="onFormSearch">
+                    <el-radio-button label="">All Assets</el-radio-button>
+                    <el-radio-button label="0">Images</el-radio-button>
+                    <el-radio-button label="1">Videos</el-radio-button>
                 </el-radio-group>
             </el-form-item>
         </el-form>
@@ -89,6 +103,17 @@
                             <span>Size:<span class="val">{{scope.row.original_width}} x {{scope.row.original_height}}</span></span>
                             <br>
                             <img width="400" :src="scope.row.permalink_url">
+                            <div class="debug">
+                                <p>
+                                    http://www.vking.com/facebook_ads/wwwroot/apido/asyn.getAssetForAd?debug=true&ac_id={{scope.row.account_id}}&ad_id={{scope.row.ad_id}}
+                                </p>
+                                <p v-if="scope.row.type == '1'">
+                                    http://www.vking.com/facebook_ads/wwwroot/apido/asyn.getAssetsVideoInfo?debug=true&ac_id={{scope.row.account_id}}&video_id={{scope.row.id}}
+                                </p>
+                                <p v-else="">
+                                    http://www.vking.com/facebook_ads/wwwroot/apido/asyn.getAssetsImageInfo?debug=true&ac_id={{scope.row.account_id}}&hashes={{scope.row.hash}}
+                                </p>
+                            </div>
                         </div>
                         <a :href="scope.row.url" target="_blank" slot="reference">
                             <img height="100" :src="scope.row.permalink_url" v-if="scope.row.permalink_url"/>
@@ -97,44 +122,57 @@
                     </el-popover>
                 </template>
             </el-table-column>
-            <el-table-column :formatter="numberFormatInt" columnKey="websiteaddstocart" label="Website Adds to Cart"
-                             width="80" className="autotooltip"></el-table-column>
-            <el-table-column :formatter="moneyFormat" columnKey="costperwebsiteaddtocart" label="Cost per Website Add to Cart" width="80"></el-table-column>
-            <el-table-column :formatter="moneyFormat" columnKey="websiteaddstocartconversionvalue"
-                             label="Website Adds to Cart Conversion Value" width="80"></el-table-column>
-            <el-table-column :formatter="moneyFormat" columnKey="amountspent"
-                             prop="amountspent" label="Spent" width="80"
+            <el-table-column :formatter="numberFormatInt" columnKey="websiteaddstocart" prop="websiteaddstocart"
+                             label="Website Adds to Cart"
+                             width="80" className="autotooltip" sortable></el-table-column>
+            <el-table-column :formatter="moneyFormat" columnKey="costperwebsiteaddtocart" prop="costperwebsiteaddtocart"
+                             label="Cost per Website Add to Cart" width="80" sortable></el-table-column>
+            <el-table-column :formatter="moneyFormat" columnKey="websiteaddstocartconversionvalue" prop="websiteaddstocartconversionvalue"
+                             label="Website Adds to Cart Conversion Value" width="80" sortable></el-table-column>
+            <el-table-column :formatter="moneyFormat" columnKey="amountspent" prop="amountspent" label="Spent"
+                             width="80"
                              sortable></el-table-column>
-            <el-table-column :formatter="numberFormatInt" columnKey="websitepurchases" label="Website Purchases"
-                             width="80"></el-table-column>
-            <el-table-column :formatter="moneyFormat" columnKey="websitepurchasesconversionvalue" label="Website Purchases Conversion Value" width="80"></el-table-column>
-            <el-table-column :formatter="numberFormatInt" columnKey="linkclicks" label="Link Clicks"
-                             width="80"></el-table-column>
-            <el-table-column :formatter="moneyFormat" columnKey="cpc" label="CPC (Cost per Link Click)" width="80"></el-table-column>
-            <el-table-column :formatter="numberFormatPer" columnKey="ctr" label="CTR (Link Click-Through Rate)"
-                             width="80"></el-table-column>
-            <el-table-column :formatter="moneyFormat" columnKey="cpm1000" label="CPM (Cost per 1,000 Impressions)"
-                             width="80"></el-table-column>
-            <el-table-column :formatter="numberFormatInt" columnKey="reach" label="Reach" width="80"></el-table-column>
-            <el-table-column :formatter="numberFormatInt" columnKey="results" label="Results" width="80"></el-table-column>
-            <el-table-column :formatter="CostperResult" columnKey="costperresult" label="Cost per Result"
-                             width="80"></el-table-column>
-            <el-table-column :formatter="numberFormatInt" columnKey="impressions" label="Impressions"
-                             width="80"></el-table-column>
-            <el-table-column :formatter="numberFormat" columnKey="frequency" label="Frequency"
-                             width="80"></el-table-column>
-            <el-table-column :formatter="numberFormat" columnKey="relevance_score" label="Relevent Score"
-                             width="80"></el-table-column>
+            <el-table-column :formatter="numberFormatInt" columnKey="websitepurchases" prop="websitepurchases" label="Website Purchases"
+                             width="80" sortable></el-table-column>
+            <el-table-column :formatter="moneyFormat" columnKey="websitepurchasesconversionvalue" prop="websitepurchasesconversionvalue"
+                             label="Website Purchases Conversion Value" width="80" sortable></el-table-column>
+            <el-table-column :formatter="numberFormatInt" columnKey="linkclicks"
+                             prop="linkclicks" label="Link Clicks"
+                             width="80" sortable></el-table-column>
+            <el-table-column :formatter="moneyFormat" columnKey="cpc" prop="cpc" label="CPC (Cost per Link Click)"
+                             width="80"
+                             sortable
+            ></el-table-column>
+            <el-table-column :formatter="numberFormatPer" columnKey="ctr" prop="ctr"
+                             label="CTR (Link Click-Through Rate)"
+                             width="80" sortable></el-table-column>
+            <el-table-column :formatter="moneyFormat" columnKey="cpm1000" prop="cpm1000"
+                             label="CPM (Cost per 1,000 Impressions)"
+                             width="80" sortable></el-table-column>
+            <el-table-column :formatter="numberFormatInt" columnKey="reach" prop="reach" label="Reach" width="80"
+                             sortable></el-table-column>
+            <el-table-column :formatter="numberFormatInt" columnKey="results" prop="results" label="Results" width="80"
+                             sortable
+            ></el-table-column>
+            <el-table-column :formatter="CostperResult" columnKey="costperresult" prop="costperresult" label="Cost per Result"
+                             width="80" sortable></el-table-column>
+            <el-table-column :formatter="numberFormatInt" columnKey="impressions" prop="impressions" label="Impressions"
+                             width="80" sortable></el-table-column>
+            <el-table-column :formatter="numberFormat" columnKey="frequency"  prop="frequency" label="Frequency"
+                             width="80" sortable></el-table-column>
+            <el-table-column :formatter="numberFormat" columnKey="relevance_score"  prop="relevance_score"
+                             label="Relevent Score"
+                             width="80" sortable></el-table-column>
             <el-table-column prop="positive_feedback" label="Positive Feedback"
                              width="80"></el-table-column>
             <el-table-column prop="negative_feedback" label="Negative Feedback"
                              width="80"></el-table-column>
             <el-table-column prop="ads_num" columnKey="ads_num" label="广告数"
-                             width="50"></el-table-column>
+                             width="70" sortable></el-table-column>
             <el-table-column :formatter="numberFormatPer" columnKey="conversion_rate" prop="conversion_rate" label="转化率"
-                             width="50"></el-table-column>
+                             width="70" sortable></el-table-column>
             <el-table-column :formatter="numberFormatPer" columnKey="roas" prop="roas" label="ROAS"
-                             width="50"></el-table-column>
+                             width="70" sortable></el-table-column>
             <el-table-column label="Author"  width="100">
                 <template scope="scope" >
                     <el-select
@@ -142,7 +180,8 @@
                             v-model="scope.row.author"
                             filterable
                             allow-create
-                            placeholder="请选择" @change="setAuthor(scope.row.author,scope.row)">
+                            placeholder="请选择" @change="setAuthor(scope.row.author,scope.row)"
+                            @visible-change="setAuthorFlag">
                         <el-option
                                 v-for="item in authors"
                                 :key="item"
@@ -218,9 +257,11 @@
                     keyword:'',
                     limit:30,
                     offset:0,
-                    dataType:'Lifetime'
+                    dataType:'lifetime',
+                    assetType:"",
                 },
                 authors:[],
+                authors_flag:false,
             }
         },
         computed: mapState({ user: state => state.user }),
@@ -230,6 +271,7 @@
         },
         methods:{
             getData(){
+                this.authors_flag=false;
                 vk.http(uri.assetsGetData,this.formSearch,this.then);
             },
             then:function(json,code){
@@ -318,11 +360,15 @@
                 this.formSearch.offset=(page-1)*this.formSearch.limit;
                 this.getData();
             },
+            setAuthorFlag(){
+                this.authors_flag=true;
+            },
             setAuthor(author,obj){
-                 vk.http(uri.assetsSetAuthor,{
-                     'author':author,
-                     'id':obj.id,
-                 },this.then)
+                if(!this.authors_flag) return;
+                vk.http(uri.assetsSetAuthor,{
+                    'author':author,
+                    'id':obj.id,
+                },this.then)
             },
             handleCloseTag(id,tag) {
                 //console.log('handleCloseTag',id,tag);

@@ -14,11 +14,14 @@ class lib{
     	$this->model=new model();
     }
     function getAssetForAd(){
+        $debug=I('request.debug','');
         $ad_id=I('request.ad_id','');
         if(!$ad_id)   return;
         $insight_id=$ad_id.'.lifetime';
-        $count=M('assets_insights')->where("insight_id='{$insight_id}'")->count();
-        if($count>0) return;
+        if(!$debug){
+            $count=M('assets_insights')->where("insight_id='{$insight_id}'")->count();
+            if($count>0) return;
+        }
 
         $ac_id=I('request.ac_id');
         if(!$ac_id) return;
@@ -112,18 +115,10 @@ END;
         }
 
     }
-    function setAssetsImageInfo(){
-        $ac_id=I('request.ac_id');
-        if(!$ac_id) return;
-        $hashes=[];
-        $assets=$this->model->field('hash')
-            ->where("account_id='{$ac_id}' and type=0 and `hash` is not null and created_time is null")
-            ->limit(10)
-            ->select();
-        foreach ($assets as $r){
-            array_push($hashes,$r['hash']);
-        }
-        if(!$hashes) return;
+    function getAssetsImageInfo($ac_id,$hashes){
+        $debug=I('request.debug');
+        $ac_id=$ac_id?$ac_id:I('request.ac_id');
+        $hashes=$hashes?$hashes:explode(',',I('request.hashes'));
         $ac=FBC($ac_id);
         vendor("vendor.autoload");
         $fba=Api::init($ac['app_id'],$ac['app_secret'],$ac['access_tokens']);
@@ -160,6 +155,24 @@ END;
                 'hashes'=>$hashes
             )
         );
+        if($debug){
+            return $adsets->current()->getData();
+        }
+        return $adsets;
+    }
+    function setAssetsImageInfo(){
+        $ac_id=I('request.ac_id');
+        if(!$ac_id) return;
+        $hashes=[];
+        $assets=$this->model->field('hash')
+            ->where("account_id='{$ac_id}' and type=0 and `hash` is not null and created_time is null")
+            ->limit(10)
+            ->select();
+        foreach ($assets as $r){
+            array_push($hashes,$r['hash']);
+        }
+        if(!$hashes) return;
+        $adsets = $this->getAssetsImageInfo($ac_id,$hashes);
         $data=[];
         while ($adsets->valid()) {
             $_d= $adsets->current()->getData();
@@ -180,6 +193,37 @@ END;
         }
         asyn_implement('apido/asyn.setAssetsFileHash');
         return $data;
+    }
+    function getAssetsVideoInfo($ac_id,$video_id){
+        $ac_id=$ac_id?$ac_id:I('request.ac_id');
+        $video_id=$video_id?$video_id:I('request.video_id');
+        $ac=FBC($ac_id);
+        vendor("vendor.autoload");
+        $fba=Api::init($ac['app_id'],$ac['app_secret'],$ac['access_tokens']);
+        $api = Api::instance();
+        $fields_str=<<<END
+        ["created_time"] => NULL
+        ["description"] => NULL
+        ["embed_html"] => NULL
+        ["embeddable"] => NULL
+        ["format"] => NULL
+        ["from"] => NULL
+        ["icon"] => NULL
+        ["id"] => string(16) "1928026167434181"
+        ["is_instagram_eligible"] => NULL
+        [`"name"] => NULL
+        ["picture"] => NULL
+        ["published"] => NULL
+        [`"slideshow_spec"] => NULL
+        ["source"] => NULL
+        ["thumbnails"] => NULL
+        ["updated_time"] => string(24) "2017-06-22T07:02:47+0000"
+END;
+        preg_match_all("/\[\"(.*)\"\]/",$fields_str,$match);
+        $fields=$match[1];
+        $ad=new AdVideo($video_id);
+        $_d=$ad->read($fields)->getData();
+        return $_d;
     }
     function setAssetsVideoInfo(){
         $ac_id=I('request.ac_id');
@@ -265,10 +309,6 @@ END;
     }
     function _getDataChild($filehash){
         $dataType=I('request.dataType','lifetime');
-        $dataType=strtolower(str_replace(" ","",$dataType));
-        if('lifetime'!=$dataType) {
-            $dataType = str_replace("last", "last_",$dataType);
-        }
         $where=[
             'A.filehash'=>$filehash
         ];
@@ -290,6 +330,7 @@ END;
             .",(ADI.negative_feedback)as negative_feedback"
             .",sum(ADI.CLICK1D_WebsiteAddstoCartConversionValue)as websiteaddstocartconversionvalue"
             .",sum(ADI.impressions)as impressions"
+            .",ADI.ad_id as ad_id"
         ;
         $data=$this->model->alias('A')
             ->field($fields)
@@ -326,12 +367,16 @@ END;
         $offset=I('request.offset',0);
         $limit=I('request.limit',30);
         $keyword=I('request.keyword');
-        $where="";
+        $assetType=I('request.assetType');
+        $where=" 1=1 ";
         if($keyword){
-            $where=" account_id like '%$keyword%' "
+            $where.=" and (account_id like '%$keyword%' "
                 ." or author like '%$keyword%' "
                 ." or skus like '%$keyword%' "
-                ." or name like '%$keyword%' ";
+                ." or name like '%$keyword%') ";
+        }
+        if($assetType!=""){
+            $where.=" and type='{$assetType}' ";
         }
         $filehashs=$this->model
             ->where($where)

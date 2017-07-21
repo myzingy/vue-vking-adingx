@@ -1,6 +1,6 @@
 import Vue  from 'vue'
 import VueResource  from 'vue-resource'
-import { Message,MessageBox } from 'element-ui';
+import { Message,MessageBox,Loading } from 'element-ui';
 import store from './store/'
 import URI from './uri.js'
 Vue.use(VueResource);
@@ -20,6 +20,7 @@ let vk={
         Message(msg);
     },
     then:function(data,uri,callback){
+        this.loading(false);
         console.log('vk-then',data,uri.code);
         if(data.code==-1){
             this.toast(data.message);
@@ -36,6 +37,7 @@ let vk={
         if(callback) callback(data,uri.code);
     },
     http:function(uri,data,callback){
+        this.loading();
         var cdata=this.getCache(uri);
         if(cdata){
             console.log('cacheData',cdata);
@@ -133,6 +135,10 @@ let vk={
             str=str.substr(0,str.length-1);
             return str+arguments[5];
         });
+    },
+    loading(flag=true){
+        var load=Loading.service({ fullscreen: true });
+        if(!flag) setTimeout(function(){load.close();},0);
     },
 };
 export default vk;

@@ -313,6 +313,15 @@ class AppLogic {
         $lib = new \Modules\assets\lib();
         return $lib -> setAssetsVideoInfo();
     }
+    function asyn__getAssetsImageInfo(){
+        $lib = new \Modules\assets\lib();
+        return $lib -> getAssetsImageInfo();
+    }
+    function asyn__getAssetsVideoInfo(){
+        $lib = new \Modules\assets\lib();
+        return $lib -> getAssetsVideoInfo();
+    }
+
     function asyn__setAssetsFileHash(){
         $lib = new \Modules\assets\lib();
         return $lib -> setAssetsFileHash();
