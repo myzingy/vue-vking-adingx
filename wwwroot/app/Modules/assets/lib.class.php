@@ -303,7 +303,7 @@ END;
             ->find();
         if($video){
             $filename='uploads/'.$video['id'].'.mp4';
-            $this->model->where()->save(array(
+            $this->model->where("id='{$video['id']}'")->save(array(
                 'url_128'=>$filename,
                 'status'=>'VIDEO'
             ));
