@@ -320,6 +320,10 @@ END;
         $asset['roas']=$asset['websitepurchasesconversionvalue']?
             $asset['amountspent']/$asset['websitepurchasesconversionvalue']
             :'X';
+        $asset['positive_feedback_str']=explode(',',$asset['positive_feedback_str']);
+        $asset['negative_feedback_str']=explode(',',$asset['negative_feedback_str']);
+        $asset['positive_feedback']=$this->_getRecountValue($asset['positive_feedback_str']);
+        $asset['negative_feedback']=$this->_getRecountValue($asset['negative_feedback_str']);
     }
     function _getDataChild($filehash){
         $dataType=I('request.dataType','lifetime');
@@ -340,8 +344,8 @@ END;
             .",sum(ADI.CLICK1D_WebsitePurchases)as results"
             .",avg(ADI.frequency)as frequency"
             .",avg(ADI.relevance_score)as relevance_score"
-            .",(ADI.positive_feedback)as positive_feedback"
-            .",(ADI.negative_feedback)as negative_feedback"
+            .",GROUP_CONCAT(ADI.positive_feedback)as positive_feedback_str"
+            .",GROUP_CONCAT(ADI.negative_feedback)as negative_feedback_str"
             .",sum(ADI.CLICK1D_WebsiteAddstoCartConversionValue)as websiteaddstocartconversionvalue"
             .",sum(ADI.impressions)as impressions"
             .",ADI.ad_id as ad_id"
@@ -357,6 +361,10 @@ END;
     }
     function _sumAccAssets(&$par,$chi){
           foreach ($par as $key=>$value){
+              if('positive_feedback_str'==$key || 'negative_feedback_str'==$key){
+                  $par[$key]= array_merge($par[$key],$chi[$key]);
+                  break;
+              }
               if(is_numeric($value) && is_numeric($chi[$key])){
                   $par[$key]= $value+$chi[$key];
               }elseif(is_numeric($value)){
@@ -367,15 +375,36 @@ END;
           }
 
     }
+    function _getRecountValue($arr){
+        $maxnum=0;
+        $maxval='';
+        $tmp=[];
+        foreach ($arr as $key){
+            $tmp[$key]+=1;
+            if($tmp[$key]>$maxnum){
+                $maxval=$key;
+            }
+        }
+        return $maxval;
+    }
     function _avgAccAssets(&$par){
-        $avg=['costperwebsiteaddtocart','cpc','ctr','cpm1000'
-            ,'relevance_score','frequency','conversion_rate'
-            ,'roas'];
+        $avg=['costperwebsiteaddtocart','cpc','cpm1000'
+            ,'relevance_score','conversion_rate'
+            ,'roas'
+            //,'ctr','frequency',
+            ];
+        $par['ctr']= $par['linkclicks']/$par['impressions'];
+        $par['frequency']= $par['impressions']/$par['reach'];
+        $par['cpm1000']= ($par['amountspent']*1000)/$par['reach'];
+        
         foreach ($avg as $key){
             if(is_numeric($par[$key])){
                 $par[$key]= $par[$key]/$par['list_count'];
             }
         }
+        $arr=array_count_values($par[positive_feedback_str]);
+        $par['positive_feedback']=$this->_getRecountValue($par['positive_feedback_str']);
+        $par['negative_feedback']=$this->_getRecountValue($par['negative_feedback_str']);
     }
     function getData(){
         $offset=I('request.offset',0);
