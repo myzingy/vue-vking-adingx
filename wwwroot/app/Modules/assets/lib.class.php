@@ -361,9 +361,10 @@ END;
     }
     function _sumAccAssets(&$par,$chi){
           foreach ($par as $key=>$value){
+              if('type'==$key) continue;
               if('positive_feedback_str'==$key || 'negative_feedback_str'==$key){
                   $par[$key]= array_merge($par[$key],$chi[$key]);
-                  break;
+                  continue;
               }
               if(is_numeric($value) && is_numeric($chi[$key])){
                   $par[$key]= $value+$chi[$key];
