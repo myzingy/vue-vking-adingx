@@ -44,8 +44,7 @@ class ApidoController extends Controller {
 			$info['message']=$info['message']?$info['message']:'';
 			$info['code']=$info['message']?($info['code']?$info['code']:10000):200;
 			$info['act']=$action;
-			$info['provider_flag']=$info['provider_flag']?$info['provider_flag']:($this->api_lib->user->provider_flag."");
-
+			
 			$this->api_lib->status($info);
 		}else{
 			//方法未找到
