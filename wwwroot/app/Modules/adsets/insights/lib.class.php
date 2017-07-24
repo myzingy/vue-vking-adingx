@@ -165,7 +165,7 @@ END;
                     $campaigns_data['type']=model::INSIGHT_TYPE_YESTODAY;
             }
             M('adsets_insights')->where("id='{$campaigns_data['id']}'")->delete();
-            M('adsets_insights_action_types')->where("adsets_insights_id='{$campaigns_data['id']}'")->delete();
+            //M('adsets_insights_action_types')->where("adsets_insights_id='{$campaigns_data['id']}'")->delete();
             //$campaigns_data['id'] = md5($campaigns_data['adset_id'] . $campaigns_data['date_start']);
             $adsets->next();
         }

@@ -192,7 +192,7 @@ END;
                     }
             }
             M('ads_insights')->where("id='{$campaigns_data['id']}'")->delete();
-            M('ads_insights_action_types')->where("ads_insights_id='{$campaigns_data['id']}'")->delete();
+            //M('ads_insights_action_types')->where("ads_insights_id='{$campaigns_data['id']}'")->delete();
             $adsets->next();
         }
         //return $campaigns_data;

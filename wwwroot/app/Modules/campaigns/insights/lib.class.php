@@ -152,7 +152,7 @@ END;
                     $campaigns_data['type'] = model::INSIGHT_TYPE_YESTODAY;
             }
             M('campaigns_insights')->where("id='{$campaigns_data['id']}'")->delete();
-            M('campaigns_insights_action_types')->where("campaigns_insights_id='{$campaigns_data['id']}'")->delete();
+            //M('campaigns_insights_action_types')->where("campaigns_insights_id='{$campaigns_data['id']}'")->delete();
             $adsets->next();
         }
 
