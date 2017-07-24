@@ -9,7 +9,7 @@ $conf['group_rules']=include(CONF_PATH.'group_rules.php');
 $conf['think']=array(
 	"URL_MODEL"=>2,
 	//"SESSION_AUTO_START"=>true,
-    'DEFAULT_TIMEZONE'=>__APP__POS=='CC__DEV'?'PRC':'UTC+8',
+    'DEFAULT_TIMEZONE'=>__APP__POS=='CC__DEV'?'PRC':'PRC',
 );
 $conf['erp_host']=array('erp_host'=>array(
         'http://54.199.246.177/',//测试环境
