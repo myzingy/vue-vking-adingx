@@ -300,7 +300,8 @@ END;
             ])
             ->select();
         foreach ($data as &$r){
-            $r['country']=json_decode($r['country'],true);
+            $r['countrys']=json_decode($r['country'],true);
+            unset($r['country']);
         }
         return ['data'=>$data];
     }
