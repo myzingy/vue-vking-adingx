@@ -173,8 +173,8 @@ END;
         //return $campaigns_data;
         if ($campaigns_data) {
             setDayClick($campaigns_data['adsets_insights_action_types'],$campaigns_data);
-            //unset($campaigns_data['adsets_insights_action_types']);
-            $this->model->relation(true)->add($campaigns_data);
+            unset($campaigns_data['adsets_insights_action_types']);
+            $this->model->add($campaigns_data);
         }
         if($adset_timespace=='today') {
             //执行规则
