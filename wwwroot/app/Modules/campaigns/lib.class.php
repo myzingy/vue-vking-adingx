@@ -167,6 +167,7 @@ class lib{
     function postErpCampaign(){
         //if(__APP__POS=='CC__DEV') return;
         $ac_ids_rules=array(
+            //jeulia
             '561910137324149'=>'戴婷',
             '836196303228863'=>'权文娟',
             '564914007023762'=>'王乐',
@@ -187,6 +188,10 @@ class lib{
                 ['王乐-mar','-mar'],['王乐-dpa','dpa'],['王乐-g-w','us-g-w'],
                 ['杨超英','Kelly']
             ],
+            //gnoce
+            '670806899767805'=>'陈灿',
+            '639275086254320'=>'胡美莹',
+            '769185763263251'=>'员燕子',
         );
         $ac_id=I('request.ac_id');
         $date_stop=I('request.date_stop');
