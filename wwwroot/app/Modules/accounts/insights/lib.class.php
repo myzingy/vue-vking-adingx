@@ -139,8 +139,9 @@ END;
             );
         }
         $breakdowns_data=[];
+        $campaigns_data['country_spend']=[];
         if($breakdowns){
-            array_push($fields,'device_platform');
+            array_push($fields,$breakdowns);
         }
         while ($adsets->valid()) {
             $campaigns_data['accounts_insights_action_types']=array();
@@ -178,15 +179,7 @@ END;
                     $campaigns_data['type']=model::INSIGHT_TYPE_YESTODAY;
             }
             $adsets->next();
-            if($breakdowns){
-//                array_push($breakdowns_data,array(
-//                    'accounts_insights_id'=>$campaigns_data['id'],
-//                    'insight_key'=>'breakdowns.'.$breakdowns,
-//                    'action_type'=>$campaigns_data['device_platform'].'.spend',
-//                    'value'=>  $campaigns_data['spend'],
-//                    '1d_click'=>  $campaigns_data['spend'],
-//                    '1d_view'=>  $campaigns_data['spend'],
-//                ));
+            if($breakdowns=='device_platform'){
                 if($campaigns_data['device_platform']=='desktop'){
                     $pc_fee=$campaigns_data['spend']*100;
                 }
@@ -194,19 +187,14 @@ END;
                     $mb_fee=$campaigns_data['spend']*100;
                 }
             }
+            if($breakdowns=='country'){
+                $campaigns_data['country_spend'][]=array(
+                    'country'=>$campaigns_data['country'],
+                    'spend'=>$campaigns_data['spend']*100,
+                );
+            }
         }
-        //return $campaigns_data;
-        if($breakdowns){
-//            M('accounts_insights_action_types')->addAll($breakdowns_data);
-//            $erpData=array(
-//                'date'=> $campaigns_data['date_stop'],
-//                'account_id'=>$campaigns_data['account_id'],
-//                'account_name'=>$campaigns_data['account_name'],
-//                'pc_fee'=>$pc_fee+0,
-//                'mb_fee'=>$mb_fee+0,
-//                'fee'=>$pc_fee+$mb_fee,
-//            );
-//            postERP('api/api/facebook-fee',$erpData);
+        if($breakdowns=='device_platform'){
             if ($campaigns_data) {
                 $insights=M('accounts_insights')->where("id='{$campaigns_data['id']}'")->find();
                 if($insights){
@@ -222,6 +210,20 @@ END;
                     $this->model->add($campaigns_data);
                 }
             }
+        }else if($breakdowns=='country'){
+            if ($campaigns_data) {
+                $campaigns_data['country_spend']=json_encode($campaigns_data['country_spend']);
+                $insights=M('accounts_insights')->where("id='{$campaigns_data['id']}'")->find();
+                if($insights){
+                    M('accounts_insights')->where("id='{$campaigns_data['id']}'")->save(array(
+                        'country_spend'=>$campaigns_data['country_spend']
+                    ));
+                }else{
+                    setDayClick($campaigns_data['accounts_insights_action_types'],$campaigns_data);
+                    unset($campaigns_data['country'],$campaigns_data['accounts_insights_action_types']);
+                    $this->model->add($campaigns_data);
+                }
+            }
         }else{
             if ($campaigns_data) {
                 M('accounts_insights')->where("id='{$campaigns_data['id']}'")->delete();
@@ -233,6 +235,7 @@ END;
                 $this->model->add($campaigns_data);
             }
             asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>$ad_timespace,'ac_id'=>$ac_id,'breakdowns'=>'device_platform'));
+            asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>$ad_timespace,'ac_id'=>$ac_id,'breakdowns'=>'country'));
         }
         if($ad_timespace=='today' && !$breakdowns) {
             //其它Insights

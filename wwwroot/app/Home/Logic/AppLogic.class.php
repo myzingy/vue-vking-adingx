@@ -148,6 +148,10 @@ class AppLogic {
         $lib = new \Modules\accounts\lib();
         return $lib->getAcconutByPlatform();
     }
+    function erp__getAcconutByCountry(){
+        $lib = new \Modules\accounts\lib();
+        return $lib->getAcconutByCountry();
+    }
 	############################################################
 	# 一些异步接口开始
 	############################################################

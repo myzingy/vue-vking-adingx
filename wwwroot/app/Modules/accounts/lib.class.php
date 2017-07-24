@@ -284,4 +284,24 @@ END;
             ->select();
         return ['data'=>$data];
     }
+    function getAcconutByCountry(){
+        $date=I('request.date');
+        $brand=strtolower(I('request.brand'));
+        if(!$date || !$brand) return "param is null";
+        $brands=C('brand');
+        $brands=$brands[$brand];
+        if(!$brands) return "brand is error";
+        $data=M('accounts_insights')
+            ->field('account_id,account_name,country_spend as country,date_start as date')
+            ->where([
+                'date_start'=>$date,
+                'date_stop'=>$date,
+                'account_id'=>array('in',explode(',',$brands))
+            ])
+            ->select();
+        foreach ($data as &$r){
+            $r['country']=json_decode($r['country'],true);
+        }
+        return ['data'=>$data];
+    }
 }

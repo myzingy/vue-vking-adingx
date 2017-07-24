@@ -13,3 +13,6 @@ ALTER TABLE `facebook_ads`.`accounts_insights` ADD COLUMN `CLICK1D_WebsiteAddsto
 ALTER TABLE `facebook_ads`.`ads_insights` ADD COLUMN `CLICK1D_WebsiteAddstoCartConversionValue` VARCHAR(20) DEFAULT '0' NULL AFTER `CLICK1D_MobileSpend`;
 ALTER TABLE `facebook_ads`.`adsets_insights` ADD COLUMN `CLICK1D_WebsiteAddstoCartConversionValue` VARCHAR(20) DEFAULT '0' NULL AFTER `CLICK1D_MobileSpend`;
 ALTER TABLE `facebook_ads`.`campaigns_insights` ADD COLUMN `CLICK1D_WebsiteAddstoCartConversionValue` VARCHAR(20) DEFAULT '0' NULL AFTER `CLICK1D_MobileSpend`;
+
+
+ALTER TABLE `facebook_ads`.`accounts_insights` ADD COLUMN `country_spend` VARCHAR(5000) DEFAULT '[]' NULL AFTER `CLICK1D_WebsiteAddstoCartConversionValue`; 
