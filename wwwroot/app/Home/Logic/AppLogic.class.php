@@ -146,34 +146,6 @@ class AppLogic {
     }
     function erp__getAcconutByPlatform(){
         $lib = new \Modules\accounts\lib();
-        return array(
-            'data'=>array(
-                array(
-                    'date'=> I('request.date'),
-                    'account_id'=>'11111111111111',
-                    'account_name'=>'account11111111111111_name',
-                    'pc_fee'=>100,
-                    'mb_fee'=>200,
-                    'fee'=>300,
-                ),
-                array(
-                    'date'=> I('request.date'),
-                    'account_id'=>'222222222',
-                    'account_name'=>'account222222222_name',
-                    'pc_fee'=>1000,
-                    'mb_fee'=>2000,
-                    'fee'=>3000,
-                ),
-                array(
-                    'date'=> I('request.date'),
-                    'account_id'=>'333333333333',
-                    'account_name'=>'account333333333333_name',
-                    'pc_fee'=>10000,
-                    'mb_fee'=>20000,
-                    'fee'=>30000,
-                ),
-            )
-        );
         return $lib->getAcconutByPlatform();
     }
 	############################################################
