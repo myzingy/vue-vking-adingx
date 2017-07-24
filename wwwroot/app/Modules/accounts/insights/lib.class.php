@@ -188,10 +188,14 @@ END;
                 }
             }
             if($breakdowns=='country'){
-                $campaigns_data['country_spend'][]=array(
-                    'country'=>$campaigns_data['country'],
-                    'spend'=>$campaigns_data['spend']*100,
-                );
+                setDayClick($campaigns_data['accounts_insights_action_types'],$campaigns_data);
+                $campaigns_data['country_cost'][$campaigns_data['country']]=$campaigns_data['spend']*100;
+                $campaigns_data['country_purchase'][$campaigns_data['country']]=$campaigns_data['CLICK1D_WebsitePurchases']+0;
+                $campaigns_data['country_income'][$campaigns_data['country']]=(preg_replace("/[$,]+/","",$campaigns_data['CLICK1D_WebsitePurchasesConversionValue'])*100);
+                $campaigns_data['country_add_to_cart'][$campaigns_data['country']]=$campaigns_data['CLICK1D_WebsiteAddstoCart']+0;
+                $campaigns_data['country_cpm'][$campaigns_data['country']]=$campaigns_data['cpm']*100;
+                $campaigns_data['country_ctr'][$campaigns_data['country']]=$campaigns_data['inline_link_click_ctr']+0;
+                $campaigns_data['country_link_click'][$campaigns_data['country']]=$campaigns_data['inline_link_clicks']+0;
             }
         }
         if($breakdowns=='device_platform'){
@@ -212,12 +216,16 @@ END;
             }
         }else if($breakdowns=='country'){
             if ($campaigns_data) {
-                $campaigns_data['country_spend']=json_encode($campaigns_data['country_spend']);
+                $upkey=[];
+                foreach (['country_cost','country_purchase','country_income','country_add_to_cart'
+                         ,'country_cpm','country_ctr','country_link_click'] as $key){
+                    $upkey[$key]=json_encode($campaigns_data[$key]);
+                    $campaigns_data[$key]=$upkey[$key];
+                }
+                $campaigns_data['country_cost']=json_encode($campaigns_data['country_cost']);
                 $insights=M('accounts_insights')->where("id='{$campaigns_data['id']}'")->find();
                 if($insights){
-                    M('accounts_insights')->where("id='{$campaigns_data['id']}'")->save(array(
-                        'country_spend'=>$campaigns_data['country_spend']
-                    ));
+                    M('accounts_insights')->where("id='{$campaigns_data['id']}'")->save($upkey);
                 }else{
                     setDayClick($campaigns_data['accounts_insights_action_types'],$campaigns_data);
                     unset($campaigns_data['country'],$campaigns_data['accounts_insights_action_types']);
@@ -229,7 +237,6 @@ END;
                 M('accounts_insights')->where("id='{$campaigns_data['id']}'")->delete();
                 //M('accounts_insights_action_types')->where("accounts_insights_id='{$campaigns_data['id']}'")
                 //->delete();
-
                 setDayClick($campaigns_data['accounts_insights_action_types'],$campaigns_data);
                 unset($campaigns_data['accounts_insights_action_types']);
                 $this->model->add($campaigns_data);

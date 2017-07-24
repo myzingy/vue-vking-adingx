@@ -292,7 +292,9 @@ END;
         $brands=$brands[$brand];
         if(!$brands) return "brand is error";
         $data=M('accounts_insights')
-            ->field('account_id,account_name,country_spend as country,date_start as date')
+            ->field('account_id,account_name,date_start as date,country_cost as cost
+            ,country_purchase as purchase,country_income as income,country_add_to_cart as add_to_cart
+            ,country_cpm as cpm,country_ctr as ctr,country_link_click as link_click')
             ->where([
                 'date_start'=>$date,
                 'date_stop'=>$date,
@@ -300,8 +302,13 @@ END;
             ])
             ->select();
         foreach ($data as &$r){
-            $r['countrys']=json_decode($r['country'],true);
-            unset($r['country']);
+            $r['cost']=json_decode($r['cost'],true);
+            $r['purchase']=json_decode($r['purchase'],true);
+            $r['income']=json_decode($r['income'],true);
+            $r['add_to_cart']=json_decode($r['add_to_cart'],true);
+            $r['cpm']=json_decode($r['cpm'],true);
+            $r['ctr']=json_decode($r['ctr'],true);
+            $r['link_click']=json_decode($r['link_click'],true);
         }
         return ['data'=>$data];
     }
