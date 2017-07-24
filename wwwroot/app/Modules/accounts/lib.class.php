@@ -271,7 +271,7 @@ END;
         $date=I('request.date');
         if(!$date) return "date is null";
         $data=M('accounts_insights')
-            ->field('account_id,account_name,CLICK1D_DesktopSpend as pc_fee,CLICK1D_MobileSpend as mb_fee,CLICK1D_DesktopSpend+CLICK1D_MobileSpend as fee')
+            ->field('account_id,account_name,CLICK1D_DesktopSpend as pc_fee,CLICK1D_MobileSpend as mb_fee,CLICK1D_DesktopSpend+CLICK1D_MobileSpend as fee,date_start as date')
             ->where([
                 'date_start'=>$date,
                 'date_stop'=>$date
