@@ -18,6 +18,7 @@ class lib{
 	function flushAccountsInsights(){
         $ad_timespace=I('request.ad_timespace','today');
         $breakdowns=I('request.breakdowns','');
+        $date=I('request.date','');
         $ac_id=I('request.ac_id');
         if(!$ac_id) return;
         $ac=FBC($ac_id);
@@ -109,7 +110,16 @@ END;
         $time_range=array(date('Y-m-d' ,NOW_TIME),date('Y-m-d' , strtotime('-1 day'))
             ,date('Y-m-d' , strtotime('-7 day')),date('Y-m-d' , strtotime('-14 day')));
         list($today,$yestoday,$last_7day,$last_14day)=$time_range;
-        if($ad_timespace=='today'){
+        if($date){
+            $adsets = $campaign->getInsights(
+                $fields,
+                array(
+                    'time_range'=>array('since'=>$date,'until'=>$date),
+                    'action_attribution_windows'=>['1d_click','1d_view'],
+                    'breakdowns'=> $breakdowns,
+                )
+            );
+        }else if($ad_timespace=='today'){
             $adsets = $campaign->getInsights(
                 $fields,
                 array(
@@ -169,14 +179,14 @@ END;
             }
             $adsets->next();
             if($breakdowns){
-                array_push($breakdowns_data,array(
-                    'accounts_insights_id'=>$campaigns_data['id'],
-                    'insight_key'=>'breakdowns.'.$breakdowns,
-                    'action_type'=>$campaigns_data['device_platform'].'.spend',
-                    'value'=>  $campaigns_data['spend'],
-                    '1d_click'=>  $campaigns_data['spend'],
-                    '1d_view'=>  $campaigns_data['spend'],
-                ));
+//                array_push($breakdowns_data,array(
+//                    'accounts_insights_id'=>$campaigns_data['id'],
+//                    'insight_key'=>'breakdowns.'.$breakdowns,
+//                    'action_type'=>$campaigns_data['device_platform'].'.spend',
+//                    'value'=>  $campaigns_data['spend'],
+//                    '1d_click'=>  $campaigns_data['spend'],
+//                    '1d_view'=>  $campaigns_data['spend'],
+//                ));
                 if($campaigns_data['device_platform']=='desktop'){
                     $pc_fee=$campaigns_data['spend']*100;
                 }
@@ -187,24 +197,40 @@ END;
         }
         //return $campaigns_data;
         if($breakdowns){
-            M('accounts_insights_action_types')->addAll($breakdowns_data);
-            $erpData=array(
-                'date'=> $campaigns_data['date_stop'],
-                'account_id'=>$campaigns_data['account_id'],
-                'account_name'=>$campaigns_data['account_name'],
-                'pc_fee'=>$pc_fee+0,
-                'mb_fee'=>$mb_fee+0,
-                'fee'=>$pc_fee+$mb_fee,
-            );
-            postERP('api/api/facebook-fee',$erpData);
+//            M('accounts_insights_action_types')->addAll($breakdowns_data);
+//            $erpData=array(
+//                'date'=> $campaigns_data['date_stop'],
+//                'account_id'=>$campaigns_data['account_id'],
+//                'account_name'=>$campaigns_data['account_name'],
+//                'pc_fee'=>$pc_fee+0,
+//                'mb_fee'=>$mb_fee+0,
+//                'fee'=>$pc_fee+$mb_fee,
+//            );
+//            postERP('api/api/facebook-fee',$erpData);
+            if ($campaigns_data) {
+                $insights=M('accounts_insights')->where("id='{$campaigns_data['id']}'")->find();
+                if($insights){
+                    M('accounts_insights')->where("id='{$campaigns_data['id']}'")->save(array(
+                        'CLICK1D_DesktopSpend'=>$pc_fee,
+                        'CLICK1D_MobileSpend'=> $mb_fee
+                    ));
+                }else{
+                    setDayClick($campaigns_data['accounts_insights_action_types'],$campaigns_data);
+                    unset($campaigns_data['device_platform'],$campaigns_data['accounts_insights_action_types']);
+                    $campaigns_data['CLICK1D_DesktopSpend']=$pc_fee;
+                    $campaigns_data['CLICK1D_MobileSpend']=$mb_fee;
+                    $this->model->add($campaigns_data);
+                }
+            }
         }else{
             if ($campaigns_data) {
                 M('accounts_insights')->where("id='{$campaigns_data['id']}'")->delete();
-                M('accounts_insights_action_types')->where("accounts_insights_id='{$campaigns_data['id']}'")->delete();
+                //M('accounts_insights_action_types')->where("accounts_insights_id='{$campaigns_data['id']}'")
+                //->delete();
 
                 setDayClick($campaigns_data['accounts_insights_action_types'],$campaigns_data);
-                //unset($campaigns_data['accounts_insights_action_types']);
-                $this->model->relation(true)->add($campaigns_data);
+                unset($campaigns_data['accounts_insights_action_types']);
+                $this->model->add($campaigns_data);
             }
             asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>$ad_timespace,'ac_id'=>$ac_id,'breakdowns'=>'device_platform'));
         }
@@ -213,6 +239,6 @@ END;
             asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>'yestoday','ac_id'=>$ac_id),null,
                 getDayTime("00:06:00"),0);
         }
-        return $breakdowns_data?$breakdowns_data:$campaigns_data;
+        return $campaigns_data;
     }
 }
