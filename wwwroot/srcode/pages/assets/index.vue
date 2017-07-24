@@ -87,10 +87,12 @@
                                          width="80"></el-table-column>
                         <el-table-column prop="negative_feedback" label="Negative Feedback"
                                          width="80"></el-table-column>
+                        <el-table-column prop="ads_num" columnKey="ads_num" label="广告数"
+                                         width="70" sortable></el-table-column>
                         <el-table-column :formatter="numberFormatPer" columnKey="conversion_rate" prop="conversion_rate" label="转化率"
-                                         width="50"></el-table-column>
+                                         width="70"></el-table-column>
                         <el-table-column :formatter="numberFormatPer" columnKey="roas" prop="roas" label="ROAS"
-                                         width="50"></el-table-column>
+                                         width="70"></el-table-column>
                     </el-table>
                 </template>
             </el-table-column>
