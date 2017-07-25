@@ -446,6 +446,7 @@ END;
         }
         foreach ($fdata as &$x){
             $this->_avgAccAssets($x);
+            $x['url']=$x['url_128']?(url($x['url_128'])):$x['url'];
         }
         $cc=M()->query(
             'SELECT COUNT(DISTINCT `filehash`) AS tp_count FROM `assets` '
