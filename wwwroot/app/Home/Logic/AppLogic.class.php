@@ -153,7 +153,7 @@ class AppLogic {
         return $lib->getAcconutByCountry();
     }
     function erp__getAcconutByOperator(){
-        $lib = new \Modules\accounts\lib();
+        $lib = new \Modules\campaigns\lib();
         return $lib->getAcconutByOperator();
     }
 	############################################################

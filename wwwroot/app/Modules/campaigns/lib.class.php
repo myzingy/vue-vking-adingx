@@ -165,6 +165,7 @@ class lib{
         return array('data'=>$formatData);
     }
     function postErpCampaign(){
+        return;
         //if(__APP__POS=='CC__DEV') return;
         $ac_ids_rules=array(
             //jeulia
@@ -247,5 +248,100 @@ class lib{
             }
             return $pdata;
         }
+    }
+    function getAcconutByOperator(){
+        $date=I('request.date');
+        if(!$date) return "param is null";
+        $ac_ids_rules=array(
+            //jeulia
+            '561910137324149'=>'戴婷',
+            '836196303228863'=>'权文娟',
+            '564914007023762'=>'王乐',
+            '639275016254327'=>'王乐',
+            '909992302470836'=>'杨超英',
+            '639275062920989'=>'杨蕾',
+            '769185753263252'=>'李婷',
+            '673582062823622'=>'徐健',
+            '836196296562197'=>'何慧敏',
+            '836196299895530'=>'葛芳',
+            '769185746596586'=>[
+                ['徐健','Evan'],['何慧敏','Janet']
+            ],
+            '559461654235664'=>[
+                ['权文娟','US-Q'],['武艳云','US-W']
+            ],
+            '1593565507558990'=>[
+                ['王乐-mar','-mar'],['王乐-dpa','dpa'],['王乐-g-w','us-g-w'],
+                ['杨超英','Kelly']
+            ],
+            //gnoce
+            '670806899767805'=>'陈灿',
+            '639275086254320'=>'胡美莹',
+            '769185763263251'=>'员燕子',
+        );
+        $brands=C('brand');
+        $brands=$brands['jeulia'];
+        $data=M('campaigns_insights')
+            ->field('account_id,account_name,date_start as date,campaign_name
+            ,CLICK1D_WebsiteAddstoCart,CLICK1D_WebsitePurchases,CLICK1D_CostperWebsiteAddtoCart
+            ,CLICK1D_CPC,CLICK1D_WebsiteAddstoCartConversionValue,CLICK1D_WebsitePurchasesConversionValue
+            ,spend,cpm,inline_link_click_ctr as ctr,inline_link_clicks as link_clicks')
+            ->where([
+                'date_start'=>$date,
+                'date_stop'=>$date,
+                'account_id'=>array('in',explode(',',$brands))
+            ])
+            ->select();
+        $pdata=[];
+
+        foreach ($data as $r){
+            $ac_id=$r['account_id'];
+            $rule=$ac_ids_rules[$ac_id];
+            $day_click=getDayClick($r);
+            if(is_array($rule)){
+                $key=$ac_id;
+                foreach ($rule as $rl){
+                    if(stripos($r['campaign_name'],$rl[1])>-1){
+                        $key=$rl[0];
+                        break;
+                    }
+                }
+            }else{
+                $key=$rule?$rule:$ac_id;
+            }
+            if($key==$ac_id) continue;
+            if(!$pdata[$key]){
+                $pdata[$key]=array(
+                    'fee_date'=>$r['date'][0],
+                    'account_id'=>$ac_id,
+                    'account_name'=>$r['account_name'],
+                    'username'=>$key,
+                    'cost'=>0,
+                    'purchase'=>0,
+                    'add_to_cart'=>0,
+                    'cpm'=>0,
+                    'ctr'=>0,
+                    'link_click'=>0,
+                    'income'=>0,
+                    //'campaign_name'=>'',
+                    '__count'=>0,
+                );
+            }
+            $pdata[$key]['cost']+=$r['spend']*100;
+            $pdata[$key]['purchase']+=$day_click['WebsitePurchases'];
+            $pdata[$key]['add_to_cart']+=$day_click['WebsiteAddstoCart'];
+            $pdata[$key]['cpm']+=$r['cpm']*100;
+            $pdata[$key]['ctr']+=$r['ctr'];
+            $pdata[$key]['link_click']+=$r['link_clicks'];
+            $pdata[$key]['income']+=$day_click['WebsitePurchasesConversionValue']*100;
+            //$pdata[$key]['campaign_name'].=$r['campaign_name']." |||| ";
+            $pdata[$key]['__count']+=1;
+        }
+        foreach ($pdata as &$xd){
+            $xd['cpm']=$xd['cpm']/$xd['__count'];
+            $xd['ctr']=$xd['ctr']/$xd['__count'];
+            unset($xd['__count']);
+        }
+        return ['data'=>$pdata];
     }
 }
