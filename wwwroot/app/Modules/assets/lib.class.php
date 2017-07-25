@@ -318,7 +318,7 @@ END;
 
         $asset['conversion_rate']=$asset['websitepurchases']/($asset['linkclicks']?$asset['linkclicks']:1);
         $asset['roas']=$asset['websitepurchasesconversionvalue']?
-            $asset['amountspent']/$asset['websitepurchasesconversionvalue']
+            (($asset['amountspent']/$asset['websitepurchasesconversionvalue'])*100)
             :'X';
         $asset['positive_feedback_str']=explode(',',$asset['positive_feedback_str']);
         $asset['negative_feedback_str']=explode(',',$asset['negative_feedback_str']);
