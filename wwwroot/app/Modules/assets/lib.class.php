@@ -297,19 +297,19 @@ END;
         }
         if(count($assets)>1) asyn_implement('apido/asyn.setAssetsFileHash');
         
-        $video=$this->model->field('id,url')
-            ->where("type=1 and url_128 is null and status is null")
-            ->order('uptime desc')
-            ->find();
-        if($video){
-            $filename='uploads/'.$video['id'].'.mp4';
-            $this->model->where("id='{$video['id']}'")->save(array(
-                'url_128'=>$filename,
-                'status'=>'VIDEO'
-            ));
-            $cc=http($video['url']);
-            file_put_contents($filename,$cc);
-        }
+//        $video=$this->model->field('id,url')
+//            ->where("type=1 and url_128 is null and status is null")
+//            ->order('uptime desc')
+//            ->find();
+//        if($video){
+//            $filename='uploads/'.$video['id'].'.mp4';
+//            $this->model->where("id='{$video['id']}'")->save(array(
+//                'url_128'=>$filename,
+//                'status'=>'VIDEO'
+//            ));
+//            $cc=http($video['url']);
+//            file_put_contents($filename,$cc);
+//        }
     }
     function formatAccAssets(&$asset){
         $asset['amountspent']+=0;
@@ -467,5 +467,70 @@ END;
         if($id){
             $this->model->where("id='{$id}'")->save(array('skus'=>$skus));
         }
+    }
+    function flushAssetVideoFile(){
+        $uptime=NOW_TIME-86400;
+        $ac_id=I('request.ac_id','639275062920989');
+        $assets=$this->model->field('id,url_128')
+            ->where("status!='VIDEO_OK' and type=1 and uptime<$uptime")
+            ->find();
+        if(!$assets) return;
+        $fz=filesize($assets['url_128']);
+        if($fz>100){
+            $filehash=md5_file($assets['url_128']);
+            $this->model->where(array('id'=>$assets['id']))->save(array(
+                'status'=>'VIDEO_OK',
+                'filehash'=>$filehash,
+                'is_filehash'=>1,
+            ));
+            return;
+        }
+        $ac=FBC($ac_id);
+        vendor("vendor.autoload");
+        $fba=Api::init($ac['app_id'],$ac['app_secret'],$ac['access_tokens']);
+        $api = Api::instance();
+        $fields_str=<<<END
+        ["created_time"] => NULL
+        ["description"] => NULL
+        ["embed_html"] => NULL
+        ["embeddable"] => NULL
+        ["format"] => NULL
+        ["from"] => NULL
+        ["icon"] => NULL
+        ["id"] => string(16) "1928026167434181"
+        ["is_instagram_eligible"] => NULL
+        [`"name"] => NULL
+        ["picture"] => NULL
+        ["published"] => NULL
+        [`"slideshow_spec"] => NULL
+        ["source"] => NULL
+        ["thumbnails"] => NULL
+        ["updated_time"] => string(24) "2017-06-22T07:02:47+0000"
+END;
+        preg_match_all("/\[\"(.*)\"\]/",$fields_str,$match);
+        $fields=$match[1];
+
+        $ad=new AdVideo($assets['id']);
+        $_d=$ad->read($fields)->getData();
+        $data=array(
+            'created_time'=>$_d['created_time'],
+            'updated_time'=>$_d['updated_time'],
+            'uptime'=>NOW_TIME,
+            'url'=>$_d['source'],
+        );
+        $this->model->where(array('id'=>$_d['id']))->save($data);
+        //get file;
+        $filename='uploads/'.$assets['id'].'.mp4';
+        $cc=http($_d['source']);
+        if($cc){
+            file_put_contents($filename,$cc);
+            $filehash=md5_file($filename);
+            $this->model->where(array('id'=>$assets['id']))->save(array(
+                'status'=>'VIDEO_OK',
+                'filehash'=>$filehash,
+                'is_filehash'=>1,
+            ));
+        }
+        return $_d;
     }
 }

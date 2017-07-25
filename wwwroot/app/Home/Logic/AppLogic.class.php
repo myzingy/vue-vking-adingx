@@ -363,6 +363,10 @@ class AppLogic {
         $lib = new \Modules\ads\lib();
         return $lib -> pause();
     }
+    function asyn__flushAssetVideoFile(){
+        $lib = new \Modules\assets\lib();
+        return $lib -> flushAssetVideoFile();
+    }
 	############################################################
 	# 一些异步接口结束
 	############################################################
