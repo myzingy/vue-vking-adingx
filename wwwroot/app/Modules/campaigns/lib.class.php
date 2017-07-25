@@ -296,6 +296,7 @@ class lib{
 
         foreach ($data as $r){
             $ac_id=$r['account_id'];
+            $pdata[$ac_id]=$pdata[$ac_id]?$pdata[$ac_id]:[];
             $rule=$ac_ids_rules[$ac_id];
             $day_click=getDayClick($r);
             if(is_array($rule)){
@@ -310,8 +311,8 @@ class lib{
                 $key=$rule?$rule:$ac_id;
             }
             if($key==$ac_id) continue;
-            if(!$pdata[$key]){
-                $pdata[$key]=array(
+            if(!$pdata[$ac_id][$key]){
+                $pdata[$ac_id][$key]=array(
                     'fee_date'=>$r['date'],
                     'account_id'=>$ac_id,
                     'account_name'=>$r['account_name'],
@@ -327,20 +328,22 @@ class lib{
                     '__count'=>0,
                 );
             }
-            $pdata[$key]['cost']+=$r['spend']*100;
-            $pdata[$key]['purchase']+=$day_click['WebsitePurchases'];
-            $pdata[$key]['add_to_cart']+=$day_click['WebsiteAddstoCart'];
-            $pdata[$key]['cpm']+=$r['cpm']*100;
-            $pdata[$key]['ctr']+=$r['ctr'];
-            $pdata[$key]['link_click']+=$r['link_clicks'];
-            $pdata[$key]['income']+=$day_click['WebsitePurchasesConversionValue']*100;
+            $pdata[$ac_id][$key]['cost']+=$r['spend']*100;
+            $pdata[$ac_id][$key]['purchase']+=$day_click['WebsitePurchases'];
+            $pdata[$ac_id][$key]['add_to_cart']+=$day_click['WebsiteAddstoCart'];
+            $pdata[$ac_id][$key]['cpm']+=$r['cpm']*100;
+            $pdata[$ac_id][$key]['ctr']+=$r['ctr'];
+            $pdata[$ac_id][$key]['link_click']+=$r['link_clicks'];
+            $pdata[$ac_id][$key]['income']+=$day_click['WebsitePurchasesConversionValue']*100;
             //$pdata[$key]['campaign_name'].=$r['campaign_name']." |||| ";
-            $pdata[$key]['__count']+=1;
+            $pdata[$ac_id][$key]['__count']+=1;
         }
-        foreach ($pdata as &$xd){
-            $xd['cpm']=$xd['cpm']/$xd['__count'];
-            $xd['ctr']=$xd['ctr']/$xd['__count'];
-            unset($xd['__count']);
+        foreach ($pdata as &$xxd){
+            foreach ($xxd as &$xd){
+                $xd['cpm']=$xd['cpm']/$xd['__count'];
+                $xd['ctr']=$xd['ctr']/$xd['__count'];
+                unset($xd['__count']);
+            }
         }
         return ['data'=>$pdata];
     }

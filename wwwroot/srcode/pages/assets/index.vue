@@ -66,7 +66,7 @@
                         <el-table-column :formatter="numberFormatInt" columnKey="websiteaddstocart" label="Website Adds to Cart" width="80"></el-table-column>
                         <el-table-column :formatter="moneyFormat" columnKey="costperwebsiteaddtocart" label="Cost per Website Add to Cart" width="80"></el-table-column>
                         <el-table-column :formatter="moneyFormat" columnKey="amountspent" label="Spent"
-                                         width="60"></el-table-column>
+                                         width="80"></el-table-column>
                         <el-table-column :formatter="numberFormatInt" columnKey="websitepurchases" label="Website Purchases" width="80"></el-table-column>
                         <el-table-column :formatter="moneyFormat" columnKey="websitepurchasesconversionvalue" label="Website Purchases Conversion Value" width="80"></el-table-column>
                         <el-table-column :formatter="numberFormatInt" columnKey="linkclicks" label="Link Clicks" width="80"></el-table-column>
