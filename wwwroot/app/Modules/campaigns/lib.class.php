@@ -215,7 +215,7 @@ class lib{
                 }
                 if(!$pdata[$key]){
                     $pdata[$key]=array(
-                        'fee_date'=>$r['date'],
+                        'fee_date'=>$r['Date'][0],
                         'account_id'=>$ac_id,
                         'account_name'=>$r['AccountName'],
                         'username'=>$key,
@@ -312,7 +312,7 @@ class lib{
             if($key==$ac_id) continue;
             if(!$pdata[$key]){
                 $pdata[$key]=array(
-                    'fee_date'=>$r['date'][0],
+                    'fee_date'=>$r['date'],
                     'account_id'=>$ac_id,
                     'account_name'=>$r['account_name'],
                     'username'=>$key,
