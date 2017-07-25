@@ -359,7 +359,7 @@ END;
             ->field($fields)
             //->join('assets_insights AI ON AI.asset_id=A.id')
             //->join("ads_insights ADI ON ADI.id=replace(AI.insight_id,'lifetime','{$dataType}')",'left')
-            ->join("ads_insights ADI ON ADI.id=concat(AI.insight_id,'lifetime','{$dataType}')",'left')
+            ->join("ads_insights ADI ON ADI.id=concat(A.ad_id,'.{$dataType}')",'left')
             ->where($where)
             ->group('A.account_id')
             ->select();
