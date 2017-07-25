@@ -93,10 +93,6 @@ END;
                             'ad_id'=>$ad_id,
                         );
                         $this->model->add($assets);
-                    }else{
-                        $this->model->where("id='{$id}'")->save(array(
-                            'ad_id'=>$ad_id,
-                        ));
                     }
                     $assets_insights=array(
                         'asset_id'=>$id,
@@ -357,9 +353,9 @@ END;
         ;
         $data=$this->model->alias('A')
             ->field($fields)
-            //->join('assets_insights AI ON AI.asset_id=A.id')
-            //->join("ads_insights ADI ON ADI.id=replace(AI.insight_id,'lifetime','{$dataType}')",'left')
-            ->join("ads_insights ADI ON ADI.id=concat(A.ad_id,'.{$dataType}')",'left')
+            ->join('assets_insights AI ON AI.asset_id=A.id')
+            ->join("ads_insights ADI ON ADI.id=replace(AI.insight_id,'lifetime','{$dataType}')",'left')
+            //->join("ads_insights ADI ON ADI.id=concat(A.ad_id,'.{$dataType}')",'left')
             ->where($where)
             ->group('A.account_id')
             ->select();
