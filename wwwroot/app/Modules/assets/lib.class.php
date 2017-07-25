@@ -98,8 +98,10 @@ END;
                         'asset_id'=>$id,
                         'insight_id'=>$insight_id
                     );
-                    M('assets_insights')->where($assets_insights)->delete();
-                    M('assets_insights')->add($assets_insights);
+                    $ex_count=M('assets_insights')->where($assets_insights)->count();
+                    if($ex_count<1){
+                        M('assets_insights')->add($assets_insights);
+                    }
                 }
 //                if(count($assets)>0){
 //                    $assets=array_values($assets);
