@@ -391,9 +391,9 @@ END;
     function _avgAccAssets(&$par){
         $avg=['costperwebsiteaddtocart','cpc','cpm1000'
             ,'relevance_score','conversion_rate'
-            ,'roas'
-            //,'ctr','frequency',
+            //,'roas','ctr','frequency',
             ];
+        $par['roas']= ($par['websitepurchasesconversionvalue'])?(($par['amountspent']/$par['websitepurchasesconversionvalue'])*100):'X';
         $par['ctr']= $par['linkclicks']/$par['impressions'];
         $par['frequency']= $par['impressions']/$par['reach'];
         $par['cpm1000']= ($par['amountspent']*1000)/$par['reach'];
