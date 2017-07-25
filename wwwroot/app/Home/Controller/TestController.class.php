@@ -225,45 +225,45 @@ END;
 //      ["permission_for_actions"] => string(24) "CustomAudiencePermission"
 //      ["pixel_id"] => string(6) "string"
 //END;
-//        $str=<<<END
-//["created_time"] => NULL
-//    ["description"] => NULL
-//    ["embed_html"] => NULL
-//    ["embeddable"] => NULL
-//    ["format"] => NULL
-//    ["from"] => NULL
-//    ["icon"] => NULL
-//    ["id"] => string(16) "1928026167434181"
-//    ["is_instagram_eligible"] => NULL
-//    [`"name"] => NULL
-//    ["picture"] => NULL
-//    ["published"] => NULL
-//    [`"slideshow_spec"] => NULL
-//    ["source"] => NULL
-//    ["thumbnails"] => NULL
-//    ["updated_time"] => string(24) "2017-06-22T07:02:47+0000"
-//END;
+        $str=<<<END
+["created_time"] => NULL
+    ["description"] => NULL
+    ["embed_html"] => NULL
+    ["embeddable"] => NULL
+    ["format"] => NULL
+    ["from"] => NULL
+    ["icon"] => NULL
+    ["id"] => string(16) "1928026167434181"
+    ["is_instagram_eligible"] => NULL
+    [`"name"] => NULL
+    ["picture"] => NULL
+    ["published"] => NULL
+    [`"slideshow_spec"] => NULL
+    ["source"] => NULL
+    ["thumbnails"] => NULL
+    ["updated_time"] => string(24) "2017-06-22T07:02:47+0000"
+END;
 
         preg_match_all("/\[\"(.*)\"\]/",$str,$match);
         $fields=$match[1];
         #$b=new Business('1594081490842802');
-        //$ac=new AdAccount('act_1593565507558990');
-//        $res=$ac->getAdImages($fields);
-//        //$res=$ac->getAdVideos($fields);
+//        $ac=new AdAccount('act_639275062920989');
+//        //$res=$ac->getAdImages($fields);
+//        $res=$ac->getAdVideos($fields);
 //        dump($res);
 //        exit;
         //$ac=new AdAccount('act_1593565507558990');
         //$ad=new Campaign('6084032058764');
         //$ad=new AdSet('6084652424764');
-        $ad=new Ad('6061113967197');
+        //$ad=new Ad('6061113967197');
         //$ad=new CustomAudience('6085459889364');
         //$ad=new AdsPixel('1593577174232007');
         //$res=$ad->getSelf($fields);
         //dump($ad->getAdCreatives($fields));
         //$ad=new AdImage("ec5ae30157667320218078b5949735e8",'6084839602764');
-//        $ad=new AdVideo("1928026167434181");
-//        dump($ad->read($fields)->getData());
-//        return;
+        $ad=new AdVideo("1134389053318704");
+        dump($ad->read($fields)->getData());
+        return;
 //        dump($ac->getAdImages($fields,array(
 //            'hashes'=>array(
 //                'ec5ae30157667320218078b5949735e8',

@@ -31,6 +31,13 @@
 <template>
     <div>
         <el-form :inline="true" :model="formSearch" class="demo-form-inline">
+            <el-form-item style="width:100px;">
+                <el-select v-model="formSearch.brand" placeholder="全部品牌" @change="onFormSearch">
+                    <el-option label="全部品牌" value=""></el-option>
+                    <el-option label="Jeulia" value="jeulia"></el-option>
+                    <el-option label="Gnoce" value="gnoce"></el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item>
                 <el-input style="width:300px;" v-model="formSearch.keyword"
                           placeholder="AccountId / Author / SKU / Filename"></el-input>
@@ -261,6 +268,7 @@
                     offset:0,
                     dataType:'lifetime',
                     assetType:"",
+                    brand:"",
                 },
                 authors:[],
                 authors_flag:false,

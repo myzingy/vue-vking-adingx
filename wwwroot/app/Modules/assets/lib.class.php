@@ -89,9 +89,14 @@ END;
                             'name'=>$r['name'],
                             'filehash'=>md5($id),
                             'type'=>$r['video_id']?1:0,
-                            'permalink_url'=>$r['picture']
+                            'permalink_url'=>$r['picture'],
+                            'ad_id'=>$ad_id,
                         );
                         $this->model->add($assets);
+                    }else{
+                        $this->model->where("id='{$id}'")->save(array(
+                            'ad_id'=>$ad_id,
+                        ));
                     }
                     $assets_insights=array(
                         'asset_id'=>$id,
@@ -352,8 +357,9 @@ END;
         ;
         $data=$this->model->alias('A')
             ->field($fields)
-            ->join('assets_insights AI ON AI.asset_id=A.id')
-            ->join("ads_insights ADI ON ADI.id=replace(AI.insight_id,'lifetime','{$dataType}')",'left')
+            //->join('assets_insights AI ON AI.asset_id=A.id')
+            //->join("ads_insights ADI ON ADI.id=replace(AI.insight_id,'lifetime','{$dataType}')",'left')
+            ->join("ads_insights ADI ON ADI.id=concat(AI.insight_id,'lifetime','{$dataType}')",'left')
             ->where($where)
             ->group('A.account_id')
             ->select();
@@ -412,6 +418,7 @@ END;
         $limit=I('request.limit',30);
         $keyword=I('request.keyword');
         $assetType=I('request.assetType');
+        $brand=I('request.brand');
         $where=" 1=1 ";
         if($keyword){
             $where.=" and (account_id like '%$keyword%' "
@@ -422,6 +429,11 @@ END;
         if($assetType!=""){
             $where.=" and type='{$assetType}' ";
         }
+        if($brand){
+            $brands=C('brand');
+            $brands=$brands[$brand];
+            $where.=" and account_id in ({$brands}) ";
+        }
         $filehashs=$this->model
             ->where($where)
             ->group('filehash')
@@ -431,6 +443,7 @@ END;
         $fdata=[];
         foreach ($filehashs as $filehash){
             $data=$this->_getDataChild($filehash);
+            $fdata[$filehash]=$filehash;
             foreach ($data as $i=>$r){
                 $this->formatAccAssets($r);
                 if($i==0){
