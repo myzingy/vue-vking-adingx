@@ -545,4 +545,24 @@ END;
         }
         return $_d;
     }
+    function flushAssetsAdsInsight(){
+        $offset=I('request.offset')+0;
+        $data=M('assets_insights')->alias('AI')
+            ->field('AI.`insight_id`,A.`account_id`')
+            ->join('assets A ON AI.asset_id=A.id')
+            ->where(" AI.insight_id NOT IN (SELECT id FROM `ads_insights`) ")
+            ->group('AI.insight_id')
+            ->limit($offset,30)
+            ->select();
+        foreach ($data as $r){
+            asyn('apido/asyn.flushAdsInsights',array('ad_id' => str_replace('.lifetime','',$r['insight_id']),'ad_timespace'=>'lifetime',
+                'ac_id'=>$r['account_id']));
+        }
+        if(count($data)==30){
+            asyn_implement('apido/asyn.flushAssetsAdsInsight',array(
+                'offset'=>$offset+30
+            ));
+        }
+        return $data;
+    }
 }
