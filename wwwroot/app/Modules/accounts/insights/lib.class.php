@@ -242,7 +242,10 @@ END;
                 $this->model->add($campaigns_data);
             }
             asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>$ad_timespace,'ac_id'=>$ac_id,'breakdowns'=>'device_platform'));
-            asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>$ad_timespace,'ac_id'=>$ac_id,'breakdowns'=>'country'));
+            $brands=C('brand');
+            if(strpos($brands['gnoce'],$ac_id)!==false){
+                asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>$ad_timespace,'ac_id'=>$ac_id,'breakdowns'=>'country'));
+            }
         }
         if($ad_timespace=='today' && !$breakdowns) {
             //其它Insights
