@@ -248,6 +248,8 @@ END;
             //其它Insights
             asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>'yestoday','ac_id'=>$ac_id),null,
                 getDayTime("00:06:00"),0);
+            asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>'yestoday','ac_id'=>$ac_id),null,
+                getDayTime("00:08:30"),0);
         }
         return $campaigns_data;
     }
