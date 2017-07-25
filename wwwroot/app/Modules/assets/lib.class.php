@@ -113,7 +113,7 @@ END;
 //                }
             }
             asyn('apido/asyn.setAssetsImageInfo',array('ac_id'=>$ac_id));
-            asyn('apido/asyn.setAssetsVideoInfo',array('ac_id'=>$ac_id));
+            //asyn('apido/asyn.setAssetsVideoInfo',array('ac_id'=>$ac_id));
             return $data;
         }
 
@@ -229,6 +229,7 @@ END;
         return $_d;
     }
     function setAssetsVideoInfo(){
+        return;
         $ac_id=I('request.ac_id');
         if(!$ac_id) return;
         $hashes=[];
@@ -481,11 +482,11 @@ END;
     }
     function flushAssetVideoFile(){
         $uptime=NOW_TIME-86400;
-        $ac_id=I('request.ac_id','639275062920989');
-        $assets=$this->model->field('id,url_128')
+        $assets=$this->model->field('id,url_128,account_id')
             ->where("status!='VIDEO_OK' and type=1 and uptime<$uptime")
             ->find();
         if(!$assets) return;
+        $ac_id=$assets['account_id'];
         $fz=filesize($assets['url_128']);
         if($fz>100){
             $filehash=md5_file($assets['url_128']);
