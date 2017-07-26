@@ -109,11 +109,10 @@ class lib{
         //$insights=new \Modules\adsets\insights\lib();
         //$data=$insights->getAdsetsInsightsData($adset_id);
         $data=$this->getAdsetsData($adset_id);
-        $debug_ids=explode(',','23842624232450368,23842623980060368,23842622254040368,23842623986200368,23842623983240368,23842623977590368,23842620950830368');
-        $debug_flag=false;
-        if(in_array($adset_id,$debug_ids)!==false){
+        $debug_ids=explode(',','debug_id1,debug_id2');
+        $debug_flag=in_array($adset_id,$debug_ids);
+        if($debug_flag){
             debug("debug.runRules.{$adset_id}########==>START");
-            $debug_flag=true;
         }
         if(!$data['data']) return;
         $formatData=$data['data'];
