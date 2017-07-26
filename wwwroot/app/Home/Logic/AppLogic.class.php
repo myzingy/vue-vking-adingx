@@ -326,10 +326,10 @@ class AppLogic {
      * @return mixed
      * 提交数据给erp
      */
-    function asyn__postErpCampaign(){
-        $lib = new \Modules\campaigns\lib();
-        return $lib -> postErpCampaign();
-    }
+//    function asyn__postErpCampaign(){
+//        $lib = new \Modules\campaigns\lib();
+//        return $lib -> postErpCampaign();
+//    }
     function asyn__getAssetForAd(){
         $lib = new \Modules\assets\lib();
         return $lib -> getAssetForAd();
