@@ -241,11 +241,13 @@ END;
                 unset($campaigns_data['accounts_insights_action_types']);
                 $this->model->add($campaigns_data);
             }
-            asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>$ad_timespace,'date'=>$date,'ac_id'=>$ac_id,
-                'breakdowns'=>'device_platform'));
-            $brands=C('brand');
-            if(strpos($brands['gnoce'],$ac_id)!==false){
-                asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>$ad_timespace,'date'=>$date,'ac_id'=>$ac_id,'breakdowns'=>'country'));
+            if($ad_timespace=='yestoday' || $date){
+                asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>$ad_timespace,'date'=>$date,'ac_id'=>$ac_id,
+                    'breakdowns'=>'device_platform'));
+                $brands=C('brand');
+                if(strpos($brands['gnoce'],$ac_id)!==false){
+                    asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>$ad_timespace,'date'=>$date,'ac_id'=>$ac_id,'breakdowns'=>'country'));
+                }
             }
         }
         if($ad_timespace=='today' && !$breakdowns && !$date) {
