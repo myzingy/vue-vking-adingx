@@ -24,26 +24,23 @@ class lib{
         //20:00-08:00 不获取数据
         $time_s=getDayTime("15:00:00",0);
         $time_e=getDayTime("08:00:00",0);
-        if(NOW_TIME > $time_s || NOW_TIME < $time_e) return;
+        $fouce=I('request.fouce','');
+        if(!$fouce){
+            if(NOW_TIME > $time_s || NOW_TIME < $time_e) return;
+        }
         $acs=FBC();
+        $acts=array('Campaigns','Adsets','Ads','Accounts');
+        if($fouce){
+            $acts=array(ucfirst($fouce));
+        }
         if($acs){
             foreach ($acs as $ac){
-                asyn('apido/asyn.flushCampaigns',array(
-                    'ac_id'=>$ac['account_id'],
-                    'active'=>'active'
-                ),null,null,2);
-                asyn('apido/asyn.flushAdsets',array(
-                    'ac_id'=>$ac['account_id'],
-                    'active'=>'active'
-                ),null,null,2);
-                asyn('apido/asyn.flushAds',array(
-                    'ac_id'=>$ac['account_id'],
-                    'active'=>'active'
-                ),null,null,2);
-                asyn('apido/asyn.flushAccounts',array(
-                    'ac_id'=>$ac['account_id'],
-                    'active'=>'active'
-                ));
+                foreach ($acts as $act){
+                    asyn('apido/asyn.flush'.$act,array(
+                        'ac_id'=>$ac['account_id'],
+                        'active'=>'active'
+                    ),null,null,2);
+                }
             }
             if(count($acs)==\Modules\accounts\lib::FBC_LIMIT_NUM){
                 $offset=I('request.offset',0)+\Modules\accounts\lib::FBC_LIMIT_NUM;
