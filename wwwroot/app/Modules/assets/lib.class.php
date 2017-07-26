@@ -448,6 +448,12 @@ END;
                 if($i==0){
                     $r['list']=[$r];
                     $r['list_count']=1;
+                    if($r['type']==1 && $r['url_128']){
+                        $path=str_replace('uploads','video-thumb',$r['url_128']).".jpg";
+                        if(file_exists($path)){
+                            $r['permalink_url']=$path;
+                        }
+                    }
                     $fdata[$filehash]=$r;
                 }else{
                     $this->_sumAccAssets($fdata[$filehash],$r);
