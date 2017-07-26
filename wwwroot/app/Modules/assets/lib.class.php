@@ -5,6 +5,7 @@
  */
 namespace Modules\assets;
 use FacebookAds\Api;
+use FacebookAds\Exception\Exception;
 use FacebookAds\Object\Ad;
 use FacebookAds\Object\AdAccount;
 use FacebookAds\Object\AdVideo;
@@ -529,8 +530,21 @@ END;
         preg_match_all("/\[\"(.*)\"\]/",$fields_str,$match);
         $fields=$match[1];
 
-        $ad=new AdVideo($assets['id']);
-        $_d=$ad->read($fields)->getData();
+        try{
+            $ad=new AdVideo($assets['id']);
+            $_d=$ad->read($fields)->getData();
+        }catch(Exception $e){
+            if($e->getCode()==100){
+                $this->model->where(array('id'=>$assets['id']))->save(array(
+                    'created_time'=>'Object with ID does not exist',
+                    'updated_time'=>'Object with ID does not exist',
+                    'status'=>'VIDEO_OK',
+                    'filehash'=>md5($assets['id']),
+                    'is_filehash'=>1,
+                ));
+            }
+            return ['code'=>$e->getCode(),'message'=>$e->getMessage()];
+        }
         $data=array(
             'created_time'=>$_d['created_time'],
             'updated_time'=>$_d['updated_time'],
