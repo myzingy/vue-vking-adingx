@@ -219,7 +219,9 @@ END;
 
         }
         if($ad_timespace=='lifetime'){
-            asyn('apido/asyn.getAssetForAd',array('ad_id' => $ad_id,'ac_id'=>$ac_id));
+            if('909992302470836'!=$ac_id && '564914007023762'!=$ac_id){
+                asyn('apido/asyn.getAssetForAd',array('ad_id' => $ad_id,'ac_id'=>$ac_id));
+            }
         }
         return $campaigns_data;
     }

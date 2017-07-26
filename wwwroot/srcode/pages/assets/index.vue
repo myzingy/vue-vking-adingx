@@ -94,8 +94,8 @@
                                          width="80"></el-table-column>
                         <el-table-column prop="negative_feedback" label="Negative Feedback"
                                          width="80"></el-table-column>
-                        <el-table-column prop="ads_num" columnKey="ads_num" label="广告数"
-                                         width="70" sortable></el-table-column>
+                        <el-table-column :formatter="formatAdsNumView" prop="ads_num" columnKey="ads_num" label="广告数"
+                                         width="250" sortable></el-table-column>
                         <el-table-column :formatter="numberFormatPer" columnKey="conversion_rate" prop="conversion_rate" label="转化率"
                                          width="70"></el-table-column>
                         <el-table-column :formatter="numberFormatPer" columnKey="roas" prop="roas" label="ROAS"
@@ -250,6 +250,8 @@
     import 'element-ui/lib/theme-default/index.css'
     import vk from '../../vk.js';
     import uri from '../../uri.js';
+    import date_choice from '../../date_choice.js';
+
     Vue.use(ElementUI)
     export default {
         data:function(){
@@ -324,6 +326,9 @@
                 if(row.websitepurchases==0) return 'X';
                 var CostperResult=row.amountspent/row.websitepurchases;
                 return  vk.numberFormat(CostperResult);
+            },
+            formatAdsNumView(row, column){
+                return  row.ad_ids+' ['+row.ads_num+']';
             },
             getSummaries(param){
                 const { columns, data } = param;

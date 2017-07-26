@@ -321,7 +321,7 @@ END;
         $asset['skus']=$asset['skus']?explode(',',$asset['skus']):[];
         $asset['inputVisible']=false;
 
-        $asset['conversion_rate']=$asset['websitepurchases']/($asset['linkclicks']?$asset['linkclicks']:1);
+        $asset['conversion_rate']=$asset['websitepurchases']*100/($asset['linkclicks']?$asset['linkclicks']:1);
         $asset['roas']=$asset['websitepurchasesconversionvalue']?
             (($asset['amountspent']/$asset['websitepurchasesconversionvalue'])*100)
             :'X';
@@ -349,6 +349,7 @@ END;
             .",sum(ADI.CLICK1D_WebsitePurchases)as results"
             .",avg(ADI.frequency)as frequency"
             .",avg(ADI.relevance_score)as relevance_score"
+            .",GROUP_CONCAT(ADI.ad_id)as ad_ids"
             .",GROUP_CONCAT(ADI.positive_feedback)as positive_feedback_str"
             .",GROUP_CONCAT(ADI.negative_feedback)as negative_feedback_str"
             .",sum(ADI.CLICK1D_WebsiteAddstoCartConversionValue)as websiteaddstocartconversionvalue"

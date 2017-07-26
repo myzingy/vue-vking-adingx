@@ -241,18 +241,24 @@ END;
                 unset($campaigns_data['accounts_insights_action_types']);
                 $this->model->add($campaigns_data);
             }
-            asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>$ad_timespace,'ac_id'=>$ac_id,'breakdowns'=>'device_platform'));
+            asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>$ad_timespace,'date'=>$date,'ac_id'=>$ac_id,
+                'breakdowns'=>'device_platform'));
             $brands=C('brand');
             if(strpos($brands['gnoce'],$ac_id)!==false){
-                asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>$ad_timespace,'ac_id'=>$ac_id,'breakdowns'=>'country'));
+                asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>$ad_timespace,'date'=>$date,'ac_id'=>$ac_id,'breakdowns'=>'country'));
             }
         }
-        if($ad_timespace=='today' && !$breakdowns) {
+        if($ad_timespace=='today' && !$breakdowns && !$date) {
             //其它Insights
             asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>'yestoday','ac_id'=>$ac_id),null,
-                getDayTime("00:06:00"),0);
+                getDayTime("00:30:00"),0);
             asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>'yestoday','ac_id'=>$ac_id),null,
-                getDayTime("00:08:30"),0);
+                getDayTime("08:30:00"),0);
+
+            //获取前天数据
+            $before_yesterday=date("Y-m-d",getDayTime("16:30:00",-2));
+            asyn('apido/asyn.flushAccountsInsights',array('date'=>$before_yesterday,'ac_id'=>$ac_id),null,
+                getDayTime("16:30:00"),0);
         }
         return $campaigns_data;
     }
