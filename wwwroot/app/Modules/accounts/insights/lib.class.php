@@ -260,7 +260,7 @@ END;
             //获取前天数据
             $before_yesterday=date("Y-m-d",getDayTime("16:30:00",-2));
             asyn('apido/asyn.flushAccountsInsights',array('date'=>$before_yesterday,'ac_id'=>$ac_id),null,
-                getDayTime("16:30:00"),0);
+                getDayTime("16:30:00",0),0);
         }
         return $campaigns_data;
     }
