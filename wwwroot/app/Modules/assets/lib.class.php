@@ -434,26 +434,46 @@ END;
         $brand=I('request.brand');
         $where=" 1=1 ";
         if($keyword){
-            $where.=" and (account_id like '%$keyword%' "
-                ." or author like '%$keyword%' "
-                ." or skus like '%$keyword%' "
-                ." or name like '%$keyword%') ";
+            $where.=" and (A.account_id like '%$keyword%' "
+                ." or A.author like '%$keyword%' "
+                ." or A.skus like '%$keyword%' "
+                ." or A.name like '%$keyword%') ";
         }
         if($assetType!=""){
-            $where.=" and type='{$assetType}' ";
+            $where.=" and A.type='{$assetType}' ";
         }
         if($brand){
             $brands=C('brand');
             $brands=$brands[$brand];
-            $where.=" and account_id in ({$brands}) ";
+            $where.=" and A.account_id in ({$brands}) ";
         }
-        $filehashs=$this->model
-            ->where($where)
-            ->group('filehash')
-            ->order('updated_time desc')
-            ->limit($offset,$limit)
-            ->getField('filehash',true);
-        $fdata=[];
+        $fields="count(*) as ads_num,A.*"
+            .",sum(ADI.CLICK1D_WebsiteAddstoCart) as websiteaddstocart"
+            .",avg(ADI.CLICK1D_CostperWebsiteAddtoCart) as costperwebsiteaddtocart"
+            .",sum(ADI.spend) as amountspent"
+            .",sum(ADI.CLICK1D_WebsitePurchases)as websitepurchases"
+            .",sum(ADI.CLICK1D_WebsitePurchasesConversionValue)as websitepurchasesconversionvalue"
+            .",sum(ADI.inline_link_clicks)as linkclicks"
+            .",avg(ADI.CLICK1D_CPC)as cpc"
+            .",avg(ADI.inline_link_click_ctr)as ctr"
+            .",avg(ADI.cpm)as cpm1000"
+            .",sum(ADI.reach)as reach"
+            .",sum(ADI.CLICK1D_WebsitePurchases)as results"
+            .",avg(ADI.frequency)as frequency"
+            .",avg(ADI.relevance_score)as relevance_score"
+            .",GROUP_CONCAT(ADI.ad_id)as ad_ids"
+            .",GROUP_CONCAT(ADI.positive_feedback)as positive_feedback_str"
+            .",GROUP_CONCAT(ADI.negative_feedback)as negative_feedback_str"
+            .",sum(ADI.CLICK1D_WebsiteAddstoCartConversionValue)as websiteaddstocartconversionvalue"
+            .",sum(ADI.impressions)as impressions"
+            .",(sum(ADI.CLICK1D_WebsitePurchases)/sum(ADI.inline_link_clicks)) as conversion_rate"
+            .",(sum(ADI.spend)/sum(ADI.CLICK1D_WebsitePurchasesConversionValue)) as roas"
+            .",(sum(ADI.impressions)/sum(ADI.reach)) as frequency"
+            .",(sum(ADI.spend)/sum(ADI.CLICK1D_WebsitePurchases)) as costperresult"
+        ;
+        $order=I('request.order');
+        $order=$order?$order:'A.updated_time';
+        $sort=I('request.sort','desc');
 
         $dataType=I('request.dataType','lifetime');
         $date=I('request.dateOne','');
@@ -463,33 +483,59 @@ END;
             $stime=date("Y-m-d",strtotime("$w $m $d $y $time"));
             list($w,$m,$d,$y,$time)=explode(" ",$date[1]);
             $etime=date("Y-m-d",strtotime("$w $m $d $y $time"));
+            $filehashs=$this->model->alias('A')
+                ->field($fields)
+                ->join('assets_insights AI ON  AI.`asset_id`=A.`id`')
+                ->join("ads_insights ADI ON ADI.`ad_id`=REPLACE(AI.`insight_id`,'.lifetime','') 
+                    AND ADI.date_stop=ADI.date_start 
+                    AND (ADI.date_start>='{$stime}' AND ADI.date_start<='{$etime}')
+                    ",'left')
+                ->where($where)
+                ->group('A.filehash')
+                ->order($order." ".$sort)
+                ->limit($offset,$limit)
+                ->select();
+        }else{
+            $filehashs=$this->model->alias('A')
+                ->field($fields)
+                ->join('assets_insights AI ON  AI.`asset_id`=A.`id`')
+                ->join("ads_insights ADI ON ADI.`id`=REPLACE(AI.`insight_id`,'lifetime','{$dataType}')",'left')
+                ->where($where)
+                ->group('A.filehash')
+                ->order($order." ".$sort)
+                ->limit($offset,$limit)
+                ->select();
         }
 
-        foreach ($filehashs as $filehash){
-            if($dataType=='custom'){
-                $data=$this->_getDataChild($filehash,$dataType,[$stime,$etime]);
-            }else{
-                $data=$this->_getDataChild($filehash,$dataType);
-            }
-            $fdata[$filehash]=$filehash;
-            foreach ($data as $i=>$r){
-                $this->formatAccAssets($r);
-                if($i==0){
-                    $r['list']=[$r];
-                    $r['list_count']=1;
-                    if($r['type']==1 && $r['url_128']){
-                        $path=str_replace('uploads','video-thumb',$r['url_128']).".jpg";
-                        if(file_exists($path)){
-                            $r['permalink_url']=url($path);
-                        }
-                    }
-                    $fdata[$filehash]=$r;
-                }else{
-                    $this->_sumAccAssets($fdata[$filehash],$r);
-                    array_push($fdata[$filehash]['list'],$r);
-                    $fdata[$filehash]['list_count']+=1;
+        $fdata=[];
+
+
+
+        foreach ($filehashs as $file){
+            $this->formatAccAssets($file);
+            $filehash=$file['filehash'];
+            if($file['type']==1 && $file['url_128']){
+                $path=str_replace('uploads','video-thumb',$file['url_128']).".jpg";
+                if(file_exists($path)){
+                    $file['permalink_url']=url($path);
                 }
             }
+            if(!$fdata[$filehash]){
+                $file['list']=[];
+                $file['list_count']=0;
+                $fdata[$filehash]=$file;
+            }
+            if($dataType=='custom'){
+                $data=$this->_getDataChild($filehash,$dataType,[$stime,$etime]);
+            }else {
+                $data = $this->_getDataChild($filehash, $dataType);
+            }
+            foreach ($data as $i=>$r){
+                $this->formatAccAssets($r);
+                array_push($fdata[$filehash]['list'],$r);
+                $fdata[$filehash]['list_count']+=1;
+            }
+
         }
         foreach ($fdata as &$x){
             $this->_avgAccAssets($x);
@@ -595,7 +641,7 @@ END;
         return $_d;
     }
     function flushAssetsAdsInsight(){
-        $offset=I('request.offset')+0;
+        $offset=I('request.offset');
         $data=M('assets_insights')->alias('AI')
             ->field('AI.`insight_id`,A.`account_id`')
             ->join('assets A ON AI.asset_id=A.id')

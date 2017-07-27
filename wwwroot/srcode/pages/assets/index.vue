@@ -118,9 +118,8 @@
                 </el-radio-group>
             </el-form-item>
         </el-form>
-        <el-table :data="rulesLog" border style="width: 100%" max-height="700" :default-sort =
-                "{prop: 'amountspent', order: 'descending'}" :summary-method="getSummaries"
-                  show-summary>
+        <el-table :data="rulesLog" border style="width: 100%" max-height="700" :summary-method="getSummaries"
+                  show-summary @sort-change="sortChange">
             <el-table-column type="expand" fixed>
                 <template scope="props">
                     <span>Updated Time:<span class="val">{{props.row.updated_time}}</span></span>
@@ -199,7 +198,7 @@
             </el-table-column>
             <el-table-column columnKey="websiteaddstocart" prop="websiteaddstocart"
                              label="Website Adds to Cart"
-                             width="80" className="autotooltip" sortable>
+                             width="80" className="autotooltip" sortable="custom">
                 <template scope="scope">
                     <div>{{numberFormatInt(scope.row,{columnKey:'websiteaddstocart'})}}</div>
                     <div class="pk-val" v-show="pkFlag">{{numberFormatInt(scope.row,{columnKey:'websiteaddstocart'},
@@ -207,14 +206,14 @@
                 </template>
             </el-table-column>
             <el-table-column columnKey="costperwebsiteaddtocart" prop="costperwebsiteaddtocart"
-                             label="Cost per Website Add to Cart" width="80" sortable>
+                             label="Cost per Website Add to Cart" width="80" sortable="custom">
                 <template scope="scope">
                     <div>{{moneyFormat(scope.row,{columnKey:'costperwebsiteaddtocart'})}}</div>
                     <div class="pk-val" v-show="pkFlag">{{moneyFormat(scope.row,{columnKey:'costperwebsiteaddtocart'},'PK')}}</div>
                 </template>
             </el-table-column>
             <el-table-column columnKey="websiteaddstocartconversionvalue" prop="websiteaddstocartconversionvalue"
-                             label="Website Adds to Cart Conversion Value" width="80" sortable>
+                             label="Website Adds to Cart Conversion Value" width="80" sortable="custom">
                 <template scope="scope">
                     <div>{{moneyFormat(scope.row,{columnKey:'websiteaddstocartconversionvalue'})}}</div>
                     <div class="pk-val" v-show="pkFlag">{{moneyFormat(scope.row,{columnKey:'websiteaddstocartconversionvalue'},'PK')}}</div>
@@ -222,21 +221,21 @@
             </el-table-column>
             <el-table-column columnKey="amountspent" prop="amountspent" label="Spent"
                              width="80"
-                             sortable>
+                             sortable="custom">
                 <template scope="scope">
                     <div>{{moneyFormat(scope.row,{columnKey:'amountspent'})}}</div>
                     <div class="pk-val" v-show="pkFlag">{{moneyFormat(scope.row,{columnKey:'amountspent'},'PK')}}</div>
                 </template>
             </el-table-column>
             <el-table-column columnKey="websitepurchases" prop="websitepurchases" label="Website Purchases"
-                             width="80" sortable>
+                             width="80" sortable="custom">
                 <template scope="scope">
                     <div>{{numberFormatInt(scope.row,{columnKey:'websitepurchases'})}}</div>
                     <div class="pk-val" v-show="pkFlag">{{numberFormatInt(scope.row,{columnKey:'websitepurchases'},'PK')}}</div>
                 </template>
             </el-table-column>
             <el-table-column columnKey="websitepurchasesconversionvalue" prop="websitepurchasesconversionvalue"
-                             label="Website Purchases Conversion Value" width="80" sortable>
+                             label="Website Purchases Conversion Value" width="80" sortable="custom">
                 <template scope="scope">
                     <div>{{moneyFormat(scope.row,{columnKey:'websitepurchasesconversionvalue'})}}</div>
                     <div class="pk-val" v-show="pkFlag">{{moneyFormat(scope.row,{columnKey:'websitepurchasesconversionvalue'},'PK')}}</div>
@@ -244,7 +243,7 @@
             </el-table-column>
             <el-table-column columnKey="linkclicks"
                              prop="linkclicks" label="Link Clicks"
-                             width="80" sortable>
+                             width="80" sortable="custom">
                 <template scope="scope">
                     <div>{{numberFormatInt(scope.row,{columnKey:'linkclicks'})}}</div>
                     <div class="pk-val" v-show="pkFlag">{{numberFormatInt(scope.row,{columnKey:'linkclicks'},'PK')}}</div>
@@ -252,7 +251,7 @@
             </el-table-column>
             <el-table-column columnKey="cpc" prop="cpc" label="CPC (Cost per Link Click)"
                              width="80"
-                             sortable
+                             sortable="custom"
             >
                 <template scope="scope">
                     <div>{{moneyFormat(scope.row,{columnKey:'cpc'})}}</div>
@@ -261,7 +260,7 @@
             </el-table-column>
             <el-table-column columnKey="ctr" prop="ctr"
                              label="CTR (Link Click-Through Rate)"
-                             width="80" sortable>
+                             width="80" sortable="custom">
                 <template scope="scope">
                     <div>{{numberFormatPer(scope.row,{columnKey:'ctr'})}}</div>
                     <div class="pk-val" v-show="pkFlag">{{numberFormatPer(scope.row,{columnKey:'ctr'},'PK')}}</div>
@@ -269,7 +268,7 @@
             </el-table-column>
             <el-table-column columnKey="cpm1000" prop="cpm1000"
                              label="CPM (Cost per 1,000 Impressions)"
-                             width="80" sortable>
+                             width="80" sortable="custom">
                 <template scope="scope">
                     <div>{{moneyFormat(scope.row,{columnKey:'cpm1000'})}}</div>
                     <div class="pk-val" v-show="pkFlag">{{moneyFormat(scope.row,{columnKey:'cpm1000'},'PK')
@@ -277,14 +276,14 @@
                 </template>
             </el-table-column>
             <el-table-column columnKey="reach" prop="reach" label="Reach" width="80"
-                             sortable>
+                             sortable="custom">
                 <template scope="scope">
                     <div>{{numberFormatInt(scope.row,{columnKey:'reach'})}}</div>
                     <div class="pk-val" v-show="pkFlag">{{numberFormatInt(scope.row,{columnKey:'reach'},'PK')}}</div>
                 </template>
             </el-table-column>
             <el-table-column columnKey="results" prop="results" label="Results" width="80"
-                             sortable
+                             sortable="custom"
             >
                 <template scope="scope">
                     <div>{{numberFormatInt(scope.row,{columnKey:'results'})}}</div>
@@ -292,21 +291,21 @@
                 </template>
             </el-table-column>
             <el-table-column columnKey="costperresult" prop="costperresult" label="Cost per Result"
-                             width="80" sortable>
+                             width="80" sortable="custom">
                 <template scope="scope">
                     <div>{{CostperResult(scope.row,{columnKey:'costperresult'})}}</div>
                     <div class="pk-val" v-show="pkFlag">{{CostperResult(scope.row,{columnKey:'costperresult'},'PK')}}</div>
                 </template>
             </el-table-column>
             <el-table-column columnKey="impressions" prop="impressions" label="Impressions"
-                             width="80" sortable>
+                             width="80" sortable="custom">
                 <template scope="scope">
                     <div>{{numberFormatInt(scope.row,{columnKey:'impressions'})}}</div>
                     <div class="pk-val" v-show="pkFlag">{{numberFormatInt(scope.row,{columnKey:'impressions'},'PK')}}</div>
                 </template>
             </el-table-column>
             <el-table-column columnKey="frequency"  prop="frequency" label="Frequency"
-                             width="80" sortable>
+                             width="80" sortable="custom">
                 <template scope="scope">
                     <div>{{numberFormat(scope.row,{columnKey:'frequency'})}}</div>
                     <div class="pk-val" v-show="pkFlag">{{numberFormat(scope.row,{columnKey:'frequency'},'PK')}}</div>
@@ -314,7 +313,7 @@
             </el-table-column>
             <el-table-column columnKey="relevance_score"  prop="relevance_score"
                              label="Relevent Score"
-                             width="80" sortable>
+                             width="80" sortable="custom">
                 <template scope="scope">
                     <div>{{numberFormat(scope.row,{columnKey:'relevance_score'})}}</div>
                     <div class="pk-val" v-show="pkFlag">{{numberFormat(scope.row,{columnKey:'relevance_score'},'PK')}}</div>
@@ -325,16 +324,16 @@
             <el-table-column prop="negative_feedback" label="Negative Feedback"
                              width="80"></el-table-column>
             <el-table-column prop="ads_num" columnKey="ads_num" label="广告数"
-                             width="70" sortable></el-table-column>
+                             width="70" sortable="custom"></el-table-column>
             <el-table-column columnKey="conversion_rate" prop="conversion_rate" label="转化率"
-                             width="70" sortable>
+                             width="70" sortable="custom">
                 <template scope="scope">
                     <div>{{numberFormatPer(scope.row,{columnKey:'conversion_rate'})}}</div>
                     <div class="pk-val" v-show="pkFlag">{{numberFormatPer(scope.row,{columnKey:'conversion_rate'},'PK')}}</div>
                 </template>
             </el-table-column>
             <el-table-column columnKey="roas" prop="roas" label="ROAS"
-                             width="70" sortable>
+                             width="70" sortable="custom">
                 <template scope="scope">
                     <div>{{numberFormatPer(scope.row,{columnKey:'roas'})}}</div>
                     <div class="pk-val" v-show="pkFlag">{{numberFormatPer(scope.row,{columnKey:'roas'},'PK')}}</div>
@@ -433,6 +432,8 @@
                     dateOne:"",
                     dateTwo:"",
                     dataTypeTwo:"custom",
+                    order:"amountspent",
+                    sort:"desc",
                 },
                 authors:[],
                 authors_flag:false,
@@ -676,6 +677,11 @@
                     }
                 }
                 return false;
+            },
+            sortChange(obj){
+                this.formSearch.order=obj.prop;
+                this.formSearch.sort=obj.order=='ascending'?'asc':'desc';
+                this.getData();
             }
         }
     }
