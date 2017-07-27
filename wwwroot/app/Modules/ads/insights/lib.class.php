@@ -178,10 +178,10 @@ END;
                     $campaigns_data['id']=$campaigns_data['ad_id'].'.last_14day';
                     $campaigns_data['type']=model::INSIGHT_TYPE_LAST_14DAY;
                     break;
-                case $yestoday:
-                    $campaigns_data['id']=$campaigns_data['ad_id'].'.yestoday';
-                    $campaigns_data['type']=model::INSIGHT_TYPE_YESTODAY;
-                    break;
+//                case $yestoday:
+//                    $campaigns_data['id']=$campaigns_data['ad_id'].'.yestoday';
+//                    $campaigns_data['type']=model::INSIGHT_TYPE_YESTODAY;
+//                    break;
                 default:
                     if($ad_timespace=='lifetime'){
                         $campaigns_data['id']=$campaigns_data['ad_id'].'.lifetime';
