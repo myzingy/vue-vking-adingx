@@ -542,7 +542,7 @@ END;
             $x['url']=$x['url_128']?(url($x['url_128'])):$x['url'];
         }
         $cc=M()->query(
-            'SELECT COUNT(DISTINCT `filehash`) AS tp_count FROM `assets` '
+            'SELECT COUNT(DISTINCT `filehash`) AS tp_count FROM `assets` A '
             .($where?" where $where":"")
         );
         return ['data'=>array_values($fdata),'total'=>$cc[0]['tp_count']];
