@@ -330,8 +330,7 @@ END;
         $asset['positive_feedback']=$this->_getRecountValue($asset['positive_feedback_str']);
         $asset['negative_feedback']=$this->_getRecountValue($asset['negative_feedback_str']);
     }
-    function _getDataChild($filehash){
-        $dataType=I('request.dataType','lifetime');
+    function _getDataChild($filehash,$dataType,$date=[]){
         $where=[
             'A.filehash'=>$filehash
         ];
@@ -356,14 +355,27 @@ END;
             .",sum(ADI.impressions)as impressions"
             .",ADI.ad_id as ad_id"
         ;
-        $data=$this->model->alias('A')
-            ->field($fields)
-            ->join('assets_insights AI ON AI.asset_id=A.id')
-            ->join("ads_insights ADI ON ADI.id=replace(AI.insight_id,'lifetime','{$dataType}')",'left')
-            //->join("ads_insights ADI ON ADI.id=concat(A.ad_id,'.{$dataType}')",'left')
-            ->where($where)
-            ->group('A.account_id')
-            ->select();
+        if($date){
+            $data=$this->model->alias('A')
+                ->field($fields)
+                ->join('assets_insights AI ON AI.asset_id=A.id')
+                ->join("ads_insights ADI ON 
+                    ADI.ad_id=replace(AI.insight_id,'.lifetime','')
+                    AND ADI.date_stop=ADI.date_start 
+                    AND (ADI.date_start>='{$date[0]}' AND ADI.date_start<='{$date[1]}') 
+                    ",'left')
+                ->where($where)
+                ->group('A.account_id')
+                ->select();
+        }else{
+            $data=$this->model->alias('A')
+                ->field($fields)
+                ->join('assets_insights AI ON AI.asset_id=A.id')
+                ->join("ads_insights ADI ON ADI.id=replace(AI.insight_id,'lifetime','{$dataType}')",'left')
+                ->where($where)
+                ->group('A.account_id')
+                ->select();
+        }
         return $data;
     }
     function _sumAccAssets(&$par,$chi){
@@ -442,8 +454,23 @@ END;
             ->limit($offset,$limit)
             ->getField('filehash',true);
         $fdata=[];
+
+        $dataType=I('request.dataType','lifetime');
+        $date=I('request.dateOne','');
+        if($date){
+            $date=explode(',',$date);
+            list($w,$m,$d,$y,$time)=explode(" ",$date[0]);
+            $stime=date("Y-m-d",strtotime("$w $m $d $y $time"));
+            list($w,$m,$d,$y,$time)=explode(" ",$date[1]);
+            $etime=date("Y-m-d",strtotime("$w $m $d $y $time"));
+        }
+
         foreach ($filehashs as $filehash){
-            $data=$this->_getDataChild($filehash);
+            if($dataType=='custom'){
+                $data=$this->_getDataChild($filehash,$dataType,[$stime,$etime]);
+            }else{
+                $data=$this->_getDataChild($filehash,$dataType);
+            }
             $fdata[$filehash]=$filehash;
             foreach ($data as $i=>$r){
                 $this->formatAccAssets($r);

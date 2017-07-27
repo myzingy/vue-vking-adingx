@@ -27,6 +27,20 @@
         text-indent:15px;
     }
     .debug{ display:none;}
+    .pk-val{
+        border-top: 1px #d0d0d0 dashed;
+        padding-top: 8px;
+        color: #ff3333;
+        margin-top: 5px;
+    }
+    .pk-val:after {
+        content: "VS";
+        color: #d0d0d0;
+        margin-top: -20px;
+        position: absolute;
+        right: 3px;
+        font-size: 9px;
+    }
 </style>
 <template>
     <div>
@@ -42,16 +56,59 @@
                 <el-input style="width:300px;" v-model="formSearch.keyword"
                           placeholder="AccountId / Author / SKU / Filename"></el-input>
             </el-form-item>
+            <el-popover
+                    ref="popoverDate"
+                    placement="bottom"
+                    width="600"
+                    trigger="click">
+                <el-row :gutter="24">
+                    <el-col :span="20">
+                        <el-form-item>
+                            <el-select v-model="formSearch.dataType" placeholder="选择日期" @change="onDataTypeChangeOne">
+                                <el-option label="Lifetime" value="lifetime"></el-option>
+                                <el-option label="Last 7 Day" value="last_7day"></el-option>
+                                <el-option label="Last 14 Day" value="last_14day"></el-option>
+                                <el-option label="自定义日期" value="custom"></el-option>
+                            </el-select>
+                            <el-date-picker
+                                    :disabled="dateOne"
+                                    :editable="false"
+                                    v-model="formSearch.dateOne"
+                                    type="daterange"
+                                    align="right"
+                                    placeholder="选择日期范围"
+                                    :picker-options="dateChoice">
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-select v-model="formSearch.dataTypeTwo" placeholder="选择日期" @change="onDataTypeChangeTwo">
+                                <el-option label="Lifetime" value="lifetime"></el-option>
+                                <el-option label="Last 7 Day" value="last_7day"></el-option>
+                                <el-option label="Last 14 Day" value="last_14day"></el-option>
+                                <el-option label="自定义日期" value="custom"></el-option>
+                            </el-select>
+                            <el-date-picker
+                                    :disabled="dateTwo"
+                                    :editable="false"
+                                    v-model="formSearch.dateTwo"
+                                    type="daterange"
+                                    align="right"
+                                    placeholder="选择日期范围"
+                                    :picker-options="dateChoice"
+                                    @change="pkFlagSetting">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="4">
+                        <el-button style="height: 100px;" type="primary" @click="onFormSearch" icon="search">查 询
+                        </el-button>
+                    </el-col>
+                </el-row>
+            </el-popover>
+            <el-button type="primary" icon="date" v-popover:popoverDate>日期</el-button>
             <el-form-item>
-                <el-button type="primary" @click="onFormSearch">查询</el-button>
+                <el-button type="primary" @click="onFormSearch" icon="search">查询</el-button>
                 <a href="javascript://" @click="onClearFormSearch">清空条件</a>
-            </el-form-item>
-            <el-form-item>
-                <el-radio-group v-model="formSearch.dataType" @change="onFormSearch">
-                    <el-radio-button label="lifetime">Lifetime</el-radio-button>
-                    <el-radio-button label="last_7day">Last 7 Day</el-radio-button>
-                    <el-radio-button label="last_14day">Last 14 Day</el-radio-button>
-                </el-radio-group>
             </el-form-item>
             <el-form-item>
                 <el-radio-group v-model="formSearch.assetType" @change="onFormSearch">
@@ -108,7 +165,10 @@
                     <el-popover placement="right" title="" width="400" trigger="hover">
                         <div>
                             <span v-if="scope.row.type == '1'">Video:</span><span v-else>Image:</span>
-                            <span>Updated Time:<span class="val">{{scope.row.updated_time}}</span></span>
+                            <h1 v-if="scope.row.updated_time == 'Object with ID does not exist'">
+                                <span class="val">{{scope.row.updated_time}}</span>
+                            </h1>
+                            <span v-else="">Updated Time:<span class="val">{{scope.row.updated_time}}</span></span>
                             <span>Size:<span class="val">{{scope.row.original_width}} x {{scope.row.original_height}}</span></span>
                             <br>
                             <img width="400" :src="scope.row.permalink_url">
@@ -124,64 +184,162 @@
                                 </p>
                             </div>
                         </div>
-                        <a :href="scope.row.url" target="_blank" slot="reference">
+                        <span slot="reference"
+                           v-if="scope.row.updated_time == 'Object with ID does not exist'">
+                            <img height="100" :src="scope.row.permalink_url" v-if="scope.row.permalink_url"/>
+                            <span v-else="">{{scope.row.name}}</span>
+                        </span>
+                        <a :href="scope.row.url" target="_blank" slot="reference"
+                           v-else="">
                             <img height="100" :src="scope.row.permalink_url" v-if="scope.row.permalink_url"/>
                             <span v-else="">{{scope.row.name}}</span>
                         </a>
                     </el-popover>
                 </template>
             </el-table-column>
-            <el-table-column :formatter="numberFormatInt" columnKey="websiteaddstocart" prop="websiteaddstocart"
+            <el-table-column columnKey="websiteaddstocart" prop="websiteaddstocart"
                              label="Website Adds to Cart"
-                             width="80" className="autotooltip" sortable></el-table-column>
-            <el-table-column :formatter="moneyFormat" columnKey="costperwebsiteaddtocart" prop="costperwebsiteaddtocart"
-                             label="Cost per Website Add to Cart" width="80" sortable></el-table-column>
-            <el-table-column :formatter="moneyFormat" columnKey="websiteaddstocartconversionvalue" prop="websiteaddstocartconversionvalue"
-                             label="Website Adds to Cart Conversion Value" width="80" sortable></el-table-column>
-            <el-table-column :formatter="moneyFormat" columnKey="amountspent" prop="amountspent" label="Spent"
+                             width="80" className="autotooltip" sortable>
+                <template scope="scope">
+                    <div>{{numberFormatInt(scope.row,{columnKey:'websiteaddstocart'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{numberFormatInt(scope.row,{columnKey:'websiteaddstocart'},
+                        'PK')}}</div>
+                </template>
+            </el-table-column>
+            <el-table-column columnKey="costperwebsiteaddtocart" prop="costperwebsiteaddtocart"
+                             label="Cost per Website Add to Cart" width="80" sortable>
+                <template scope="scope">
+                    <div>{{moneyFormat(scope.row,{columnKey:'costperwebsiteaddtocart'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{moneyFormat(scope.row,{columnKey:'costperwebsiteaddtocart'},'PK')}}</div>
+                </template>
+            </el-table-column>
+            <el-table-column columnKey="websiteaddstocartconversionvalue" prop="websiteaddstocartconversionvalue"
+                             label="Website Adds to Cart Conversion Value" width="80" sortable>
+                <template scope="scope">
+                    <div>{{moneyFormat(scope.row,{columnKey:'websiteaddstocartconversionvalue'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{moneyFormat(scope.row,{columnKey:'websiteaddstocartconversionvalue'},'PK')}}</div>
+                </template>
+            </el-table-column>
+            <el-table-column columnKey="amountspent" prop="amountspent" label="Spent"
                              width="80"
-                             sortable></el-table-column>
-            <el-table-column :formatter="numberFormatInt" columnKey="websitepurchases" prop="websitepurchases" label="Website Purchases"
-                             width="80" sortable></el-table-column>
-            <el-table-column :formatter="moneyFormat" columnKey="websitepurchasesconversionvalue" prop="websitepurchasesconversionvalue"
-                             label="Website Purchases Conversion Value" width="80" sortable></el-table-column>
-            <el-table-column :formatter="numberFormatInt" columnKey="linkclicks"
+                             sortable>
+                <template scope="scope">
+                    <div>{{moneyFormat(scope.row,{columnKey:'amountspent'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{moneyFormat(scope.row,{columnKey:'amountspent'},'PK')}}</div>
+                </template>
+            </el-table-column>
+            <el-table-column columnKey="websitepurchases" prop="websitepurchases" label="Website Purchases"
+                             width="80" sortable>
+                <template scope="scope">
+                    <div>{{numberFormatInt(scope.row,{columnKey:'websitepurchases'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{numberFormatInt(scope.row,{columnKey:'websitepurchases'},'PK')}}</div>
+                </template>
+            </el-table-column>
+            <el-table-column columnKey="websitepurchasesconversionvalue" prop="websitepurchasesconversionvalue"
+                             label="Website Purchases Conversion Value" width="80" sortable>
+                <template scope="scope">
+                    <div>{{moneyFormat(scope.row,{columnKey:'websitepurchasesconversionvalue'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{moneyFormat(scope.row,{columnKey:'websitepurchasesconversionvalue'},'PK')}}</div>
+                </template>
+            </el-table-column>
+            <el-table-column columnKey="linkclicks"
                              prop="linkclicks" label="Link Clicks"
-                             width="80" sortable></el-table-column>
-            <el-table-column :formatter="moneyFormat" columnKey="cpc" prop="cpc" label="CPC (Cost per Link Click)"
+                             width="80" sortable>
+                <template scope="scope">
+                    <div>{{numberFormatInt(scope.row,{columnKey:'linkclicks'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{numberFormatInt(scope.row,{columnKey:'linkclicks'},'PK')}}</div>
+                </template>
+            </el-table-column>
+            <el-table-column columnKey="cpc" prop="cpc" label="CPC (Cost per Link Click)"
                              width="80"
                              sortable
-            ></el-table-column>
-            <el-table-column :formatter="numberFormatPer" columnKey="ctr" prop="ctr"
+            >
+                <template scope="scope">
+                    <div>{{moneyFormat(scope.row,{columnKey:'cpc'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{moneyFormat(scope.row,{columnKey:'cpc'},'PK')}}</div>
+                </template>
+            </el-table-column>
+            <el-table-column columnKey="ctr" prop="ctr"
                              label="CTR (Link Click-Through Rate)"
-                             width="80" sortable></el-table-column>
-            <el-table-column :formatter="moneyFormat" columnKey="cpm1000" prop="cpm1000"
+                             width="80" sortable>
+                <template scope="scope">
+                    <div>{{numberFormatPer(scope.row,{columnKey:'ctr'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{numberFormatPer(scope.row,{columnKey:'ctr'},'PK')}}</div>
+                </template>
+            </el-table-column>
+            <el-table-column columnKey="cpm1000" prop="cpm1000"
                              label="CPM (Cost per 1,000 Impressions)"
-                             width="80" sortable></el-table-column>
-            <el-table-column :formatter="numberFormatInt" columnKey="reach" prop="reach" label="Reach" width="80"
-                             sortable></el-table-column>
-            <el-table-column :formatter="numberFormatInt" columnKey="results" prop="results" label="Results" width="80"
+                             width="80" sortable>
+                <template scope="scope">
+                    <div>{{moneyFormat(scope.row,{columnKey:'cpm1000'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{moneyFormat(scope.row,{columnKey:'cpm1000'},'PK')
+                        }}</div>
+                </template>
+            </el-table-column>
+            <el-table-column columnKey="reach" prop="reach" label="Reach" width="80"
+                             sortable>
+                <template scope="scope">
+                    <div>{{numberFormatInt(scope.row,{columnKey:'reach'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{numberFormatInt(scope.row,{columnKey:'reach'},'PK')}}</div>
+                </template>
+            </el-table-column>
+            <el-table-column columnKey="results" prop="results" label="Results" width="80"
                              sortable
-            ></el-table-column>
-            <el-table-column :formatter="CostperResult" columnKey="costperresult" prop="costperresult" label="Cost per Result"
-                             width="80" sortable></el-table-column>
-            <el-table-column :formatter="numberFormatInt" columnKey="impressions" prop="impressions" label="Impressions"
-                             width="80" sortable></el-table-column>
-            <el-table-column :formatter="numberFormat" columnKey="frequency"  prop="frequency" label="Frequency"
-                             width="80" sortable></el-table-column>
-            <el-table-column :formatter="numberFormat" columnKey="relevance_score"  prop="relevance_score"
+            >
+                <template scope="scope">
+                    <div>{{numberFormatInt(scope.row,{columnKey:'results'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{numberFormatInt(scope.row,{columnKey:'results'},'PK')}}</div>
+                </template>
+            </el-table-column>
+            <el-table-column columnKey="costperresult" prop="costperresult" label="Cost per Result"
+                             width="80" sortable>
+                <template scope="scope">
+                    <div>{{CostperResult(scope.row,{columnKey:'costperresult'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{CostperResult(scope.row,{columnKey:'costperresult'},'PK')}}</div>
+                </template>
+            </el-table-column>
+            <el-table-column columnKey="impressions" prop="impressions" label="Impressions"
+                             width="80" sortable>
+                <template scope="scope">
+                    <div>{{numberFormatInt(scope.row,{columnKey:'impressions'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{numberFormatInt(scope.row,{columnKey:'impressions'},'PK')}}</div>
+                </template>
+            </el-table-column>
+            <el-table-column columnKey="frequency"  prop="frequency" label="Frequency"
+                             width="80" sortable>
+                <template scope="scope">
+                    <div>{{numberFormat(scope.row,{columnKey:'frequency'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{numberFormat(scope.row,{columnKey:'frequency'},'PK')}}</div>
+                </template>
+            </el-table-column>
+            <el-table-column columnKey="relevance_score"  prop="relevance_score"
                              label="Relevent Score"
-                             width="80" sortable></el-table-column>
+                             width="80" sortable>
+                <template scope="scope">
+                    <div>{{numberFormat(scope.row,{columnKey:'relevance_score'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{numberFormat(scope.row,{columnKey:'relevance_score'},'PK')}}</div>
+                </template>
+            </el-table-column>
             <el-table-column prop="positive_feedback" label="Positive Feedback"
                              width="80"></el-table-column>
             <el-table-column prop="negative_feedback" label="Negative Feedback"
                              width="80"></el-table-column>
             <el-table-column prop="ads_num" columnKey="ads_num" label="广告数"
                              width="70" sortable></el-table-column>
-            <el-table-column :formatter="numberFormatPer" columnKey="conversion_rate" prop="conversion_rate" label="转化率"
-                             width="70" sortable></el-table-column>
-            <el-table-column :formatter="numberFormatPer" columnKey="roas" prop="roas" label="ROAS"
-                             width="70" sortable></el-table-column>
+            <el-table-column columnKey="conversion_rate" prop="conversion_rate" label="转化率"
+                             width="70" sortable>
+                <template scope="scope">
+                    <div>{{numberFormatPer(scope.row,{columnKey:'conversion_rate'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{numberFormatPer(scope.row,{columnKey:'conversion_rate'},'PK')}}</div>
+                </template>
+            </el-table-column>
+            <el-table-column columnKey="roas" prop="roas" label="ROAS"
+                             width="70" sortable>
+                <template scope="scope">
+                    <div>{{numberFormatPer(scope.row,{columnKey:'roas'})}}</div>
+                    <div class="pk-val" v-show="pkFlag">{{numberFormatPer(scope.row,{columnKey:'roas'},'PK')}}</div>
+                </template>
+            </el-table-column>
             <el-table-column label="Author"  width="100">
                 <template scope="scope" >
                     <el-select
@@ -258,6 +416,7 @@
             return {
                 activeName: 'getRulesLog',
                 rulesLog:[],
+                rulesLogPK:[],
                 popover_img_src:"",
                 total:0,
                 //limit:30,
@@ -271,9 +430,16 @@
                     dataType:'lifetime',
                     assetType:"",
                     brand:"",
+                    dateOne:"",
+                    dateTwo:"",
+                    dataTypeTwo:"custom",
                 },
                 authors:[],
                 authors_flag:false,
+                dateChoice:date_choice,
+                dateOne:true,
+                dateTwo:false,
+                pkFlag:false,
             }
         },
         computed: mapState({ user: state => state.user }),
@@ -284,13 +450,27 @@
         methods:{
             getData(){
                 this.authors_flag=false;
-                vk.http(uri.assetsGetData,this.formSearch,this.then);
+                this.rulesLogPK=[];
+                var formSearch={};
+                Object.assign(formSearch,this.formSearch);
+                formSearch.dateOne=formSearch.dateOne.toString();
+                vk.http(uri.assetsGetData,formSearch,this.then);
+                if(this.pkFlag){
+                    var formSearch={};
+                    Object.assign(formSearch,this.formSearch);
+                    formSearch.dateOne=formSearch.dateTwo.toString();
+                    formSearch.dataType=formSearch.dataTypeTwo;
+                    vk.http(uri.assetsGetDataTwo,formSearch,this.then);
+                }
             },
             then:function(json,code){
                 switch(code){
                     case uri.assetsGetData.code:
                         this.rulesLog=json.data;
                         this.total=parseInt(json.total);
+                        break;
+                    case uri.assetsGetDataTwo.code:
+                        this.rulesLogPK=json.data;
                         break;
                     case uri.assetsSetAuthor.code:
                         break;
@@ -305,24 +485,49 @@
                     vk.http(uri[uriKey],params,this.then);
                 }
             },
-            numberFormat:function(row, column){
+            numberFormat:function(row, column,pkFlag){
+                if(pkFlag=='PK'){
+                    if(!this.pkFlag) return;
+                    row=this.getRowPK(row);
+                    if(!row) return '--';
+                }
                 var columnKey=arguments[1].columnKey;
                 return vk.numberFormat(row[columnKey],2,'');
             },
-            numberFormatPer:function(row, column){
+            numberFormatPer:function(row, column,pkFlag){
+                if(pkFlag=='PK'){
+                    if(!this.pkFlag) return;
+                    row=this.getRowPK(row);
+                    if(!row) return '--';
+                }
                 var columnKey=arguments[1].columnKey;
                 if(!isFinite(row[columnKey])) return row[columnKey];
                 return vk.numberFormat(row[columnKey],2,'')+'%';
             },
-            numberFormatInt:function(row, column){
+            numberFormatInt:function(row, column,pkFlag){
+                if(pkFlag=='PK'){
+                    if(!this.pkFlag) return;
+                    row=this.getRowPK(row);
+                    if(!row) return '--';
+                }
                 var columnKey=arguments[1].columnKey;
                 return vk.numberFormat(row[columnKey],0,'');
             },
-            moneyFormat:function(row, column){
+            moneyFormat:function(row, column,pkFlag){
+                if(pkFlag=='PK'){
+                    if(!this.pkFlag) return;
+                    row=this.getRowPK(row);
+                    if(!row) return '--';
+                }
                 var columnKey=arguments[1].columnKey;
                 return vk.numberFormat(row[columnKey]);
             },
-            CostperResult:function(row, column){
+            CostperResult:function(row, column,pkFlag){
+                if(pkFlag=='PK'){
+                    if(!this.pkFlag) return;
+                    row=this.getRowPK(row);
+                    if(!row) return '--';
+                }
                 if(row.websitepurchases==0) return 'X';
                 var CostperResult=row.amountspent/row.websitepurchases;
                 return  vk.numberFormat(CostperResult);
@@ -441,6 +646,37 @@
             onFormSearch(){
                 this.getData();
             },
+            onDataTypeChangeOne(val){
+                this.dateOne=true;
+                if(val=='custom'){
+                    this.dateOne=false;
+                }
+            },
+            onDataTypeChangeTwo(val){
+                this.dateTwo=true;
+                if(val=='custom'){
+                    this.pkFlag=false;
+                    this.dateTwo=false;
+                }else{
+                    this.pkFlag=true;
+                }
+            },
+            pkFlagSetting(val){
+                if(val){
+                    this.pkFlag=true;
+                }else{
+                    this.pkFlag=false;
+                }
+            },
+            getRowPK(row){
+                var id=row.id;
+                for(var i in this.rulesLogPK){
+                    if(id==this.rulesLogPK[i].id){
+                        return this.rulesLogPK[i];
+                    }
+                }
+                return false;
+            }
         }
     }
 </script>
