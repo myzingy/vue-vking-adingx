@@ -660,4 +660,51 @@ END;
         }
         return $data;
     }
+    function flushAssetImageFile(){
+        $uptime=NOW_TIME-86400;
+        $assets=$this->model->field('id,permalink_url')
+            ->where("status is null and type=0 and (uptime<$uptime or uptime is null)")
+            ->find();
+
+        if(!$assets) return $this->model->getLastSql();
+        $this->model->where(array('id'=>$assets['id']))->save(array(
+            'uptime'=>NOW_TIME,
+        ));
+        //get file;
+        $fileid=str_replace(':','',$assets['id']);
+        $filename='video-thumb/'.$fileid.'.jpg';
+        stream_context_set_default(
+            array(
+                'http' => array(
+                    'header' => [
+                        'User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36',
+                    ]
+                )
+            )
+        );
+        $url_302=get_headers($assets['permalink_url'],1) ;
+        if($url_302['Location']){
+            $assets['permalink_url']=$url_302['Location'];
+        }
+        $cc=http($assets['permalink_url']);
+        if($cc){
+            file_put_contents($filename,$cc);
+            $filethumb='video-thumb/'.$fileid.'.thumb.jpg';
+            $image = new \Think\Image();
+            $image->open($filename);
+            $image->thumb(300, 300,\Think\Image::IMAGE_THUMB_CENTER)->save($filethumb);
+
+            $filehash=md5_file($filename);
+            $this->model->where(array('id'=>$assets['id']))->save(array(
+                'status'=>'IMAGE_OK',
+                'filehash'=>$filehash,
+                'is_filehash'=>1,
+                'url_128'=>$filename,
+            ));
+        }else{
+            $assets['message']='cc is null';
+            return $assets;
+        }
+        return $assets;
+    }
 }

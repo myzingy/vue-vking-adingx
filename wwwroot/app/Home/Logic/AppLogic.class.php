@@ -367,6 +367,10 @@ class AppLogic {
         $lib = new \Modules\assets\lib();
         return $lib -> flushAssetVideoFile();
     }
+    function asyn__flushAssetImageFile(){
+        $lib = new \Modules\assets\lib();
+        return $lib -> flushAssetImageFile();
+    }
     function asyn__flushAssetsAdsInsight(){
         $lib = new \Modules\assets\lib();
         return $lib -> flushAssetsAdsInsight();

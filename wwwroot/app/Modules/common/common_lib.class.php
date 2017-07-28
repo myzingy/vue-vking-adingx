@@ -145,6 +145,7 @@ class common_lib {
         if ($header)
             curl_setopt($oCurl, CURLOPT_HTTPHEADER, $header);
         curl_setopt($oCurl, CURLOPT_TIMEOUT, 20);
+        curl_setopt($oCurl, CURLOPT_FOLLOWLOCATION, 1);
         $sContent = curl_exec($oCurl);
         $aStatus = curl_getinfo($oCurl);
         curl_close($oCurl);
