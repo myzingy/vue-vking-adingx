@@ -519,7 +519,7 @@ END;
                     $path=str_replace('uploads','video-thumb',$file['url_128']).".jpg";
                 }else{
                     $fileid=str_replace(':','',$file['id']);
-                    $path='video-thumb/'.$fileid.'thumb.jpg';
+                    $path='video-thumb/'.$fileid.'.thumb.jpg';
                 }
                 if(file_exists($path)){
                     $file['permalink_url']=url($path);
