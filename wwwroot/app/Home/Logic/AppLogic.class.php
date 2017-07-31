@@ -224,6 +224,10 @@ class AppLogic {
         $lib = new \Modules\campaigns\insights\lib();
         return $lib -> flushCampaignsInsights();
     }
+    function asyn__flushCampaignsInsightsForDate(){
+        $lib = new \Modules\campaigns\insights\lib();
+        return $lib -> flushCampaignsInsightsForDate();
+    }
     /**
      * <ok class="异步"/> 根据广告系列刷新广告组
      * 参数

@@ -206,4 +206,22 @@ END;
         $formatData=formatInsightsData($data);
         return array('data'=>$formatData);
     }
+    function flushCampaignsInsightsForDate(){
+        $date=I('request.date');
+        if(!$date) return 'params is null';
+        $data=$this->model->field('account_id,campaign_id')->where(
+            array(
+                'date_start'=>$date,
+                'date_stop'=>$date,
+            )
+        )->group('campaign_id')->select();
+        if($data){
+            foreach ($data as $r){
+                asyn('apido/asyn.flushCampaignsInsights',array('date'=>$date,'ac_id'=>$r['account_id'],'campaign_id' => $r['campaign_id']));
+            }
+            return $data;
+        }
+        return "Time machine!!!";
+
+    }
 }
