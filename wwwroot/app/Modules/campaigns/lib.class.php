@@ -204,6 +204,7 @@ class lib{
             ->where([
                 'date_start'=>$date,
                 'date_stop'=>$date,
+                'type'=>99,
                 'account_id'=>array('in',explode(',',$brands))
             ])
             ->select();
