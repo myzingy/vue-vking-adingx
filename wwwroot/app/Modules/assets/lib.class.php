@@ -415,7 +415,7 @@ END;
         $par['roas']= ($par['websitepurchasesconversionvalue'])?(($par['amountspent']/$par['websitepurchasesconversionvalue'])*100):'X';
         $par['ctr']= $par['linkclicks']/$par['impressions'];
         $par['frequency']= $par['impressions']/$par['reach'];
-        $par['cpm1000']= ($par['amountspent']*1000)/$par['reach'];
+        $par['cpm1000']= ($par['amountspent']*1000)/$par['impressions'];
         
         foreach ($avg as $key){
             if(is_numeric($par[$key])){

@@ -287,7 +287,7 @@ class lib{
             foreach ($xxd as &$xd){
                 //$xd['cpm']=$xd['cpm']/$xd['__count']+0;
                 //$xd['ctr']=$xd['ctr']/$xd['__count']+0;
-                $xd['cpm']=($xd['cost']*10)/$xd['reach'];
+                $xd['cpm']=($xd['cost']*10)/$xd['impressions'];
                 $xd['ctr']=($xd['link_click']/$xd['impressions'])*100;
                 unset($xd['__count']);
             }
