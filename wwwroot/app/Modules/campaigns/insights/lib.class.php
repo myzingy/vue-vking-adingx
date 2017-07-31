@@ -25,6 +25,7 @@ class lib{
 
         $ac_id=I('request.ac_id');
         if(!$ac_id) return;
+        $date=I('request.date','');
         $ac=FBC($ac_id);
         vendor("vendor.autoload");
         $fba=Api::init($ac['app_id'],$ac['app_secret'],$ac['access_tokens']);
@@ -100,7 +101,15 @@ END;
         $time_range = array(date('Y-m-d', NOW_TIME), date('Y-m-d', strtotime('-1 day'))
         , date('Y-m-d', strtotime('-7 day')), date('Y-m-d', strtotime('-14 day')));
         list($today, $yestoday, $last_7day, $last_14day) = $time_range;
-        if ($campaign_timespace == 'today') {
+        if($date){
+            $adsets = $campaign->getInsights(
+                $fields,
+                array(
+                    'time_range'=>array('since'=>$date,'until'=>$date),
+                    'action_attribution_windows'=>['1d_click','1d_view'],
+                )
+            );
+        }else if ($campaign_timespace == 'today') {
             $adsets = $campaign->getInsights(
                 $fields,
                 array(
@@ -162,7 +171,7 @@ END;
             unset($campaigns_data['campaigns_insights_action_types']);
             $this->model->add($campaigns_data);
         }
-        if ($campaign_timespace == 'today') {
+        if ($campaign_timespace == 'today' && !$date) {
             //其它Insights
             asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'yestoday','ac_id'=>$ac_id),null,
                 getDayTime("06:00:00"),0);
@@ -172,13 +181,12 @@ END;
 //                getDayTime("03:00:00"));
 //            asyn('apido/asyn.flushCampaignsInsights', array('campaign_id' => $campaign_id, 'campaign_timespace' => 'last_14day','ac_id'=>$ac_id),null,
 //                getDayTime("03:00:00"));
+            //获取前天数据
+            $before_yesterday=date("Y-m-d",getDayTime("16:30:00",-2));
+            asyn('apido/asyn.flushCampaignsInsights',array('date'=>$before_yesterday,'ac_id'=>$ac_id,'campaign_id' => $campaign_id,),null,
+                getDayTime("16:30:00",0),0);
 
         }
-        //提交数据给erp
-//        asyn('apido/asyn.postErpCampaign',array(
-//            'ac_id'=>$ac_id,
-//            'date_stop'=>$campaigns_data['date_stop']
-//        ),null,NOW_TIME+1200);
         return $campaigns_data;
     }
 
