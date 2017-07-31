@@ -139,27 +139,33 @@ END;
                     $campaigns_data[$fk] = $_d[$fk];
                 }
             }
-            switch ($campaigns_data['date_start']) {
-                case $today:
-                    $campaigns_data['id'] = $campaigns_data['campaign_id'] . '.today';
-                    $campaigns_data['type'] = model::INSIGHT_TYPE_TODAY;
-                    break;
-                case $last_7day:
-                    $campaigns_data['id'] = $campaigns_data['campaign_id'] . '.last_7day';
-                    $campaigns_data['type'] = model::INSIGHT_TYPE_LAST_7DAY;
-                    break;
-                case $last_14day:
-                    $campaigns_data['id'] = $campaigns_data['campaign_id'] . '.last_14day';
-                    $campaigns_data['type'] = model::INSIGHT_TYPE_LAST_14DAY;
-                    break;
+            if(!$date){
+                switch ($campaigns_data['date_start']) {
+                    case $today:
+                        $campaigns_data['id'] = $campaigns_data['campaign_id'] . '.today';
+                        $campaigns_data['type'] = model::INSIGHT_TYPE_TODAY;
+                        break;
+                    case $last_7day:
+                        $campaigns_data['id'] = $campaigns_data['campaign_id'] . '.last_7day';
+                        $campaigns_data['type'] = model::INSIGHT_TYPE_LAST_7DAY;
+                        break;
+                    case $last_14day:
+                        $campaigns_data['id'] = $campaigns_data['campaign_id'] . '.last_14day';
+                        $campaigns_data['type'] = model::INSIGHT_TYPE_LAST_14DAY;
+                        break;
 //                case $yestoday:
 //                    $campaigns_data['id'] = $campaigns_data['campaign_id'] . '.yestoday';
 //                    $campaigns_data['type'] = model::INSIGHT_TYPE_YESTODAY;
 //                    break;
-                default:
-                    $campaigns_data['id'] = md5($campaigns_data['campaign_id'] . $campaigns_data['date_start']);
-                    $campaigns_data['type'] = model::INSIGHT_TYPE_YESTODAY;
+                    default:
+                        $campaigns_data['id'] = md5($campaigns_data['campaign_id'] . $campaigns_data['date_start']);
+                        $campaigns_data['type'] = model::INSIGHT_TYPE_YESTODAY;
+                }
+            }else{
+                $campaigns_data['id'] = md5($campaigns_data['campaign_id'] . $campaigns_data['date_start']);
+                $campaigns_data['type'] = model::INSIGHT_TYPE_YESTODAY;
             }
+
             M('campaigns_insights')->where("id='{$campaigns_data['id']}'")->delete();
             //M('campaigns_insights_action_types')->where("campaigns_insights_id='{$campaigns_data['id']}'")->delete();
             $adsets->next();
