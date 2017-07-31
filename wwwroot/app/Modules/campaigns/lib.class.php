@@ -200,7 +200,7 @@ class lib{
             ->field('account_id,account_name,date_start as date,campaign_name
             ,CLICK1D_WebsiteAddstoCart,CLICK1D_WebsitePurchases,CLICK1D_CostperWebsiteAddtoCart
             ,CLICK1D_CPC,CLICK1D_WebsiteAddstoCartConversionValue,CLICK1D_WebsitePurchasesConversionValue
-            ,spend,cpm,inline_link_click_ctr as ctr,inline_link_clicks as link_clicks')
+            ,spend,cpm,inline_link_click_ctr as ctr,inline_link_clicks as link_clicks,impressions,reach')
             ->where([
                 'date_start'=>$date,
                 'date_stop'=>$date,
@@ -230,6 +230,8 @@ class lib{
                         'ctr'=>0,
                         'link_click'=>0,
                         'income'=>0,
+                        'impressions'=>1,
+                        'reach'=>1,
                         '__count'=>0,
                     ];
                 }
@@ -247,6 +249,8 @@ class lib{
                     'ctr'=>0,
                     'link_click'=>0,
                     'income'=>0,
+                    'impressions'=>1,
+                    'reach'=>1,
                     '__count'=>0,
                 ];
             }
@@ -267,24 +271,6 @@ class lib{
                 $key=$rule?$rule:$ac_id;
             }
             if($key==$ac_id) continue;
-//            $pdata[$key]=$pdata[$key]?$pdata[$key]:[];
-//            if(!$pdata[$key][$ac_id]){
-//                $pdata[$key][$ac_id]=array(
-//                    'fee_date'=>$r['date'],
-//                    'account_id'=>$ac_id,
-//                    'account_name'=>$r['account_name'],
-//                    'username'=>$key,
-//                    'cost'=>0,
-//                    'purchase'=>0,
-//                    'add_to_cart'=>0,
-//                    'cpm'=>0,
-//                    'ctr'=>0,
-//                    'link_click'=>0,
-//                    'income'=>0,
-//                    //'campaign_name'=>'',
-//                    '__count'=>0,
-//                );
-//            }
             $pdata[$key][$ac_id]['cost']+=$r['spend']*100;
             $pdata[$key][$ac_id]['purchase']+=$day_click['WebsitePurchases'];
             $pdata[$key][$ac_id]['add_to_cart']+=$day_click['WebsiteAddstoCart'];
@@ -293,12 +279,16 @@ class lib{
             $pdata[$key][$ac_id]['link_click']+=$r['link_clicks'];
             $pdata[$key][$ac_id]['income']+=$day_click['WebsitePurchasesConversionValue']*100;
             //$pdata[$key]['campaign_name'].=$r['campaign_name']." |||| ";
+            $pdata[$key][$ac_id]['impressions']+=$r['impressions'];
+            $pdata[$key][$ac_id]['reach']+=$r['reach'];
             $pdata[$key][$ac_id]['__count']+=1;
         }
         foreach ($pdata as &$xxd){
             foreach ($xxd as &$xd){
-                $xd['cpm']=$xd['cpm']/$xd['__count']+0;
-                $xd['ctr']=$xd['ctr']/$xd['__count']+0;
+                //$xd['cpm']=$xd['cpm']/$xd['__count']+0;
+                //$xd['ctr']=$xd['ctr']/$xd['__count']+0;
+                $xd['cpm']=($xd['cost']*10)/$xd['reach'];
+                $xd['ctr']=($xd['link_click']/$xd['impressions'])*100;
                 unset($xd['__count']);
             }
         }
