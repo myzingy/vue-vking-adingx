@@ -253,24 +253,24 @@ class lib{
             //jeulia
             '561910137324149'=>'戴婷',
             '836196303228863'=>'权文娟',
-            '564914007023762'=>'王乐',
-            '639275016254327'=>'王乐',
-            '909992302470836'=>'杨超英',
-            '639275062920989'=>'杨蕾',
-            '769185753263252'=>'李婷',
-            '673582062823622'=>'徐健',
-            '836196296562197'=>'何慧敏',
-            '836196299895530'=>'葛芳',
-            '769185746596586'=>[
-                ['徐健','Evan'],['何慧敏','Janet']
-            ],
             '559461654235664'=>[
                 ['权文娟','US-Q'],['武艳云','US-W']
             ],
+            '769185753263252'=>'李婷',
+            '564914007023762'=>'王乐',
             '1593565507558990'=>[
-                ['王乐-mar','-mar'],['王乐-dpa','dpa'],['王乐-g-w','us-g-w'],
-                ['杨超英','Kelly']
+                ['王乐','-mar'],['王乐','us-g-w'],
+                ['杨超英','Kelly'],['DPA','dpa']
             ],
+            '639275016254327'=>'DPA',
+            '909992302470836'=>'杨超英',
+            '673582062823622'=>'徐健',
+            '769185746596586'=>[
+                ['徐健','Evan'],['何慧敏','Janet']
+            ],
+            '836196296562197'=>'何慧敏',
+            '836196299895530'=>'葛芳',
+            '639275062920989'=>'杨蕾',
             //gnoce
             '670806899767805'=>'陈灿',
             '639275086254320'=>'胡美莹',
@@ -293,7 +293,6 @@ class lib{
 
         foreach ($data as $r){
             $ac_id=$r['account_id'];
-            $pdata[$ac_id]=$pdata[$ac_id]?$pdata[$ac_id]:[];
             $rule=$ac_ids_rules[$ac_id];
             $day_click=getDayClick($r);
             if(is_array($rule)){
@@ -308,8 +307,9 @@ class lib{
                 $key=$rule?$rule:$ac_id;
             }
             if($key==$ac_id) continue;
-            if(!$pdata[$ac_id][$key]){
-                $pdata[$ac_id][$key]=array(
+            $pdata[$key]=$pdata[$key]?$pdata[$key]:[];
+            if(!$pdata[$key][$ac_id]){
+                $pdata[$key][$ac_id]=array(
                     'fee_date'=>$r['date'],
                     'account_id'=>$ac_id,
                     'account_name'=>$r['account_name'],
@@ -325,15 +325,15 @@ class lib{
                     '__count'=>0,
                 );
             }
-            $pdata[$ac_id][$key]['cost']+=$r['spend']*100;
-            $pdata[$ac_id][$key]['purchase']+=$day_click['WebsitePurchases'];
-            $pdata[$ac_id][$key]['add_to_cart']+=$day_click['WebsiteAddstoCart'];
-            $pdata[$ac_id][$key]['cpm']+=$r['cpm']*100;
-            $pdata[$ac_id][$key]['ctr']+=$r['ctr'];
-            $pdata[$ac_id][$key]['link_click']+=$r['link_clicks'];
-            $pdata[$ac_id][$key]['income']+=$day_click['WebsitePurchasesConversionValue']*100;
+            $pdata[$key][$ac_id]['cost']+=$r['spend']*100;
+            $pdata[$key][$ac_id]['purchase']+=$day_click['WebsitePurchases'];
+            $pdata[$key][$ac_id]['add_to_cart']+=$day_click['WebsiteAddstoCart'];
+            $pdata[$key][$ac_id]['cpm']+=$r['cpm']*100;
+            $pdata[$key][$ac_id]['ctr']+=$r['ctr'];
+            $pdata[$key][$ac_id]['link_click']+=$r['link_clicks'];
+            $pdata[$key][$ac_id]['income']+=$day_click['WebsitePurchasesConversionValue']*100;
             //$pdata[$key]['campaign_name'].=$r['campaign_name']." |||| ";
-            $pdata[$ac_id][$key]['__count']+=1;
+            $pdata[$key][$ac_id]['__count']+=1;
         }
         foreach ($pdata as &$xxd){
             foreach ($xxd as &$xd){
