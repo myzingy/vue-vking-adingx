@@ -272,9 +272,9 @@ class lib{
             '836196299895530'=>'葛芳',
             '639275062920989'=>'杨蕾',
             //gnoce
-            '670806899767805'=>'陈灿',
-            '639275086254320'=>'胡美莹',
-            '769185763263251'=>'员燕子',
+            //'670806899767805'=>'陈灿',
+            //'639275086254320'=>'胡美莹',
+            //'769185763263251'=>'员燕子',
         );
         $brands=C('brand');
         $brands=$brands['jeulia'];
@@ -290,7 +290,48 @@ class lib{
             ])
             ->select();
         $pdata=[];
-
+        $fbc=FBC();
+        foreach ($fbc as $r){
+            $account_names[$r['account_id']]=$r['account_name'];
+        }
+        foreach ($ac_ids_rules as $acI=>$acU){
+            if(is_array($acU)){
+                foreach ($acU as $acU2){
+                    $acUx=$acU2[0];
+                    $pdata[$acUx]=$pdata[$acUx]?$pdata[$acUx]:[];
+                    $pdata[$acUx][$acI]=[
+                        'fee_date'=>$date,
+                        'account_id'=>$acI,
+                        'account_name'=>$account_names[$acI],
+                        'username'=>$acUx,
+                        'cost'=>0,
+                        'purchase'=>0,
+                        'add_to_cart'=>0,
+                        'cpm'=>0,
+                        'ctr'=>0,
+                        'link_click'=>0,
+                        'income'=>0,
+                        '__count'=>0,
+                    ];
+                }
+            }else{
+                $pdata[$acU]=$pdata[$acU]?$pdata[$acU]:[];
+                $pdata[$acU][$acI]=[
+                    'fee_date'=>$date,
+                    'account_id'=>$acI,
+                    'account_name'=>$account_names[$acI],
+                    'username'=>$acU,
+                    'cost'=>0,
+                    'purchase'=>0,
+                    'add_to_cart'=>0,
+                    'cpm'=>0,
+                    'ctr'=>0,
+                    'link_click'=>0,
+                    'income'=>0,
+                    '__count'=>0,
+                ];
+            }
+        }
         foreach ($data as $r){
             $ac_id=$r['account_id'];
             $rule=$ac_ids_rules[$ac_id];
@@ -307,24 +348,24 @@ class lib{
                 $key=$rule?$rule:$ac_id;
             }
             if($key==$ac_id) continue;
-            $pdata[$key]=$pdata[$key]?$pdata[$key]:[];
-            if(!$pdata[$key][$ac_id]){
-                $pdata[$key][$ac_id]=array(
-                    'fee_date'=>$r['date'],
-                    'account_id'=>$ac_id,
-                    'account_name'=>$r['account_name'],
-                    'username'=>$key,
-                    'cost'=>0,
-                    'purchase'=>0,
-                    'add_to_cart'=>0,
-                    'cpm'=>0,
-                    'ctr'=>0,
-                    'link_click'=>0,
-                    'income'=>0,
-                    //'campaign_name'=>'',
-                    '__count'=>0,
-                );
-            }
+//            $pdata[$key]=$pdata[$key]?$pdata[$key]:[];
+//            if(!$pdata[$key][$ac_id]){
+//                $pdata[$key][$ac_id]=array(
+//                    'fee_date'=>$r['date'],
+//                    'account_id'=>$ac_id,
+//                    'account_name'=>$r['account_name'],
+//                    'username'=>$key,
+//                    'cost'=>0,
+//                    'purchase'=>0,
+//                    'add_to_cart'=>0,
+//                    'cpm'=>0,
+//                    'ctr'=>0,
+//                    'link_click'=>0,
+//                    'income'=>0,
+//                    //'campaign_name'=>'',
+//                    '__count'=>0,
+//                );
+//            }
             $pdata[$key][$ac_id]['cost']+=$r['spend']*100;
             $pdata[$key][$ac_id]['purchase']+=$day_click['WebsitePurchases'];
             $pdata[$key][$ac_id]['add_to_cart']+=$day_click['WebsiteAddstoCart'];
@@ -337,8 +378,8 @@ class lib{
         }
         foreach ($pdata as &$xxd){
             foreach ($xxd as &$xd){
-                $xd['cpm']=$xd['cpm']/$xd['__count'];
-                $xd['ctr']=$xd['ctr']/$xd['__count'];
+                $xd['cpm']=$xd['cpm']/$xd['__count']+0;
+                $xd['ctr']=$xd['ctr']/$xd['__count']+0;
                 unset($xd['__count']);
             }
         }
