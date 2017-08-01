@@ -45,11 +45,14 @@
 <template>
     <div>
         <el-form :inline="true" :model="formSearch" class="demo-form-inline">
-            <el-form-item style="width:100px;">
+            <el-form-item style="width:100px;" v-show="brandShow">
                 <el-select v-model="formSearch.brand" placeholder="全部品牌" @change="onFormSearch">
-                    <el-option label="全部品牌" value=""></el-option>
-                    <el-option label="Jeulia" value="jeulia"></el-option>
-                    <el-option label="Gnoce" value="gnoce"></el-option>
+                    <el-option
+                            v-for="item in brands"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item>
@@ -441,11 +444,28 @@
                 dateOne:true,
                 dateTwo:false,
                 pkFlag:false,
+                brands:[],
+                brandShow:false,
             }
         },
         computed: mapState({ user: state => state.user }),
         mounted(){
-            this.editor=location.hash.indexOf('editor')>0; 
+            this.editor=location.hash.indexOf('editor')>0;
+            var brands= {
+                all:{label: "全部品牌", value: ""},
+                jeulia: {label: "Jeulia", value: "jeulia"},
+                gnoce: {label: "Gnoce", value: "gnoce"},
+            };
+            var brand=location.hash.match(/brand\/([^\/]+)/);
+            if(brand){
+                this.formSearch.brand=brand[1];
+                this.brands=[brands[brand[1]]];
+                this.brandShow=false;
+            }else{
+                this.brands=brands;
+                this.brandShow=true;
+            }
+            console.log('brands',location.hash,brands);
             this.getData();
         },
         methods:{
