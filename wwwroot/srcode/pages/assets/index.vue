@@ -455,6 +455,7 @@
                 all:{label: "全部品牌", value: ""},
                 jeulia: {label: "Jeulia", value: "jeulia"},
                 gnoce: {label: "Gnoce", value: "gnoce"},
+                amarley: {label: "Amarley",value: "amarley"},
             };
             var brand=location.hash.match(/brand\/([^\/]+)/);
             if(brand){
