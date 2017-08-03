@@ -58,6 +58,8 @@ END;
             if(is_array($r)){
                 $r['account_id']=$ac_id;
                 $r['ad_id']=$ad_id;
+                $r['keyword_id']=$r['id'];
+                $r['id']= md5($r['ad_id'].$r['keyword_id']);
                 array_push($campaigns_data,$r);
             }
         }
