@@ -52,6 +52,14 @@ export default [
                 component: resolve => require(['../pages/assets/index.vue'], resolve)
             },
             {
+                path: 'min-assets', //登录
+                component: resolve => require(['../pages/home/index.vue?min-assets'], resolve)
+            },
+            {
+                path: 'keywords*', //登录
+                component: resolve => require(['../pages/home/index.vue?keywords'], resolve)
+            },
+            {
                 path: '*', //其他页面，强制跳转到登录页面
                 redirect: '/login'
             },

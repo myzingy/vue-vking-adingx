@@ -16,6 +16,11 @@
           <el-menu-item index="rulesList" v-show="nav.rules" ><i class="el-icon-setting"></i>规则管理</el-menu-item>
           <el-menu-item index="rulesLog" v-show="nav.rules_log" ><i class="el-icon-time"></i>优化记录</el-menu-item>
         </el-menu-item-group>
+        <el-menu-item-group>
+          <template slot="title">Assets</template>
+            <el-menu-item index="min-assets"><i class="el-icon-picture"></i>图、视频</el-menu-item>
+            <el-menu-item index="keywords"><i class="el-icon-star-on"></i>关键字</el-menu-item>
+        </el-menu-item-group>
       </el-menu>
     </el-row>
   </div>

@@ -66,4 +66,28 @@ END;
         }
         return $campaigns_data;
     }
+    function getData(){
+        $offset=I('request.offset',0);
+        $limit=I('request.limit',30);
+        $keyword=I('request.keyword');
+        $where=" 1=1 ";
+        if($keyword){
+            $where.=" and (account_id like '%$keyword%' "
+                ." or name like '%$keyword%') ";
+        }
+        $fields="*";
+        $order=I('request.order');
+        $order=$order?$order:'total_actions';
+        $sort=I('request.sort','desc');
+
+        $fdata=$this->model
+            ->field($fields)
+            ->where($where)
+            ->order($order." ".$sort)
+            ->limit($offset,$limit)
+            ->select();
+
+        $cc=$this->model->where($where)->count();
+        return ['data'=>$fdata,'total'=>$cc];
+    }
 }

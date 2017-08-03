@@ -156,6 +156,10 @@ class AppLogic {
         $lib = new \Modules\campaigns\lib();
         return $lib->getAcconutByOperator();
     }
+    function user__getKeywords(){
+        $lib = new \Modules\keywords\lib();
+        return $lib->getData();
+    }
 	############################################################
 	# 一些异步接口开始
 	############################################################
