@@ -51,20 +51,13 @@ END;
         $fields=$match[1];
         $campaign = new Ad($ad_id);
 
-        $adsets = $campaign->getKeywordStats(
-            $fields,
-            array(
-                'date'=>$date,
-            )
-        );
+        $adsets = $campaign->getKeywordStats($fields);
+        if(!$adsets->valid()) return;
         $data=$adsets->current()->getData();
         foreach ($data as $r){
             if(is_array($r)){
                 $r['account_id']=$ac_id;
                 $r['ad_id']=$ad_id;
-                $r['date']=$date;
-                $r['keyword_id']=$r['id'];
-                $r['id']=md5($r['id'].$date);
                 array_push($campaigns_data,$r);
             }
         }

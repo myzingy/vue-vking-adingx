@@ -243,6 +243,27 @@ END;
     ["thumbnails"] => NULL
     ["updated_time"] => string(24) "2017-06-22T07:02:47+0000"
 END;
+        $str=<<<END
+        ["clicks"] => string(12) "unsigned int"
+        ["cost_per_total_action"] => string(5) "float"
+        ["cost_per_unique_click"] => string(5) "float"
+        ["cpc"] => string(5) "float"
+        ["cpm"] => string(5) "float"
+        ["cpp"] => string(5) "float"
+        ["ctr"] => string(5) "float"
+        ["frequency"] => string(5) "float"
+        ["id"] => string(6) "string"
+        ["impressions"] => string(12) "unsigned int"
+        ["name"] => string(6) "string"
+        ["reach"] => string(12) "unsigned int"
+        ["spend"] => string(5) "float"
+        ["total_actions"] => string(12) "unsigned int"
+        ["total_unique_actions"] => string(12) "unsigned int"
+        ["unique_clicks"] => string(12) "unsigned int"
+        ["unique_ctr"] => string(5) "float"
+        ["unique_impressions"] => string(12) "unsigned int"
+END;
+
 
         preg_match_all("/\[\"(.*)\"\]/",$str,$match);
         $fields=$match[1];
@@ -255,14 +276,19 @@ END;
         //$ac=new AdAccount('act_1593565507558990');
         //$ad=new Campaign('6084032058764');
         //$ad=new AdSet('6084652424764');
-        //$ad=new Ad('6061113967197');
+        $ad=new Ad('23842593195540090');
         //$ad=new CustomAudience('6085459889364');
         //$ad=new AdsPixel('1593577174232007');
         //$res=$ad->getSelf($fields);
         //dump($ad->getAdCreatives($fields));
         //$ad=new AdImage("ec5ae30157667320218078b5949735e8",'6084839602764');
-        $ad=new AdVideo("1134389053318704");
-        dump($ad->read($fields)->getData());
+        //$ad=new AdVideo("1134389053318704");
+        
+        dump($ad->getKeywordStats($fields,array(
+            //'date_preset'=>'today',
+            //'time_range'=>array('since'=>'2017-07-20','until'=>'2017-08-03'),
+            'date'=>'2017-07-28',
+        ))->current()->getData());
         return;
 //        dump($ac->getAdImages($fields,array(
 //            'hashes'=>array(
@@ -416,7 +442,7 @@ END;
             $sql.=" ,`{$key}` varchar(50) DEFAULT NULL ";
         }
         $sql.=" ,PRIMARY KEY (`id`),KEY `account_id` (`account_id`)) ENGINE=INNODB DEFAULT CHARSET=utf8mb4";
-        //echo $sql."<br>";
+        echo $sql."<br>";
         /*
         $insights = $account->getAdSets(
             $fields,
