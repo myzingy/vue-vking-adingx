@@ -379,6 +379,10 @@ class AppLogic {
         $lib = new \Modules\assets\lib();
         return $lib -> flushAssetsAdsInsight();
     }
+    function asyn__flushKeywordsInsight(){
+        $lib = new \Modules\keywords\lib();
+        return $lib -> flushKeywordsInsight();
+    }
 	############################################################
 	# 一些异步接口结束
 	############################################################

@@ -94,6 +94,10 @@ class lib{
                     'ad_id' => $_campaigns_data['id'],
                     'ac_id'=>$ac_id
                 ));
+                asyn('apido/asyn.flushKeywordsInsight', array(
+                    'ad_id' => $_campaigns_data['id'],
+                    'ac_id'=>$ac_id
+                ),null,getDayTime("15:00:00",0));
             //}
         }
         if(count($campaigns_data)>0){
