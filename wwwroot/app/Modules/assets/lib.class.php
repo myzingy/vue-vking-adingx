@@ -667,7 +667,7 @@ END;
         return $data;
     }
     function flushAssetImageFile(){
-        $uptime=NOW_TIME-86400;
+        $uptime=NOW_TIME-3600;
         $assets=$this->model->field('id,permalink_url')
             ->where("status is null and type=0 and (uptime<$uptime or uptime is null)")
             ->find();
