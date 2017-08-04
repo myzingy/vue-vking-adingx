@@ -228,7 +228,7 @@ END;
                     $upkey[$key]=json_encode($campaigns_data[$key]);
                     $campaigns_data[$key]=$upkey[$key];
                 }
-                $campaigns_data['country_cost']=json_encode($campaigns_data['country_cost']);
+                //$campaigns_data['country_cost']=json_encode($campaigns_data['country_cost']);
                 $insights=M('accounts_insights')->where("id='{$campaigns_data['id']}'")->find();
                 if($insights){
                     M('accounts_insights')->where("id='{$campaigns_data['id']}'")->save($upkey);
