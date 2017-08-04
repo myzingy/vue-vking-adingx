@@ -66,11 +66,12 @@ function setDayClick($action_data,&$data){
         'breakdowns.device_platform::mobile.spend'=>'MobileSpend',
         'action_values::offsite_conversion.fb_pixel_add_to_cart'=>'WebsiteAddstoCartConversionValue',
     );
-    if($action_data){
-        foreach ($action_data as  $r){
-            if($key=$data_key[$r['insight_key'].'::'.$r['action_type']]){
-                $data['CLICK1D_'.$key]=$r['1d_click'];
-            }
+    foreach ($data_key as $key){
+        $data['CLICK1D_'.$key]=0;    
+    }
+    foreach ($action_data as  $r){
+        if($key=$data_key[$r['insight_key'].'::'.$r['action_type']]){
+            $data['CLICK1D_'.$key]=$r['1d_click'];
         }
     }
 }
