@@ -209,6 +209,7 @@ class AppLogic {
                         'active' => 'active',
                         'breakdowns' => 'country',
                         'date' => $date,
+                        'fouce'=>I('request.fouce'),
                     ), null, null, 0);
                 }
                 return;
@@ -222,6 +223,7 @@ class AppLogic {
                         'active' => 'active',
                         'breakdowns' => 'country',
                         'date' => $date,
+                        'fouce'=>I('request.fouce'),
                     ), null, null, 0);
                 }
             }
