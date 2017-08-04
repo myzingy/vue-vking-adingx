@@ -692,7 +692,7 @@ END;
         if($url_302['Location']){
             $assets['permalink_url']=$url_302['Location'];
         }
-        $cc=http($assets['permalink_url']);
+        $cc=http($assets['permalink_url'],'',120);
         if($cc){
             file_put_contents($filename,$cc);
             $filethumb='video-thumb/'.$fileid.'.thumb.jpg';
