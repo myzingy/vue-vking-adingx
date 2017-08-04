@@ -198,6 +198,23 @@ class AppLogic {
             }
         }
     }
+    function cron__demonAcconutsCountryInit(){
+        $acs=FBC();
+        if($acs){
+            for($i=1;$i<40;$i++) {
+                $date=date("Y-m-d",NOW_TIME-86400*$i);
+
+                foreach ($acs as $ac) {
+                    asyn('apido/asyn.flushAccountsInsights', array(
+                        'ac_id' => $ac['account_id'],
+                        'active' => 'active',
+                        'breakdowns' => 'country',
+                        'date' => $date,
+                    ), null, null, 0);
+                }
+            }
+        }
+    }
     /**
      * <ok class="异步"/> 刷新广告系列
      * 参数
