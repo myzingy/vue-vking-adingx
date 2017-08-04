@@ -641,6 +641,7 @@ END;
                 'status'=>'VIDEO_OK',
                 'filehash'=>$filehash,
                 'is_filehash'=>1,
+                'url_128'=>$filename
             ));
         }
         return $_d;
