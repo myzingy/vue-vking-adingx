@@ -569,7 +569,7 @@ END;
     function flushAssetVideoFile(){
         $uptime=NOW_TIME-86400;
         $assets=$this->model->field('id,url_128,account_id')
-            ->where("status!='VIDEO_OK' and type=1 and (uptime<$uptime or uptime is null)")
+            ->where("(status!='VIDEO_OK' or status is null) and type=1 and (uptime<$uptime or uptime is null)")
             ->find();
 
         if(!$assets) return;
