@@ -103,6 +103,10 @@
                              width="80"
                              sortable="custom" :formatter="numberFormatInt">
             </el-table-column>
+            <el-table-column columnKey="ads_num" prop="ads_num" label="广告数"
+                             width="80"
+                             sortable="custom" :formatter="numberFormatInt">
+            </el-table-column>
         </el-table>
         <el-pagination style=" margin: 20px auto; width:300px;"
                 @size-change="handleSizeChange"

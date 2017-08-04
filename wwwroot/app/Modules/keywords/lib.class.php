@@ -77,7 +77,17 @@ END;
             $where.=" and (account_id like '%$keyword%' "
                 ." or name like '%$keyword%') ";
         }
-        $fields="*";
+        $fields="count(*) as ads_num,name"
+            .",sum(clicks) as clicks"
+            .",avg(cpc) as cpc"
+            .",avg(cpm) as cpm"
+            .",avg(cpp) as cpp"
+            .",avg(ctr) as ctr"
+            .",avg(frequency) as frequency"
+            .",sum(impressions) as impressions"
+            .",sum(reach)as reach"
+            .",sum(spend)as spend"
+        ;
         $order=I('request.order');
         $order=$order?$order:'total_actions';
         $sort=I('request.sort','desc');
@@ -87,9 +97,12 @@ END;
             ->where($where)
             ->order($order." ".$sort)
             ->limit($offset,$limit)
+            ->group('name')
             ->select();
-
-        $cc=$this->model->where($where)->count();
-        return ['data'=>$fdata,'total'=>$cc];
+        $cc=M()->query(
+            'SELECT COUNT(DISTINCT `name`) AS tp_count FROM `keywords_stats` '
+            .($where?" where $where":"")
+        );
+        return ['data'=>$fdata,'total'=>$cc[0]['tp_count']];
     }
 }
