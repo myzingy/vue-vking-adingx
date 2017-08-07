@@ -103,7 +103,7 @@ class lib{
                 asyn('apido/asyn.flushKeywordsInsight', array(
                     'ad_id' => $_campaigns_data['id'],
                     'ac_id'=>$ac_id,
-                    'date'=>date("Y-m-d",NOW_TIME),
+                    'date'=>date("Y-m-d",NOW_TIME-86400),
                 ),null,getDayTime("15:00:00",0));
             }
         }
