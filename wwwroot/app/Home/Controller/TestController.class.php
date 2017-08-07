@@ -278,7 +278,7 @@ END;
         //$ac=new AdAccount('act_1593565507558990');
         //$ad=new Campaign('6084032058764');
         //$ad=new AdSet('6084652424764');
-        $ad=new Ad('23842593195540090');
+        $ad=new Ad('836196303228863');
         //$ad=new CustomAudience('6085459889364');
         //$ad=new AdsPixel('1593577174232007');
         //$res=$ad->getSelf($fields);
