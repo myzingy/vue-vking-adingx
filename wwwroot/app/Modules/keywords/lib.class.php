@@ -137,6 +137,7 @@ END;
             .",sum(impressions) as impressions"
             .",sum(reach)as reach"
             .",sum(spend)as spend"
+            .",sum(add_to_cart)as add_to_cart"
             .($request=='ACCOUNT'?",account_id":"")
             .($request=='AD'?",ad_id":"")
         ;
