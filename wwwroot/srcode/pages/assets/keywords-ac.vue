@@ -48,7 +48,7 @@
                   @sort-change="sortChange">
             <el-table-column type="expand" fixed>
                 <template scope="props">
-                    <keywordsAD :scope="props" :formSearch="formSearch"
+                    <keywordsAD :scope="props" :formSearch="formSearchAC"
                                 style="min-height:300px;width:1000px;"></keywordsAD>
                 </template>
             </el-table-column>
@@ -127,6 +127,7 @@
         data:function(){
             return {
                 rulesLog:[],
+                formSearchAC:{},
             }
         },
         computed: mapState({ user: state => state.user }),
@@ -135,10 +136,14 @@
         },
         methods:{
             getData(){
-                this.formSearch.dateOne=this.formSearch.dateOne.toString();
-                this.formSearch.request='ACCOUNT';
-                this.formSearch.name=this.scope.row.name;
-                vk.http(uri.getKeywords,this.formSearch,this.then);
+                var formSearch={};
+                Object.assign(formSearch,this.formSearch);
+                formSearch.dateOne=formSearch.dateOne.toString();
+                formSearch.dateOne=formSearch.dateOne.toString();
+                formSearch.request='ACCOUNT';
+                formSearch.name=this.scope.row.name;
+                this.formSearchAC= formSearch;
+                vk.http(uri.getKeywords,this.formSearchAC,this.then);
             },
             then:function(json,code){
                 switch(code){
