@@ -28,6 +28,7 @@ class lib{
 
         $campaigns_data=array();
         $fields_str=<<<END
+        ["actions"] => NULL
         ["clicks"] => string(12) "unsigned int"
         ["cost_per_total_action"] => string(5) "float"
         ["cost_per_unique_click"] => string(5) "float"
@@ -60,6 +61,14 @@ END;
                 $r['ad_id']=$ad_id;
                 $r['keyword_id']=$r['id'];
                 $r['id']= md5($r['ad_id'].$r['keyword_id']);
+                $r['add_to_cart']=0;
+                foreach ($r['actions'] as $action){
+                    if($action['action_type']=='add_to_cart'){
+                        $r['add_to_cart']= $action['value'];
+                        break;
+                    }
+                }
+                unset($r['actions']);
                 array_push($campaigns_data,$r);
             }
         }
