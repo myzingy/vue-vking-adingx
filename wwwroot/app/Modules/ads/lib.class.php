@@ -98,14 +98,12 @@ class lib{
                     'ad_id' => $_campaigns_data['id'],
                     'ac_id'=>$ac_id
                 ),null,getDayTime("15:00:00",0));
-            //}
-            if(ArchivableCrudObjectEffectiveStatuses::ACTIVE==$_campaigns_data[AdFields::EFFECTIVE_STATUS]) {
                 asyn('apido/asyn.flushKeywordsInsight', array(
                     'ad_id' => $_campaigns_data['id'],
                     'ac_id'=>$ac_id,
                     'date'=>date("Y-m-d",NOW_TIME-86400),
                 ),null,getDayTime("15:00:00",0));
-            }
+            //}
         }
         if(count($campaigns_data)>0){
             $this->model->addAll($campaigns_data,null,true);
