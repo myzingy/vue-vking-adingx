@@ -18,7 +18,9 @@
         </el-menu-item-group>
         <el-menu-item-group>
           <template slot="title">Assets</template>
+            <!--
             <el-menu-item index="min-assets"><i class="el-icon-picture"></i>图、视频</el-menu-item>
+            -->
             <el-menu-item index="keywords"><i class="el-icon-star-on"></i>兴趣词</el-menu-item>
         </el-menu-item-group>
       </el-menu>

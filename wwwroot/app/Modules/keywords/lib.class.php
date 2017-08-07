@@ -91,10 +91,41 @@ END;
         $offset=I('request.offset',0);
         $limit=I('request.limit',30);
         $keyword=I('request.keyword');
+        $keyword_acid=I('request.keyword_acid');
+        $date=I('request.dateOne');
+        $delivery=I('request.delivery');
+        //request
+        $request=I('request.request');
+        $name=I('request.name');
+
         $where=" 1=1 ";
         if($keyword){
-            $where.=" and (account_id like '%$keyword%' "
-                ." or name like '%$keyword%') ";
+            $where.=" and name like '%$keyword%' ";
+        }
+        if($keyword_acid){
+            $where.=" and account_id = '$keyword_acid' ";
+        }
+        if($date && $date!=","){
+            $date=explode(',',$date);
+            list($w,$m,$d,$y,$time)=explode(" ",$date[0]);
+            $stime=date("Y-m-d",strtotime("$w $m $d $y $time"));
+            list($w,$m,$d,$y,$time)=explode(" ",$date[1]);
+            $etime=date("Y-m-d",strtotime("$w $m $d $y $time"));
+            $where.=" and (type=1 and date >= '$stime' and date <= '$etime') ";
+        }else{
+            $where.=" and type=0 ";
+        }
+        if($delivery){
+            $ymd=date('Y-m-d',NOW_TIME);
+            $sql=M('ads_insights')->field('ad_id')->where(array(
+                'type'=>0,
+                'date_start'=>$ymd,
+                'date_stop'=>$ymd,
+            ))->buildSql();
+            $where.=" and ad_id ".($delivery=='active'?"":" not ")."in ($sql) ";
+        }
+        if($name){
+            $where.=" and name = '$name' ";
         }
         $fields="count(*) as ads_num,name"
             .",sum(clicks) as clicks"
@@ -106,11 +137,31 @@ END;
             .",sum(impressions) as impressions"
             .",sum(reach)as reach"
             .",sum(spend)as spend"
+            .($request=='ACCOUNT'?",account_id":"")
+            .($request=='AD'?",ad_id":"")
         ;
         $order=I('request.order');
         $order=$order?$order:'total_actions';
         $sort=I('request.sort','desc');
 
+        if($request=='ACCOUNT'){
+            $fdata=$this->model
+                ->field($fields)
+                ->where($where)
+                ->order($order." ".$sort)
+                ->group('account_id')
+                ->select();
+            return ['data'=>$fdata];
+        }
+        if($request=='AD'){
+            $fdata=$this->model
+                ->field($fields)
+                ->where($where)
+                ->order($order." ".$sort)
+                ->group('ad_id')
+                ->select();
+            return ['data'=>$fdata];
+        }
         $fdata=$this->model
             ->field($fields)
             ->where($where)
