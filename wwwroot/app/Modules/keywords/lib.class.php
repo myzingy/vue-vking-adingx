@@ -11,12 +11,14 @@ use FacebookAds\Object\AdAccount;
 use FacebookAds\Object\AdVideo;
 
 class lib{
+    const TYPE_DATE_ALL=0;
+    const TYPE_DATE_TODAY=1;
     function __construct($id="") {
     	$this->model=new model();
     }
     function flushKeywordsInsight(){
         $ad_id=I('request.ad_id','');
-        $date=I('request.date',date('Y-m-d',NOW_TIME));
+        $date=I('request.date');
         if(!$ad_id)   return;
 
         $ac_id=I('request.ac_id');
@@ -51,8 +53,11 @@ END;
         preg_match_all("/\[\"(.*)\"\]/",$fields_str,$match);
         $fields=$match[1];
         $campaign = new Ad($ad_id);
-
-        $adsets = $campaign->getKeywordStats($fields);
+        $query=array();
+        if($date){
+            $query['date']=$date;
+        }
+        $adsets = $campaign->getKeywordStats($fields,$query);
         if(!$adsets->valid()) return;
         $data=$adsets->current()->getData();
         foreach ($data as $r){
@@ -69,6 +74,11 @@ END;
                     }
                 }
                 unset($r['actions']);
+                $r['type']=self::TYPE_DATE_ALL;
+                if($date){
+                    $r['date']=$date;
+                    $r['type']=self::TYPE_DATE_TODAY;
+                }
                 array_push($campaigns_data,$r);
             }
         }
