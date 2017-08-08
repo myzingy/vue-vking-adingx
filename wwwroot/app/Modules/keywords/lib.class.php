@@ -176,4 +176,23 @@ END;
         );
         return ['data'=>$fdata,'total'=>$cc[0]['tp_count']];
     }
+    function flushKeywordsInsightAll(){
+        $offset=I('request.offset')+0;
+        $data=M('ads')->field('account_id as ac_id,id as ad_id')
+            ->order('id desc')
+            ->limit($offset,50)
+            ->select();
+        foreach ($data as $r){
+            asyn('apido/asyn.flushKeywordsInsight', array(
+                'ad_id' => $r['ad_id'],
+                'ac_id'=>$r['ac_id']
+            ),null,getDayTime("15:00:00"));
+        }
+        if(count($data)==50){
+            asyn_implement('apido/asyn.flushKeywordsInsightAll', array(
+                'offset' => $offset+50,
+            ));
+        }
+        return $data;
+    }
 }

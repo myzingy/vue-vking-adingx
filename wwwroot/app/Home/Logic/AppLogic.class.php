@@ -418,6 +418,10 @@ class AppLogic {
         $lib = new \Modules\keywords\lib();
         return $lib -> flushKeywordsInsight();
     }
+    function asyn__flushKeywordsInsightAll(){
+        $lib = new \Modules\keywords\lib();
+        return $lib -> flushKeywordsInsightAll();
+    }
 	############################################################
 	# 一些异步接口结束
 	############################################################
