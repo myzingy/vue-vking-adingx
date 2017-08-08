@@ -117,6 +117,7 @@ END;
                     'time_range'=>array('since'=>$date,'until'=>$date),
                     'action_attribution_windows'=>['1d_click','1d_view'],
                     'breakdowns'=> $breakdowns,
+                    'limit'=>300,
                 )
             );
         }else if($ad_timespace=='today'){
@@ -126,6 +127,7 @@ END;
                     'time_range'=>array('since'=>$today,'until'=>$today),
                     'action_attribution_windows'=>['1d_click','1d_view'],
                     'breakdowns'=> $breakdowns,
+                    'limit'=>300,
                 )
             );
         }else{
@@ -135,6 +137,7 @@ END;
                     'time_range'=>array('since'=>$$ad_timespace,'until'=>$yestoday),
                     'action_attribution_windows'=>['1d_click','1d_view'],
                     'breakdowns'=> $breakdowns,
+                    'limit'=>300,
                 )
             );
         }
@@ -143,6 +146,8 @@ END;
         if($breakdowns){
             array_push($fields,$breakdowns);
         }
+        dump($adsets);
+        exit;
         while ($adsets->valid()) {
             $campaigns_data['accounts_insights_action_types']=array();
             $_d=$adsets->current()->getData();
