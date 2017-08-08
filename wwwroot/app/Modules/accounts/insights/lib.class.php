@@ -146,8 +146,6 @@ END;
         if($breakdowns){
             array_push($fields,$breakdowns);
         }
-        dump($adsets);
-        exit;
         while ($adsets->valid()) {
             $campaigns_data['accounts_insights_action_types']=array();
             $_d=$adsets->current()->getData();
