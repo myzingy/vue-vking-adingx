@@ -202,8 +202,8 @@ END;
                 $campaigns_data['country_purchase'][$campaigns_data['country']]=$campaigns_data['CLICK1D_WebsitePurchases']+0;
                 $campaigns_data['country_income'][$campaigns_data['country']]=(preg_replace("/[$,]+/","",$campaigns_data['CLICK1D_WebsitePurchasesConversionValue'])*100);
                 $campaigns_data['country_add_to_cart'][$campaigns_data['country']]=$campaigns_data['CLICK1D_WebsiteAddstoCart']+0;
-                $campaigns_data['country_cpm'][$campaigns_data['country']]=$campaigns_data['cpm']*100;
-                $campaigns_data['country_ctr'][$campaigns_data['country']]=$campaigns_data['inline_link_click_ctr']+0;
+                $campaigns_data['country_cpm'][$campaigns_data['country']]=round($campaigns_data['cpm']*100);
+                $campaigns_data['country_ctr'][$campaigns_data['country']]=round($campaigns_data['inline_link_click_ctr']+0,2);
                 $campaigns_data['country_link_click'][$campaigns_data['country']]=$campaigns_data['inline_link_clicks']+0;
             }
         }
