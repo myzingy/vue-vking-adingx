@@ -101,13 +101,8 @@ class lib{
                 asyn('apido/asyn.flushKeywordsInsight', array(
                     'ad_id' => $_campaigns_data['id'],
                     'ac_id'=>$ac_id,
-                    'date'=>date("Y-m-d",NOW_TIME-86400),
+                    'date'=>date("Y-m-d",NOW_TIME-86400*2),
                 ),null,getDayTime("15:00:00",0));
-                asyn('apido/asyn.flushKeywordsInsight', array(
-                    'ad_id' => $_campaigns_data['id'],
-                    'ac_id'=>$ac_id,
-                    'date'=>date("Y-m-d",NOW_TIME),
-                ),null,getDayTime("15:00:00",1));
             //}
         }
         if(count($campaigns_data)>0){
