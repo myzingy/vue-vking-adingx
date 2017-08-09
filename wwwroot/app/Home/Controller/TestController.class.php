@@ -39,7 +39,7 @@ class TestController extends Controller {
     {
         vendor("vendor.autoload");
         $app=C('fbapp');
-        dump($app);
+        dump(array(date("Y-m-d H:i:s",NOW_TIME),$app));
         $fba=Api::init($app['app_id'],$app['app_secret'],'EAABeuMl0aOwBAEf26Qx1SVwRSw9HZC1FUwHGuckdmNUm9hKw3mVAC0T9R0ESudBfG6i80ZAS3PZBqZAYS1KkqHDNZBRB76UmxSPGr6aDPqSmZB3wxNpmaDpLSXyemzUUEhQcN43aQrXBAt6jcpGOTqYHD1JP4T5UqNr3o9h0naYQZDZD');
         $api = Api::instance();
 
