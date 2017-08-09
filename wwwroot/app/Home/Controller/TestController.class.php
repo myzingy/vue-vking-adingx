@@ -278,11 +278,11 @@ END;
         //$ac=new AdAccount('act_1593565507558990');
         //$ad=new Campaign('6084032058764');
         //$ad=new AdSet('6084652424764');
-        $ad=new Ad('836196303228863');
+        $ad=new Ad('23842592818000090');
         //$ad=new CustomAudience('6085459889364');
         //$ad=new AdsPixel('1593577174232007');
         //$res=$ad->getSelf($fields);
-        //dump($ad->getAdCreatives($fields));
+        //dump($ad->getAdCreatives(null));
         //$ad=new AdImage("ec5ae30157667320218078b5949735e8",'6084839602764');
         //$ad=new AdVideo("1134389053318704");
         dump($ad->getKeywordStats($fields,array(
@@ -293,12 +293,12 @@ END;
         return;
 //        dump($ac->getAdImages($fields,array(
 //            'hashes'=>array(
-//                'ec5ae30157667320218078b5949735e8',
-//                'b8f5bcbce22ed55c99af3b249c63da48',
-//                'f4c70dae90f6b51440e17eef70dc17b4',
+//                '5e39a9aff196eb89ba824e429f92d4c2',
+//                '5f29b90005b8066199063eae674616eb',
+//                '5fb22ba665cbd665051715cbad51c2aa',
 //            )
-//        ))->current()->getData());
-//        return;
+//        )));
+        return;
         dump($ad->getInsights($fields,array(
             'date_preset'=>'today',
             //'time_range'=>array('since'=>'2017-07-18','until'=>'2017-07-18'),
