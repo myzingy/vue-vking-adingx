@@ -17,45 +17,19 @@
 </style>
 <template>
 
-	<div>
-		<v-header title="首页">
-			<router-link slot="left" to="?">
-				<el-select v-model="ac_idx" placeholder="请选择AD账号开始" @change="acChecked" popper-class="header-select">
-					<el-option
-							v-for="item in acs"
-							:key="item.account_id"
-							:label="item.account_name"
-							:value="item.account_id">
-						<span style="float: left">{{ item.account_name }}</span>
-						<span style="float: right; font-size: 10px; padding-left: 20px;">{{
-							item.account_id }}</span>
-					</el-option>
-				</el-select>
-			</router-link>
-			<router-link slot="right" to="/signout">{{user.name}} 退出</router-link>
-		</v-header>
-		<div>
-			<el-row :style="{ height:height +'px' }" v-if="ac_idx">
-				<el-col :span="4" style="height:100%;">
-					<div :style="{ height:height_cc +'px' }" class="grid-left bg-purple-darkc overflow-y"
-						 id="app_left_menu">
-						<v-leftMenu></v-leftMenu>
-					</div>
-				</el-col>
-				<el-col :span="20" style="height:100%;">
-					<div :style="{ height:height_cc +'px' }" class="grid-content bg-purple-dark overflow-y"
-						 id="app_right_content">
-						<v-rightContent></v-rightContent>
-					</div>
-				</el-col>
-			</el-row>
-			<el-row :style="{ height:height +'px' }" v-else>
-				<div :style="{ height:height_cc +'px' }" class="grid-content bg-purple-darkc overflow-y"
-					 id="app_overview">
-					<statistical></statistical>
-				</div>
-			</el-row>
-		</div>
+	<div class="mytable">
+		<v-headerTop></v-headerTop>
+		<el-col :span="4" style="height:100%;">
+			<div class="grid-left bg-purple-darkc overflow-y"
+				 id="app_left_menu">
+				<v-leftMenu></v-leftMenu>
+			</div>
+		</el-col>
+		<el-col :span="20" style="height:100%;">
+			<div style="padding: 10px;">
+				
+			</div>
+		</el-col>
 	</div>
 </template>
 <script>
