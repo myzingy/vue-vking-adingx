@@ -244,7 +244,7 @@ END;
     ["updated_time"] => string(24) "2017-06-22T07:02:47+0000"
 END;
         $str=<<<END
-        ["actions"] => NULL
+        [`"actions"] => NULL
       ["clicks"] => NULL
       ["cost_per_total_action"] => NULL
       ["cost_per_unique_click"] => NULL
@@ -278,18 +278,36 @@ END;
         //$ac=new AdAccount('act_1593565507558990');
         //$ad=new Campaign('6084032058764');
         //$ad=new AdSet('6084652424764');
-        $ad=new Ad('23842592818000090');
         //$ad=new CustomAudience('6085459889364');
         //$ad=new AdsPixel('1593577174232007');
         //$res=$ad->getSelf($fields);
         //dump($ad->getAdCreatives(null));
         //$ad=new AdImage("ec5ae30157667320218078b5949735e8",'6084839602764');
         //$ad=new AdVideo("1134389053318704");
-        dump($ad->getKeywordStats($fields,array(
-            //'date_preset'=>'today',
-            //'time_range'=>array('since'=>'2017-07-20','until'=>'2017-08-03'),
-            //'date'=>'2017-07-28',
-        ))->current()->getData());
+//        dump($ad->getKeywordStats($fields,array(
+//            //'date_preset'=>'today',
+//            //'time_range'=>array('since'=>'2017-07-20','until'=>'2017-08-03'),
+//            //'date'=>'2017-07-28',
+//        ))->current()->getData());
+        $offset=0;
+        $data=M('x_cron')->where(array(
+            'crontime'=>'1502262000'
+        ))  ->limit($offset,10)
+            ->select();
+        foreach ($data as $r){
+            $p=json_decode($r['param']);
+            $ad=new Ad($p->ad_id);
+            $res=$ad->getKeywordStats($fields,array(
+                'date'=>'2017-08-07'
+            ));
+            if($res->valid()){
+                dump($res->current()->getData());
+            }else{
+                echo "<hr>";
+                dump($p);
+                echo "<hr>";
+            }
+        }
         return;
 //        dump($ac->getAdImages($fields,array(
 //            'hashes'=>array(
