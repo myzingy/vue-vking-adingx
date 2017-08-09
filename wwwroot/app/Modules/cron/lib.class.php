@@ -63,7 +63,7 @@ class lib{
 //            .' or (`status`='.self::CRON_STATUS_RUN.' and `runtime`<'.(NOW_TIME-self::CRON_RETRY_TIME).')) ';
 //        $where .= ' and `retry`<'.self::CRON_RETRY_COUNT;
         $where = '`status`='.self::CRON_STATUS_DEF;
-        $where .= ' and `addtime` >'.(NOW_TIME-self::CRON_TIMEOUT);
+        //$where .= ' and `addtime` >'.(NOW_TIME-self::CRON_TIMEOUT);
         $where .= ' and (`runtime` is null or `runtime`<'.(NOW_TIME-self::CRON_RETRY_TIME).') ';
         $where .= ' and `crontime` <'.NOW_TIME;
         $error_acid=$this->getErrorACID();
