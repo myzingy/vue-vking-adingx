@@ -13,6 +13,6 @@ my_handler() {
 }
 
 for delay in {1..4}; do
-  delayed_ajax http://127.0.0.1/facebook/wwwroot/apido/cron.demon my_handler &
+  delayed_ajax http://127.0.0.1/wwwroot/apido/cron.demon my_handler &
   sleep 15
 done
