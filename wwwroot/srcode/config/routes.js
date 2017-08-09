@@ -28,23 +28,23 @@ export default [
             },
             {
                 path: 'adsList*', //广告列表
-                component: resolve => require(['../pages/home/index.vue?adsList'], resolve)
+                component: resolve => require(['../pages/ads/list.vue'], resolve)
             },
             {
                 path: 'rulesList*', //规则列表
-                component: resolve => require(['../pages/home/index.vue?rulesList'], resolve)
+                component: resolve => require(['../pages/rules/list.vue'], resolve)
             },
             {
                 path: 'rulesLog*', //规则列表
-                component: resolve => require(['../pages/home/index.vue?rulesLog'], resolve)
+                component: resolve => require(['../pages/rules/log.vue'], resolve)
             },
             {
                 path: 'accounts*', //规则列表
-                component: resolve => require(['../pages/home/index.vue?accounts'], resolve)
+                component: resolve => require(['../pages/system/accounts.vue'], resolve)
             },
             {
                 path: 'users*', //规则列表
-                component: resolve => require(['../pages/home/index.vue?users'], resolve)
+                component: resolve => require(['../pages/system/users.vue'], resolve)
             },
             {
                 path: 'assets*', //登录
@@ -53,11 +53,11 @@ export default [
             },
             {
                 path: 'min-assets', //登录
-                component: resolve => require(['../pages/home/index.vue?min-assets'], resolve)
+                component: resolve => require(['../pages/assets/min-assets.vue'], resolve)
             },
             {
                 path: 'keywords*', //登录
-                component: resolve => require(['../pages/home/index.vue?keywords'], resolve)
+                component: resolve => require(['../pages/assets/keywords.vue'], resolve)
             },
             {
                 path: '*', //其他页面，强制跳转到登录页面

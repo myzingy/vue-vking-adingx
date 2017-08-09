@@ -58,6 +58,9 @@
             version    : 'v2.8', // use graph api version 2.8
         });
     };
+    window.onerror=function(){
+        vk.toast('Fackbook login fail,Please try again or refresh the page!');
+    };
     (function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) return;

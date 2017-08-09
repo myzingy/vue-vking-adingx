@@ -46,118 +46,129 @@
     }
 </style>
 <template>
-    <div class="keyword">
-        <el-form :inline="true" :model="formSearch" class="demo-form-inline">
-            <el-form-item>
-                <el-select v-model="formSearch.keyword_acid" placeholder="全部账号" @change="onFormSearch"
-                           class="keyword-ac">
-                    <el-option value="" label="全部账号"></el-option>
-                    <el-option
-                            v-for="item in acs"
-                            :key="item.account_id"
-                            :label="item.name"
-                            :value="item.account_id">
-                        <span style="float: left">{{ item.name }}</span>
-                        <span style="float: right; font-size: 10px; padding-left: 20px;">{{
-							item.account_id }}</span>
-                    </el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item>
-                <el-select v-model="formSearch.delivery" placeholder="全部状态" @change="onFormSearch"
-                           class="keyword-ac">
-                    <el-option label="全部状态" value=""></el-option>
-                    <el-option label="Active" value="active"></el-option>
-                    <el-option label="Inactive" value="inactive"></el-option>
-                </el-select>
-                <el-date-picker
-                        :editable="false"
-                        v-model="formSearch.dateOne"
-                        type="daterange"
-                        align="right"
-                        placeholder="选择日期范围"
-                        :picker-options="dateChoice" @change="onFormSearch">
-                </el-date-picker>
-            </el-form-item>
-            <el-form-item>
-                <el-input style="width:120px;" v-model="formSearch.keyword"
-                          placeholder="Keyword"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="onFormSearch" icon="search">查询</el-button>
-                <a href="javascript://" @click="onClearFormSearch">清空条件</a>
-            </el-form-item>
-        </el-form>
-        <el-table :data="rulesLog" border style="width: 100%" max-height="700" :summary-method="getSummaries"
-                  show-summary @sort-change="sortChange" @expand="expandChange">
-            <el-table-column type="expand" fixed>
-                <template scope="props">
-                        <keywordsAC :scope="props" :formSearch="formSearch"
-                                    style="min-height:500px;width:1200px;"></keywordsAC>
-                </template>
-            </el-table-column>
-            <el-table-column columnKey="name" prop="name"
-                             label="Name"
-                             width="250">
-            </el-table-column>
-            <!--
-            <el-table-column columnKey="id" prop="id"
-                             label="Keyword Id"
-                             width="120">
-            </el-table-column>
-            -->
-            <el-table-column columnKey="spend" prop="spend" label="Spend"
-                             width="100"
-                             sortable="custom" :formatter="moneyFormat">
-            </el-table-column>
-            <el-table-column columnKey="cpc" prop="cpc" label="cpc"
-                             width="60"
-                             sortable="custom" :formatter="moneyFormat">
-            </el-table-column>
-            <el-table-column columnKey="cpm" prop="cpm" label="cpm"
-                             width="60"
-                             sortable="custom" :formatter="moneyFormat">
-            </el-table-column>
-            <el-table-column columnKey="ctr" prop="ctr" label="ctr"
-                             width="60"
-                             sortable="custom" :formatter="numberFormatPer">
-            </el-table-column>
-            <el-table-column columnKey="cpp" prop="cpp" label="cpp"
-                             width="60"
-                             sortable="custom" :formatter="numberFormat">
-            </el-table-column>
-            <el-table-column columnKey="clicks" prop="clicks" label="Clicks"
-                             width="80"
-                             sortable="custom" :formatter="numberFormatInt">
-            </el-table-column>
-            <el-table-column columnKey="add_to_cart" prop="add_to_cart" label="AddToCart"
-                             width="80"
-                             sortable="custom" :formatter="numberFormatInt">
-            </el-table-column>
-            <el-table-column columnKey="frequency" prop="frequency" label="Frequency"
-                             width="100"
-                             sortable="custom" :formatter="numberFormat">
-            </el-table-column>
-            <el-table-column columnKey="impressions" prop="impressions" label="Impressions"
-                             width="100"
-                             sortable="custom" :formatter="numberFormatInt">
-            </el-table-column>
-            <el-table-column columnKey="reach" prop="reach" label="Reach"
-                             width="80"
-                             sortable="custom" :formatter="numberFormatInt">
-            </el-table-column>
-            <el-table-column columnKey="ads_num" prop="ads_num" label="广告数"
-                             width="80"
-                             sortable="custom" :formatter="numberFormatInt">
-            </el-table-column>
-        </el-table>
-        <el-pagination style=" margin: 20px auto; width:300px;"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :page-size="formSearch.limit"
-                layout="total, prev, pager, next"
-                :total="total">
-        </el-pagination>
+    <div class="mytable">
+        <v-headerTop></v-headerTop>
+        <el-col :span="4" style="height:100%;">
+            <div class="grid-left bg-purple-darkc overflow-y"
+                 id="app_left_menu">
+                <v-leftMenu></v-leftMenu>
+            </div>
+        </el-col>
+        <el-col :span="20" style="height:100%;">
+            <div class="keyword">
+                <el-form :inline="true" :model="formSearch" class="demo-form-inline">
+                    <el-form-item>
+                        <el-select v-model="formSearch.keyword_acid" placeholder="全部账号" @change="onFormSearch"
+                                   class="keyword-ac">
+                            <el-option value="" label="全部账号"></el-option>
+                            <el-option
+                                    v-for="item in acs"
+                                    :key="item.account_id"
+                                    :label="item.name"
+                                    :value="item.account_id">
+                                <span style="float: left">{{ item.name }}</span>
+                                <span style="float: right; font-size: 10px; padding-left: 20px;">{{
+                                    item.account_id }}</span>
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-select v-model="formSearch.delivery" placeholder="全部状态" @change="onFormSearch"
+                                   class="keyword-ac">
+                            <el-option label="全部状态" value=""></el-option>
+                            <el-option label="Active" value="active"></el-option>
+                            <el-option label="Inactive" value="inactive"></el-option>
+                        </el-select>
+                        <el-date-picker
+                                :editable="false"
+                                v-model="formSearch.dateOne"
+                                type="daterange"
+                                align="right"
+                                placeholder="选择日期范围"
+                                :picker-options="dateChoice" @change="onFormSearch">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-input style="width:120px;" v-model="formSearch.keyword"
+                                  placeholder="Keyword"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="onFormSearch" icon="search">查询</el-button>
+                        <a href="javascript://" @click="onClearFormSearch">清空条件</a>
+                    </el-form-item>
+                </el-form>
+                <el-table :data="rulesLog" border style="width: 100%" max-height="700" :summary-method="getSummaries"
+                          show-summary @sort-change="sortChange" @expand="expandChange">
+                    <el-table-column type="expand" fixed>
+                        <template scope="props">
+                                <keywordsAC :scope="props" :formSearch="formSearch"
+                                            style="min-height:500px;width:1200px;"></keywordsAC>
+                        </template>
+                    </el-table-column>
+                    <el-table-column columnKey="name" prop="name"
+                                     label="Name"
+                                     width="250">
+                    </el-table-column>
+                    <!--
+                    <el-table-column columnKey="id" prop="id"
+                                     label="Keyword Id"
+                                     width="120">
+                    </el-table-column>
+                    -->
+                    <el-table-column columnKey="spend" prop="spend" label="Spend"
+                                     width="100"
+                                     sortable="custom" :formatter="moneyFormat">
+                    </el-table-column>
+                    <el-table-column columnKey="cpc" prop="cpc" label="cpc"
+                                     width="60"
+                                     sortable="custom" :formatter="moneyFormat">
+                    </el-table-column>
+                    <el-table-column columnKey="cpm" prop="cpm" label="cpm"
+                                     width="60"
+                                     sortable="custom" :formatter="moneyFormat">
+                    </el-table-column>
+                    <el-table-column columnKey="ctr" prop="ctr" label="ctr"
+                                     width="60"
+                                     sortable="custom" :formatter="numberFormatPer">
+                    </el-table-column>
+                    <el-table-column columnKey="cpp" prop="cpp" label="cpp"
+                                     width="60"
+                                     sortable="custom" :formatter="numberFormat">
+                    </el-table-column>
+                    <el-table-column columnKey="clicks" prop="clicks" label="Clicks"
+                                     width="80"
+                                     sortable="custom" :formatter="numberFormatInt">
+                    </el-table-column>
+                    <el-table-column columnKey="add_to_cart" prop="add_to_cart" label="AddToCart"
+                                     width="80"
+                                     sortable="custom" :formatter="numberFormatInt">
+                    </el-table-column>
+                    <el-table-column columnKey="frequency" prop="frequency" label="Frequency"
+                                     width="100"
+                                     sortable="custom" :formatter="numberFormat">
+                    </el-table-column>
+                    <el-table-column columnKey="impressions" prop="impressions" label="Impressions"
+                                     width="100"
+                                     sortable="custom" :formatter="numberFormatInt">
+                    </el-table-column>
+                    <el-table-column columnKey="reach" prop="reach" label="Reach"
+                                     width="80"
+                                     sortable="custom" :formatter="numberFormatInt">
+                    </el-table-column>
+                    <el-table-column columnKey="ads_num" prop="ads_num" label="广告数"
+                                     width="80"
+                                     sortable="custom" :formatter="numberFormatInt">
+                    </el-table-column>
+                </el-table>
+                <el-pagination style=" margin: 20px auto; width:300px;"
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :page-size="formSearch.limit"
+                        layout="total, prev, pager, next"
+                        :total="total">
+                </el-pagination>
+            </div>
+        </el-col>
     </div>
 </template>
 <script>

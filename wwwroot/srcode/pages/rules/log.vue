@@ -11,31 +11,42 @@
 	 
 </style>
 <template>
-	<div>
-		<el-tabs v-model="activeName" @tab-click="handleTabClick">
-			<el-tab-pane label="优化记录" name="getRulesLog">
-				<el-table :data="rulesLog" border style="width: 100%" max-height="700">
-					<el-table-column type="expand" fixed>
-						<template scope="scope">
-							<v-ad_table :adsData="scope.row.expandTabData" :dataType="scope.row.expandTabDataType"
-										rulesLog="rulesLog"></v-ad_table>
-						</template>
-					</el-table-column>
-					<el-table-column :formatter="formatExecTarget" label="执行目标" width="180"></el-table-column>
-					<el-table-column prop="time_format" label="执行时间"  width="120"></el-table-column>
-					<el-table-column :formatter="formatExecRule" label="执行规则"  ></el-table-column>
-					<el-table-column prop="rule_exec" label="执行结果"  ></el-table-column>
-				</el-table>
-				<el-pagination style=" margin: 20px auto; width:300px;"
-							   @size-change="handleSizeChange"
-							   @current-change="handleCurrentChange"
-							   :page-size="formSearch.limit"
-							   layout="total, prev, pager, next"
-							   :total="total">
-				</el-pagination>
-			</el-tab-pane>
-		</el-tabs>
-	</div>
+    <div class="mytable">
+        <v-headerTop></v-headerTop>
+        <el-col :span="4" style="height:100%;">
+            <div class="grid-left bg-purple-darkc overflow-y"
+                 id="app_left_menu">
+                <v-leftMenu></v-leftMenu>
+            </div>
+        </el-col>
+        <el-col :span="20" style="height:100%;">
+            <div>
+                <el-tabs v-model="activeName" @tab-click="handleTabClick">
+                    <el-tab-pane label="优化记录" name="getRulesLog">
+                        <el-table :data="rulesLog" border style="width: 100%" max-height="700">
+                            <el-table-column type="expand" fixed>
+                                <template scope="scope">
+                                    <v-ad_table :adsData="scope.row.expandTabData" :dataType="scope.row.expandTabDataType"
+                                                rulesLog="rulesLog"></v-ad_table>
+                                </template>
+                            </el-table-column>
+                            <el-table-column :formatter="formatExecTarget" label="执行目标" width="180"></el-table-column>
+                            <el-table-column prop="time_format" label="执行时间"  width="120"></el-table-column>
+                            <el-table-column :formatter="formatExecRule" label="执行规则"  ></el-table-column>
+                            <el-table-column prop="rule_exec" label="执行结果"  ></el-table-column>
+                        </el-table>
+                        <el-pagination style=" margin: 20px auto; width:300px;"
+                                       @size-change="handleSizeChange"
+                                       @current-change="handleCurrentChange"
+                                       :page-size="formSearch.limit"
+                                       layout="total, prev, pager, next"
+                                       :total="total">
+                        </el-pagination>
+                    </el-tab-pane>
+                </el-tabs>
+            </div>
+        </el-col>
+    </div>
 </template>
 <script>
     import Vue from 'vue'
@@ -44,8 +55,12 @@
     import 'element-ui/lib/theme-default/index.css'
 	import vk from '../../vk.js';
     import uri from '../../uri.js';
+    import ad_table from '../ads/ad_table.vue';
     Vue.use(ElementUI)
     export default {
+        components:{
+            'v-ad_table':ad_table,
+        },
         data:function(){
             return {
                 activeName: 'getRulesLog',

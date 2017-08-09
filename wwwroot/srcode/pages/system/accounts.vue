@@ -11,32 +11,43 @@
 
 </style>
 <template>
-	<div>
-		<el-button type="primary" @click="openAccountsFBDialog" style=" float: right;z-index: 1;position: relative;">绑定账号
-			<i class="el-icon-setting el-icon--right"></i></el-button>
-		<el-tabs v-model="activeName" @tab-click="handleTabClick">
-			<el-tab-pane label="已绑定广告账号" name="getRulesLog">
-				<el-table :data="rulesLog" border style="width: 100%" max-height="750">
-					<el-table-column prop="account_id" label="Account ID" width="180"></el-table-column>
-					<el-table-column prop="account_name" label="Account Name"  ></el-table-column>
-					<el-table-column label="操作" width="120" >
-						<template scope="scope">
-							<el-button type="text" size="small" @click="unBindAccount(scope.$index, scope.row)">
-								解绑
-							</el-button>
-						</template>
-					</el-table-column>
-				</el-table>
-			</el-tab-pane>
-		</el-tabs>
-		<el-dialog title="FB广告账号列表" :visible.sync="dialogTableVisible" :close-on-click-modal="false"
-				   :close-on-press-escape="false">
-			<accounts_fb ref="accounts_fb"></accounts_fb>
-			<span slot="footer" class="dialog-footer">
-				<el-button @click="closeDialog">取 消</el-button>
-				<el-button type="primary" @click="bindFbAccounts">确 定</el-button>
-			  </span>
-		</el-dialog>
+	<div class="mytable">
+		<v-headerTop></v-headerTop>
+		<el-col :span="4" style="height:100%;">
+			<div class="grid-left bg-purple-darkc overflow-y"
+				 id="app_left_menu">
+				<v-leftMenu></v-leftMenu>
+			</div>
+		</el-col>
+		<el-col :span="20" style="height:100%;">
+            <div>
+                <el-button type="primary" @click="openAccountsFBDialog" style=" float: right;z-index: 1;position: relative;">绑定账号
+                    <i class="el-icon-setting el-icon--right"></i></el-button>
+                <el-tabs v-model="activeName" @tab-click="handleTabClick">
+                    <el-tab-pane label="已绑定广告账号" name="getRulesLog">
+                        <el-table :data="rulesLog" border style="width: 100%" max-height="750">
+                            <el-table-column prop="account_id" label="Account ID" width="180"></el-table-column>
+                            <el-table-column prop="account_name" label="Account Name"  ></el-table-column>
+                            <el-table-column label="操作" width="120" >
+                                <template scope="scope">
+                                    <el-button type="text" size="small" @click="unBindAccount(scope.$index, scope.row)">
+                                        解绑
+                                    </el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </el-tab-pane>
+                </el-tabs>
+                <el-dialog title="FB广告账号列表" :visible.sync="dialogTableVisible" :close-on-click-modal="false"
+                           :close-on-press-escape="false">
+                    <accounts_fb ref="accounts_fb"></accounts_fb>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="closeDialog">取 消</el-button>
+                        <el-button type="primary" @click="bindFbAccounts">确 定</el-button>
+                      </span>
+                </el-dialog>
+            </div>
+		</el-col>
 	</div>
 </template>
 <script>

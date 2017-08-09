@@ -97,8 +97,8 @@
     import Vue from 'vue'
     import ElementUI from 'element-ui'
     import 'element-ui/lib/theme-default/index.css'
-    import vk from '../vk.js';
-    import uri from '../uri.js';
+    import vk from '../../vk.js';
+    import uri from '../../uri.js';
 
     Vue.use(ElementUI)
 

@@ -31,9 +31,9 @@
     import ElementUI from 'element-ui'
     import 'element-ui/lib/theme-default/index.css'
     import Blockly from 'node-blockly/browser';
-    import BlocklyLibrary from '../blockly/';
-    import vk from '../vk.js';
-    import uri from '../uri.js';
+    import BlocklyLibrary from '../../blockly/';
+    import vk from '../../vk.js';
+    import uri from '../../uri.js';
 
     Vue.use(ElementUI)
 

@@ -22,55 +22,66 @@
 	   transform-origin 50% 50%
 </style>
 <template>
-	<div style="padding: 10px;">
-		<el-form :inline="true" :model="formSearch" class="demo-form-inline">
-			<el-form-item label="类型">
-				<el-select v-model="formSearch.keyword_type" placeholder="请选择">
-					<el-option label="系列 ID/名称" value="campaign"></el-option>
-					<el-option label="组 ID/名称" value="adset"></el-option>
-					<el-option label="广告 ID/名称" value="ad"></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item>
-				<el-input v-model="formSearch.keyword" placeholder="关键字（支持模糊查询）"></el-input>
-			</el-form-item>
-			<el-form-item>
-				<el-button type="primary" @click="onFormSearch">查询</el-button>
-				<a href="javascript://" @click="onClearFormSearch">清空条件</a>
-			</el-form-item>
-		</el-form>
-		<el-tabs v-model="activeName" @tab-click="handleTabClick" type="card">
-			<el-tab-pane name="getCampaignsData">
-				<span slot="label">广告系列
-					<el-tag v-show="getTabName('checked_campaigns')" :closable="true"
-							@close="clearTabName('checked_campaigns')">{{getTabName
-						('checked_campaigns')}}</el-tag>
-				</span>
-				<v-ad_table v-bind:adsData="campaignsData" dataType="campaign" @searchThatID="searchThatID"
-							@openRulesDialog="openRulesDialog"></v-ad_table>
-			</el-tab-pane>
-			<el-tab-pane name="getAdsetsData">
-				<span slot="label">广告组
-					<el-tag v-show="getTabName('checked_adsets')" :closable="true" @close="clearTabName('checked_adsets')">{{getTabName('checked_adsets')
-						}}</el-tag>
-				</span>
-				<v-ad_table v-bind:adsData="adsetsData" dataType="adset" @openRulesDialog="openRulesDialog" @searchThatID="searchThatID"
-				></v-ad_table>
-			</el-tab-pane>
-			<el-tab-pane label="广告" name="getAdsData">
-				<v-ad_table v-bind:adsData="adsData" dataType="ad" @openRulesDialog="openRulesDialog"></v-ad_table>
-			</el-tab-pane>
-		</el-tabs>
-		<div id="dialogRules">
-		<el-dialog ref="refDialog" title="规则列表" :visible.sync="dialogTableVisible" :close-on-click-modal="false"
-				   :close-on-press-escape="false" @close="dialogClose" @open="dialogOpen">
-			<v-rules_list ref="refRules"></v-rules_list>
-			<span slot="footer" class="dialog-footer">
-				<el-button @click="dialogClose">取 消</el-button>
-				<el-button type="primary" @click="saveRulesForAd">确 定</el-button>
-			  </span>
-		</el-dialog>
-		</div>
+	<div class="mytable">
+		<v-headerTop></v-headerTop>
+		<el-col :span="4" style="height:100%;">
+			<div class="grid-left bg-purple-darkc overflow-y"
+				 id="app_left_menu">
+				<v-leftMenu></v-leftMenu>
+			</div>
+		</el-col>
+		<el-col :span="20" style="height:100%;">
+			<div style="padding: 10px;">
+				<el-form :inline="true" :model="formSearch" class="demo-form-inline">
+					<el-form-item label="类型">
+						<el-select v-model="formSearch.keyword_type" placeholder="请选择">
+							<el-option label="系列 ID/名称" value="campaign"></el-option>
+							<el-option label="组 ID/名称" value="adset"></el-option>
+							<el-option label="广告 ID/名称" value="ad"></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item>
+						<el-input v-model="formSearch.keyword" placeholder="关键字（支持模糊查询）"></el-input>
+					</el-form-item>
+					<el-form-item>
+						<el-button type="primary" @click="onFormSearch">查询</el-button>
+						<a href="javascript://" @click="onClearFormSearch">清空条件</a>
+					</el-form-item>
+				</el-form>
+				<el-tabs v-model="activeName" @tab-click="handleTabClick" type="card">
+					<el-tab-pane name="getCampaignsData">
+						<span slot="label">广告系列
+							<el-tag v-show="getTabName('checked_campaigns')" :closable="true"
+									@close="clearTabName('checked_campaigns')">{{getTabName
+								('checked_campaigns')}}</el-tag>
+						</span>
+						<v-ad_table v-bind:adsData="campaignsData" dataType="campaign" @searchThatID="searchThatID"
+									@openRulesDialog="openRulesDialog"></v-ad_table>
+					</el-tab-pane>
+					<el-tab-pane name="getAdsetsData">
+						<span slot="label">广告组
+							<el-tag v-show="getTabName('checked_adsets')" :closable="true" @close="clearTabName('checked_adsets')">{{getTabName('checked_adsets')
+								}}</el-tag>
+						</span>
+						<v-ad_table v-bind:adsData="adsetsData" dataType="adset" @openRulesDialog="openRulesDialog" @searchThatID="searchThatID"
+						></v-ad_table>
+					</el-tab-pane>
+					<el-tab-pane label="广告" name="getAdsData">
+						<v-ad_table v-bind:adsData="adsData" dataType="ad" @openRulesDialog="openRulesDialog"></v-ad_table>
+					</el-tab-pane>
+				</el-tabs>
+				<div id="dialogRules">
+				<el-dialog ref="refDialog" title="规则列表" :visible.sync="dialogTableVisible" :close-on-click-modal="false"
+						   :close-on-press-escape="false" @close="dialogClose" @open="dialogOpen">
+					<v-rules_list ref="refRules"></v-rules_list>
+					<span slot="footer" class="dialog-footer">
+						<el-button @click="dialogClose">取 消</el-button>
+						<el-button type="primary" @click="saveRulesForAd">确 定</el-button>
+					  </span>
+				</el-dialog>
+				</div>
+			</div>
+		</el-col>
 	</div>
 </template>
 <script>
@@ -80,8 +91,14 @@
     import 'element-ui/lib/theme-default/index.css'
 	import vk from '../../vk.js';
     import uri from '../../uri.js';
+    import ad_table from './ad_table.vue';
+    import rules_list from '../rules/rules_list.vue';
     Vue.use(ElementUI)
     export default {
+        components:{
+            'v-ad_table':ad_table,
+            'v-rules_list':rules_list,
+        },
         data:function(){
             return {
                 activeName: 'getCampaignsData',

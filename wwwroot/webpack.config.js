@@ -25,6 +25,7 @@ if(process.env.NODE_ENV === 'production'){
     };
 }
 module.exports = {
+  devtool: 'cheap-module-source-map',
   entry: './srcode/main.js',
   output: output,
   module: {
