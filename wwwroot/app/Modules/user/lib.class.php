@@ -31,8 +31,8 @@ class lib{
             if(!$fid) return "内部应用，请申请登录";
             $this->model->add($data);
         }
-        asyn_implement('apido/asyn.getLongToken',array('token'=>$data['token']));
-        asyn_implement('apido/asyn.setBusinessId',array('token'=>$data['token']));
+        asyn('apido/asyn.getLongToken',array('token'=>$data['token']),null,0,99);
+        //asyn_implement('apido/asyn.setBusinessId',array('token'=>$data['token']));
     }
     function getUserForToken(){
         $this->model->getByToken(I('request.token'));
