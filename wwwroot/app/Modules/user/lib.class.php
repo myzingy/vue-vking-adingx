@@ -17,12 +17,15 @@ class lib{
     function login(){
         $data['id']=I('request.id');
         $data['name']=I('request.name');
-        $data['email']=I('request.email');
+        I('request.email')?$data['email']=trim(I('request.email')):"";
         $data['token']=I('request.token');
         $data['time']=NOW_TIME;
         if($this->model->id){
             $this->model->save($data);
         }else{
+            if(!$data['email']){
+                return ['code'=>404,'message'=>'Facebook Email 获取失败,请手动填写'];
+            }
             $this->getRoot($data['email'],$data['group_id']);
             $this->model->add($data);
         }

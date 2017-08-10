@@ -29,7 +29,7 @@ let vk={
             location.hash='#/login';
             return;
         }
-        if(data.code!=200){
+        if(data.code!=200 && data.code!=404){
             this.toast(data.message);
             return;
         }

@@ -40,12 +40,12 @@
     import { CKECKED_AC } from '../../store/data.js'
     import vk from '../../vk.js';
     import uri from '../../uri.js';
-    import statistical from './statistical.vue';
+    //import statistical from './statistical.vue';
     Vue.use(ElementUI)
     export default {
-        components:{
-            statistical:statistical,
-		},
+//        components:{
+//            statistical:statistical,
+//		},
         data:function(){
             return {
                 height:500,

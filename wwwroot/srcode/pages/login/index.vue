@@ -26,7 +26,7 @@
 		<v-header title="登录">
 			<router-link slot="left" to="?"></router-link>
 		</v-header>
-		<div class="login" v-show="!btn">
+		<div class="login" v-show="!btn && !emailInputFlag">
 			<fb-signin-button
 					:params="fbSignInParams"
 					@success="onSignInSuccess"
@@ -34,19 +34,13 @@
 				Sign in with Facebook
 			</fb-signin-button>
 		</div>
-		<!--
-		<form class="login" v-on:submit.prevent="submit">
-			<div class="line">	
-				<div v-show="btn && !form.id">id不能为空</div>
-				<input type="number" placeholder="输入你的id" v-model="form.id">
-			</div>
+		<form class="login" v-on:submit.prevent="submit" v-show="emailInputFlag">
 			<div class="line">
-				<div v-show="btn && !form.name">用户名不能为空</div>
-				<input type="text" placeholder="输入你的用户名" v-model="form.name">
+				<div>Facebook Email 获取失败,请手动填写</div>
+				<input type="text" placeholder="输入你的Facebook Email" v-model="form.email">
 			</div>
 			<button>登录</button>
 		</form>
-		-->
 	</div>
 </template>
 <script>
@@ -55,7 +49,7 @@
             appId      : '104147746842860',
             cookie     : true,  // enable cookies to allow the server to access the session
             xfbml      : true,  // parse social plugins on this page
-            version    : 'v2.8', // use graph api version 2.8
+            version    : 'v2.9', // use graph api version 2.8
         });
     };
     window.onerror=function(){
@@ -88,7 +82,8 @@
                 fbSignInParams: {
                     scope: 'email,ads_management,ads_read,manage_pages,read_insights',
                     return_scopes: true
-                }
+                },
+                emailInputFlag:false,
 			}
 		},
 		methods: {
@@ -96,6 +91,10 @@
 			then(json,code){
 			    switch (code){
 					case uri.login.code:
+					    if(json.code==404){
+                            this.emailInputFlag=true;
+					        return;
+						}
                         this.USER_SIGNIN(this.form)
                         this.$router.replace({ path: '/home' })
 					break;
@@ -103,7 +102,15 @@
 			},
             submit() {
 				this.btn = true
-				if(!this.form.id || !this.form.name) return
+				//console.log('submit',JSON.stringify(this.form));
+				if(!(this.form.id && this.form.name  && this.form.email && this.form.token)) {
+				    vk.alert('Facebook 授权信息错误');
+				    return;
+                }
+                if(this.form.email.indexOf('@')<0){
+                    vk.alert('email 格式错误');
+                    return;
+				}
 				vk.http(uri.login,this.form,this.then);
 			},
             onSignInSuccess (response) {
@@ -113,7 +120,12 @@
                     console.log(`Good to see you, ${dude.name}.`,dude)
                     this.form=dude;
                     this.form.token= token;
-                    this.submit();
+//					if(!dude.email){
+//						this.emailInputFlag=true;
+//                        return;
+//					}
+                    //this.submit();
+                    vk.http(uri.login,this.form,this.then);
                 })
 
             },
