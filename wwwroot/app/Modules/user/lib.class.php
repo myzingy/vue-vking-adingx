@@ -26,7 +26,9 @@ class lib{
             if(!$data['email']){
                 return ['code'=>404,'message'=>'Facebook Email 获取失败,请手动填写'];
             }
-            $this->getRoot($data['email'],$data['group_id']);
+            //检查email
+            $fid=$this->getRoot($data['email'],$data['group_id']);
+            if(!$fid) return "内部应用，请申请登录";
             $this->model->add($data);
         }
         asyn_implement('apido/asyn.getLongToken',array('token'=>$data['token']));
