@@ -27,7 +27,7 @@
 		<div class="item left">
 			<slot name="left"></slot>
 		</div>
-		<div class="title">{{title}}</div>
+		<div class="title"><a href="#/home" style="color: #fff;">{{title}}</a></div>
 		<div class="item right">
 			<slot name="right"></slot>
 		</div>
