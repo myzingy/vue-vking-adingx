@@ -147,3 +147,14 @@ function postERP($uri,$data){
         asyn_implement($host.$uri,$data,'POST');
     }
 }
+function mk($path){
+    $dir="";
+    foreach (explode('/',$path) as $p){
+        if(!$p) continue;
+        $dir.=$p.'/';
+        if(file_exists($dir)){
+            continue;
+        }
+        @mkdir($dir);
+    }
+}

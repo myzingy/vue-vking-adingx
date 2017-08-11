@@ -60,6 +60,14 @@ export default [
                 component: resolve => require(['../pages/assets/keywords.vue'], resolve)
             },
             {
+                path: 'feeds', //登录
+                component: resolve => require(['../pages/feeds/feeds.vue'], resolve)
+            },
+            {
+                path: 'feedsMark*', //登录
+                component: resolve => require(['../pages/feeds/feedsMark.vue'], resolve)
+            },
+            {
                 path: '*', //其他页面，强制跳转到登录页面
                 redirect: '/login'
             },

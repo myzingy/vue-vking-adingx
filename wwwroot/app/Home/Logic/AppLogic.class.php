@@ -160,6 +160,14 @@ class AppLogic {
         $lib = new \Modules\keywords\lib();
         return $lib->getData();
     }
+    function user__getFeeds(){
+        $lib = new \Modules\feeds\lib();
+        return $lib->getFeeds();
+    }
+    function user__setFeeds(){
+        $lib = new \Modules\feeds\lib();
+        return $lib->setFeeds();
+    }
 	############################################################
 	# 一些异步接口开始
 	############################################################
@@ -421,6 +429,18 @@ class AppLogic {
     function asyn__flushKeywordsInsightAll(){
         $lib = new \Modules\keywords\lib();
         return $lib -> flushKeywordsInsightAll();
+    }
+    function asyn__flushFeed(){
+        $lib = new \Modules\feeds\lib();
+        return $lib -> flushFeed();
+    }
+    function asyn__flushFeedParseXML(){
+        $lib = new \Modules\feeds\lib();
+        return $lib -> flushFeedParseXML();
+    }
+    function asyn__downFeedImage(){
+        $lib = new \Modules\feeds\lib();
+        return $lib -> downFeedImage();
     }
 	############################################################
 	# 一些异步接口结束

@@ -23,6 +23,13 @@
             -->
             <el-menu-item index="keywords"><i class="el-icon-star-on"></i>兴趣词</el-menu-item>
         </el-menu-item-group>
+        <el-menu-item-group v-show="nav.system">
+          <template slot="title">Feeds</template>
+          <el-menu-item index="feeds" ><i class="el-icon-share"></i>Feeds</el-menu-item>
+          <el-menu-item index="feedsMark"  ><i class="el-icon-document"></i>Feeds
+            Mark
+          </el-menu-item>
+        </el-menu-item-group>
       </el-menu>
     </el-row>
   </div>

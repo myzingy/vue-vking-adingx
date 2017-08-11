@@ -36,4 +36,8 @@ export default {
 
     //keywords
     getKeywords:{act:'user.getKeywords',code:15000},
+
+    //Feeds
+    getFeeds:{act:'user.getFeeds',code:16000},
+    setFeeds:{act:'user.setFeeds',code:16001},
 }

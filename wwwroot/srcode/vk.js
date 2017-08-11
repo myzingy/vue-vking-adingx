@@ -155,5 +155,22 @@ let vk={
         var load=Loading.service({ fullscreen: true });
         if(!flag) setTimeout(function(){load.close();},0);
     },
+    date(tpl,timespace){
+        tpl=tpl || "YYYY年MM月DD日 HH时II分SS秒";
+        var d=new Date(timespace*1000);
+        tpl=tpl.toUpperCase();
+        tpl=tpl.replace('YYYY',d.getFullYear());
+        var mm=d.getMonth()+1;
+        tpl=tpl.replace('MM',mm>9?mm:'0'+mm);
+        var dd=d.getDate();
+        tpl=tpl.replace('DD',dd>9?dd:'0'+dd);
+        var hh=d.getHours();
+        tpl=tpl.replace('HH',hh>9?hh:'0'+hh);
+        var ii=d.getMinutes();
+        tpl=tpl.replace('II',ii>9?ii:'0'+ii);
+        var ss=d.getSeconds();
+        tpl=tpl.replace('SS',ss>9?ss:'0'+ss);
+        return tpl;
+    },
 };
 export default vk;
