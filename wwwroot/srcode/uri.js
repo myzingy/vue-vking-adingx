@@ -40,4 +40,5 @@ export default {
     //Feeds
     getFeeds:{act:'user.getFeeds',code:16000},
     setFeeds:{act:'user.setFeeds',code:16001},
+    getFeedsImageInfo:{act:'user.getFeedsImageInfo',code:16002},
 }

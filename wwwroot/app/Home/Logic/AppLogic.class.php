@@ -168,6 +168,14 @@ class AppLogic {
         $lib = new \Modules\feeds\lib();
         return $lib->setFeeds();
     }
+    function user__getFeedsImageInfo(){
+        $lib = new \Modules\feeds\lib();
+        return $lib->getFeedsImageInfo();
+    }
+    function getFeedsImage(){
+        $lib = new \Modules\feeds\lib();
+        return $lib->getFeedsImage();
+    }
 	############################################################
 	# 一些异步接口开始
 	############################################################

@@ -12,7 +12,7 @@
         </el-col>
         <el-col :span="20" style="height:100%;">
             <div style="padding: 10px;">
-                <el-button type="primary" @click="openDialog" style=" float: right;z-index: 1;position: relative;">
+                <el-button type="primary" @click="openDialog(-1)" style=" float: right;z-index: 1;position: relative;">
                     <i class="el-icon-plus"></i>Add Feed</el-button>
                 <el-tabs v-model="activeName">
                     <el-tab-pane label="Feed Lists" name="getRulesData">
@@ -25,7 +25,7 @@
                                              width="120"></el-table-column>
                             <el-table-column label="操作" width="120">
                                 <template scope="scope">
-                                    <el-button @click.native.prevent="editFeed(scope.$index, rulesData)"
+                                    <el-button @click.native.prevent="openDialog(scope.$index, rulesData)"
                                                type="text"
                                                size="small">
                                         修改
@@ -39,7 +39,7 @@
         </el-col>
         <el-dialog title="Update Feed" :visible.sync="dialogTableVisible" :close-on-click-modal="false"
                    :close-on-press-escape="false">
-            <feedsForm ref="feedsForm"></feedsForm>
+            <feedsForm ref="feedsForm" :form="form"></feedsForm>
             <span slot="footer" class="dialog-footer">
                         <el-button @click="closeDialog">取 消</el-button>
                         <el-button type="primary" @click="updateDialog">确 定</el-button>
@@ -63,6 +63,7 @@
                 activeName: 'getRulesData',
                 rulesData:[],
                 dialogTableVisible:false,
+                form:{},
             }
         },
         mounted(){
@@ -86,7 +87,15 @@
             editFeed(){
 
             },
-            openDialog(){
+            openDialog(index,data){
+                if(index>-1){
+                    this.form=data[index];
+                }else{
+                    this.form={
+                        brand:"",
+                    };
+                }
+                console.log(this.form);
                 this.dialogTableVisible=true;
             },
             closeDialog(){

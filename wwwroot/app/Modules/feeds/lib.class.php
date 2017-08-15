@@ -132,4 +132,29 @@ class lib
         }
 
     }
+    function getFeedsImageInfo(){
+        $fid=I('request.fid');
+        $item=M('feeds_items')->where(['fid'=>$fid])->order('image_isdown desc')->find();
+        if($item){
+            $image=self::PATH_FEED_IMAGE.$item['image_hash'].'.jpg';
+            if(file_exists($image)) {
+                $arr = getimagesize($image);
+                $url=url("apido/getFeedsImage?file={$item['image_hash']}.jpg");
+                $url=str_replace(':8080','',$url);
+                return ['data'=>[
+                    'width'=>$arr[0],
+                    'height'=>$arr[1],
+                    'url'=>$url,
+                ]];
+            }
+        }
+        return "此 Feed 未更新完成，不能获取图片信息";
+    }
+    function getFeedsImage(){
+        $file=explode('.',I('request.file'));
+        if(strpos('-',$file[0])===false){
+            $image=self::PATH_FEED_IMAGE.$file[0].'.jpg';
+            die(file_get_contents($image));
+        }
+    }
 }

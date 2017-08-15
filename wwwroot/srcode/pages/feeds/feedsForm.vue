@@ -40,12 +40,13 @@
     import vk from '../../vk.js';
     import uri from '../../uri.js';
     export default {
+        props:['form'],
         data:function(){
             return {
-                form:{
-                    brand:"",
-                    url:"",
-                },
+//                form:{
+//                    brand:"",
+//                    url:"",
+//                },
                 brands: {
                     jeulia: {label: "Jeulia", value: "jeulia"},
                     gnoce: {label: "Gnoce", value: "gnoce"},
