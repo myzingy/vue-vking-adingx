@@ -176,6 +176,14 @@ class AppLogic {
         $lib = new \Modules\feeds\lib();
         return $lib->getFeedsImage();
     }
+    function user__getFeedsMark(){
+        $lib = new \Modules\feeds\lib();
+        return $lib->getFeedsMark();
+    }
+    function user__setFeedsMark(){
+        $lib = new \Modules\feeds\lib();
+        return $lib->setFeedsMark();
+    }
 	############################################################
 	# 一些异步接口开始
 	############################################################

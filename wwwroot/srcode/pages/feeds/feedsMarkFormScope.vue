@@ -20,7 +20,8 @@
     }
     .el-slider {
         float: right;
-        width: 70%;
+        width: 65%;
+        margin-right: 2%;
     }
 </style>
 <template>
@@ -39,6 +40,10 @@
             <el-form-item label="Stroke width">
                 <el-slider v-model="object.strokeWidth" :min="0" :max="20" :step="1"
                            @change="setValStrokeWidth"></el-slider>
+            </el-form-item>
+            <el-form-item label="Angle">
+                <el-slider v-model="object.angle" :min="0" :max="360" :step="5"
+                           @change="setValAngle"></el-slider>
             </el-form-item>
             <div id="text-wrapper" class="">
                 <div id="text-controls">
@@ -121,17 +126,20 @@
 <script>
     var __fields={
         'prop':['text', 'textAlign','fontFamily','backgroundColor','textBackgroundColor'],
-        'style':['opacity','fill','fontWeight','fontStyle','textDecoration','underline','stroke','strokeWidth',
-            'fontSize', 'lineHeight','charSpacing'],
+        'style':['opacity','fill','fontWeight','textDecoration','stroke','strokeWidth',
+            'fontSize', 'lineHeight','charSpacing','fontStyle','angle'],
     };
     var __object={};
+    var __objectInit={};
     for(var i in __fields){
         for(var j in __fields[i]){
             var key=__fields[i][j];
-            if(['opacity','strokeWidth','fontSize', 'lineHeight','charSpacing'].indexOf(key)>-1){
-                __object[key]=0;
+            if(['opacity','strokeWidth','fontSize', 'lineHeight','charSpacing','angle'].indexOf(key)>-1){
+                __object[key]=1;
+                __objectInit[key]=1;
             }else{
                 __object[key]="";
+                __objectInit[key]="";
             }
         }
     }
@@ -144,9 +152,13 @@
             }
         },
         mounted(){
-            //this.getObjectAll();
+            this.getObjectAll();
         },
         methods: {
+            initPage(){
+                console.log('feedsMarkFormScope.vue','initPage...',__objectInit);
+                Object.assign(this.object,__objectInit);
+            },
             updateScope() {
                 this.canvas.renderAll();
                 this.getObjectAll();
@@ -194,8 +206,10 @@
                 this.canvas.renderAll();
             },
             getObjectAll () {
-                //var object=this.canvas.getActiveObject();
-                //this.canvas.setActiveObject(object);
+                if(!this.canvas)  return;
+                var object=this.canvas.getActiveObject();
+                if(!object) return;
+                //console.log('getObjectAll',object);
                 for(var i in this.fields){
                     for(var j in this.fields[i]){
                         var key=this.fields[i][j];
@@ -259,6 +273,9 @@
             },
             setValText(val){
                 this.setVal('text',val);
+            },
+            setValAngle(val){
+                this.setVal('angle',val);
             },
             toggleTextStyle(val){
                 val=val.split(':');

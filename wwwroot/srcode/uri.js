@@ -41,4 +41,7 @@ export default {
     getFeeds:{act:'user.getFeeds',code:16000},
     setFeeds:{act:'user.setFeeds',code:16001},
     getFeedsImageInfo:{act:'user.getFeedsImageInfo',code:16002},
+    getFeedsMark:{act:'user.getFeedsMark',code:16003},
+    setFeedsMark:{act:'user.setFeedsMark',code:16004},
+
 }

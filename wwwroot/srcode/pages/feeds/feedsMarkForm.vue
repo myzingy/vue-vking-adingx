@@ -40,7 +40,13 @@
                 <div class="grid-content bg-purple" style="background-color:#cffffc;
                 padding:5px; ">
                     <el-button type="primary" @click="addTextbox()" icon="edit">Add Text</el-button>
-                    <el-button type="primary" @click="addTextbox()" icon="picture">Add Image</el-button>
+                    <el-button type="primary" icon="picture">
+                        Add Image
+                    </el-button>
+                    <input type="file" id="file"
+                           @change="getFilePath" style="filter:alpha(opacity=0);opacity:0;width: 122px;
+                           height: 25px;border:
+                            1px solid #ccc; overflow: hidden; margin-left: -125px; position:relative; top:8px;"/>
                 </div>
                 <el-row :gutter="24">
                     <el-col :span="10"><div class="grid-content bg-purple">
@@ -48,7 +54,7 @@
                     </div></el-col>
                     <el-col :span="14">
                         <div class="tab-content" style="height: 300px; padding: 5px; overflow-y: auto;">
-                            <feedsMarkFormScope ref="feedsMarkFormScope" :object="object" :canvas="canvas"></feedsMarkFormScope>
+                            <feedsMarkFormScope ref="feedsMarkFormScope" :canvas="canvas"></feedsMarkFormScope>
                         </div>
                     </el-col>
                 </el-row>
@@ -77,12 +83,6 @@
         data:function(){
             return {
                 initCanvasInterval:null,
-                image:{
-                    width:200,
-                    height:200,
-                    url:"",
-                },
-                imageStyle:"",
                 rules:{
                     fid:[
                         { required: true, message: '请选择Feed', trigger: 'blur' }
@@ -93,25 +93,57 @@
                 },
                 canvas:null,
                 object:{text:""},
+                image:{
+                    width:200,
+                    height:200,
+                    url:"",
+                },
+                imageStyle:"",
             }
         },
         mounted(){
-            var that=this;
-            this.initCanvasInterval=setInterval(function(){
-                that.initCanvas();
-            },500);
+            this.mountedInitCanvas();
+            if(this.form.fid){
+                vk.http(uri.getFeedsImageInfo, {fid: this.form.fid}, this.then);
+            }
         },
         methods: {
+            mountedInitCanvas(clear=true){
+                var that=this;
+                if (typeof fabric == 'undefined'){
+                    this.initCanvasInterval=setInterval(function(){
+                        that.initCanvas(clear);
+                    },500);
+                }else{
+                    that.initCanvas(clear);
+                }
+
+            },
             then: function (json, code) {
                 switch (code) {
                     case uri.getFeedsImageInfo.code:
                         this.image = json.data;
                         this.imageStyle = 'background-image: url(' + json.data.url + ');width:' + json.data.width + 'px;height:' + json.data.height + 'px;';
-                        this.initCanvas();
+                        this.mountedInitCanvas(false);
                         break;
                 }
             },
-            initCanvas(){
+            initPage(){
+                console.log('feedsMarkForm.vue','initPage',this.form);
+                if(!this.form.fid){
+                    this.image = {
+                        width:200,
+                        height:200,
+                        url:"",
+                    };
+                    this.imageStyle="";
+                    this.mountedInitCanvas();
+                }else{
+                    vk.http(uri.getFeedsImageInfo, {fid: this.form.fid}, this.then);
+                }
+                this.$refs.feedsMarkFormScope.initPage();
+            },
+            initCanvas(clear){
                 console.log('initCanvasInterval...');
                 if (typeof fabric != 'undefined') {
                     clearInterval(this.initCanvasInterval);
@@ -127,7 +159,15 @@
                 }
                 this.canvas.setHeight(this.image.height);
                 this.canvas.setWidth(this.image.width);
+                if(clear){this.canvas.clear()};
+
                 this.canvas.renderAll();
+                if(this.form.mark_object){
+                    var that=this;
+                    this.canvas.loadFromJSON(this.form.mark_object, function(){
+                        that.canvas.renderAll();
+                    });
+                }
             },
             getFormData(){
                 var flag = false;
@@ -136,6 +176,8 @@
                         flag = true;
                     }
                 });
+                this.form['json']=JSON.stringify(this.canvas);
+                this.form['image_base64']=this.toImage();
                 if (flag) {
                     return this.form;
                 }
@@ -143,7 +185,7 @@
                 return false;
             },
             feedChange(fid){
-                this.image.url = "";
+                if(!fid) return;
                 vk.http(uri.getFeedsImageInfo, {fid: fid}, this.then);
             },
             pad(str, length) {
@@ -188,6 +230,44 @@
                     .on('group:selected', this.$refs.feedsMarkFormScope.updateScope)
                     .on('path:created', this.$refs.feedsMarkFormScope.updateScope)
                     .on('selection:cleared', this.$refs.feedsMarkFormScope.updateScope);
+            },
+            toImage () {
+                if (!fabric.Canvas.supports('toDataURL')) {
+                    vk.alert('This browser doesn\'t provide means to serialize canvas to an image');
+                }
+                else {
+                    var data = this.canvas.toDataURL({ multiplier: 1, format: 'png' });
+                    return data;
+                }
+            },
+            getFilePath(input){
+                console.log(arguments);
+                input=input.target;
+                var file=input.files[0];
+                if(!file) return;
+                
+                var that=this;
+                var reader = new FileReader();
+
+                reader.onload=function(res){
+                    //console.log('reader.onload',res.target);
+                    fabric.Image.fromURL(res.target.result,function(image){
+                        //console.log('fabric.Image.fromURL.onload',image);
+                        if(image.width<1 || image.height<1) return;
+                        var scale=1;
+                        if(that.image.width<image.width){
+                            scale=that.image.width/image.width;
+                        }
+                        image.set({
+                            left: 0,
+                            top: 0,
+                            angle: 0
+                        }).scale(scale).setCoords();
+                        that.canvas.add(image);
+                    });
+                };
+                reader.readAsDataURL(file);
+
             },
         }
     }

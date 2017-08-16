@@ -19,7 +19,7 @@
                         <el-table :data="rulesData" border style="width: 100%" max-height="100%">
                             <el-table-column prop="id" label="ID" width="60"></el-table-column>
                             <el-table-column prop="name" label="Mark Name" width="120"></el-table-column>
-                            <el-table-column prop="url" label="Mark URL"></el-table-column>
+                            <el-table-column prop="mark_url" label="Mark URL"></el-table-column>
                             <el-table-column label="Feed URL">
                                 <template scope="scope">
                                     [{{scope.row.brand}}] {{scope.row.url}}
@@ -72,6 +72,7 @@
         },
         mounted(){
             this.getData();
+            vk.http(uri.getFeeds,{},this.then);
         },
         methods:{
             then:function(json,code){
@@ -79,14 +80,17 @@
                     case uri.getFeeds.code:
                         this.feeds=json.data;
                         break;
-                    case uri.setFeeds.code:
+                    case uri.getFeedsMark.code:
+                        this.rulesData=json.data;
+                        break;
+                    case uri.setFeedsMark.code:
                         this.closeDialog();
                         this.getData();
                         break;
                 }
             },
             getData(){
-                vk.http(uri.getFeeds,{},this.then);
+                vk.http(uri.getFeedsMark,{},this.then);
             },
             editFeed(){
 
@@ -99,8 +103,13 @@
                         fid:"",
                     };
                 }
-                console.log(this.form);
-                this.dialogTableVisible=true;
+                console.log('openDialog',this.form);
+                var that=this;
+                setTimeout(function(){
+                    that.dialogTableVisible=true;
+                    that.$refs.feedsMarkForm.initPage();
+                },100);
+
             },
             closeDialog(){
                 this.dialogTableVisible=false;
@@ -109,7 +118,7 @@
                 var form=this.$refs.feedsMarkForm.getFormData();
                 console.log('form',form);
                 if(form){
-                    vk.http(uri.setFeeds,form,this.then);
+                    vk.http(uri.setFeedsMark,form,this.then);
                 }
 
             },

@@ -20,6 +20,10 @@ class lib
     const ITEM_IMAGE_DOWN_OK=1;
     const PATH_FEED_XML='uploads/feeds/xmls/';
     const PATH_FEED_IMAGE='uploads/feeds/images/';
+    const PATH_FEED_MARKS='uploads/feeds/marks/';
+    const PATH_FEED_IMAGE_MARKS='uploads/feeds/images-marks/';
+    const FEED_MARKS_PRE='mark-';
+    const FEED_IMAGE_PRE='img-';
 
     function __construct($id = "")
     {
@@ -139,7 +143,7 @@ class lib
             $image=self::PATH_FEED_IMAGE.$item['image_hash'].'.jpg';
             if(file_exists($image)) {
                 $arr = getimagesize($image);
-                $url=url("apido/getFeedsImage?file={$item['image_hash']}.jpg");
+                $url=url("feeds/".self::FEED_IMAGE_PRE."{$item['image_hash']}.jpeg");
                 $url=str_replace(':8080','',$url);
                 return ['data'=>[
                     'width'=>$arr[0],
@@ -155,6 +159,43 @@ class lib
         if(strpos('-',$file[0])===false){
             $image=self::PATH_FEED_IMAGE.$file[0].'.jpg';
             die(file_get_contents($image));
+        }
+    }
+    function getFeedsMark(){
+        $data=M('feeds_marks')->alias('FM')
+            ->field('FM.*,F.url,F.count_items,F.brand')
+            ->join('feeds F ON F.id=FM.fid','left')
+            ->order('FM.id desc')
+            ->select();
+        foreach ($data as &$r){
+            $r['mark_url']=url('feeds/'.self::FEED_MARKS_PRE.$r['id'].'.xml');
+        }
+        return array('data'=>$data);
+    }
+    function __setFeedsMarkImage($filename){
+        $image= I('request.image_base64','','trim');
+        $image=explode(",",$image);
+        file_put_contents($filename,base64_decode($image[1]));
+    }
+    function setFeedsMark(){
+        mk(self::PATH_FEED_MARKS);
+        $id=I('request.id');
+        $data['fid']=I('request.fid');
+        $data['name']=I('request.name');
+        $data['mark_object']=I('request.json','','trim');
+        $data['mark_img_hash']=substr(md5($data['mark_object']),8,16);
+        $data['mark_img_path']=self::PATH_FEED_MARKS.$data['mark_img_hash'].'.png';
+
+        if($id){
+            $mark=M('feeds_marks')->find($id);
+            if($mark['mark_img_hash']!=$data['mark_img_hash']){
+                //保存图片信息
+                $this->__setFeedsMarkImage($data['mark_img_path']);
+            }
+            M('feeds_marks')->where(array('id'=>$id))->save($data);
+        }else{
+            $this->__setFeedsMarkImage($data['mark_img_path']);
+            M('feeds_marks')->add($data);
         }
     }
 }
