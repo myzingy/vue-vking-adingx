@@ -1,5 +1,6 @@
 <style lang="stylus" rel="stylesheet/scss">
     canvas{ border: 1px solid #ccc;}
+    .el-popover div.img-mark{ background-color: #fff; border: 1px dashed #ccc}
 </style>
 <template>
     <div class="mytable">
@@ -17,7 +18,22 @@
                 <el-tabs v-model="activeName">
                     <el-tab-pane label="Feed Mark Lists" name="getRulesData">
                         <el-table :data="rulesData" border style="width: 100%" max-height="100%">
-                            <el-table-column prop="id" label="ID" width="60"></el-table-column>
+                            <el-table-column width="110" label="Thumb">
+                                <template scope="scope">
+                                    <el-popover placement="right" title="" trigger="hover">
+                                        <div style="position: relative;" class="img-mark">
+                                            <img :src="scope.row.mark_bgimg"/>
+                                            <img :src="scope.row.mark_img_path"
+                                                 style="position:absolute;top:0;left:0;"/>
+                                        </div>
+                                        <div style="position: relative;" slot="reference">
+                                            <img height="100" :src="scope.row.mark_bgimg"/>
+                                            <img height="100" :src="scope.row.mark_img_path"
+                                                 style="position:absolute;top:0; left:0;"/>
+                                        </div>
+                                    </el-popover>
+                                </template>
+                            </el-table-column>
                             <el-table-column prop="name" label="Mark Name" width="120"></el-table-column>
                             <el-table-column prop="mark_url" label="Mark URL"></el-table-column>
                             <el-table-column label="Feed URL">

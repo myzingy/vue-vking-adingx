@@ -82,7 +82,7 @@
                                          @change="setValBackgroundColor"></el-color-picker>
                     </div>
                     <el-form-item label="Font size">
-                        <el-slider v-model="object.fontSize" :min="8" :max="50" :step="1"
+                        <el-slider v-model="object.fontSize" :min="8" :max="70" :step="1"
                                    @change="setValFontSize"></el-slider>
                     </el-form-item>
                     <el-form-item label="Line height">
@@ -115,9 +115,16 @@
                     </el-button>
                 </div>
             </div>
+            <div>
+                <el-button type="primary" @click="shadowify">阴 影</el-button>
+            </div>
             <el-button type="text"
                        @click="removeObject()">
                 Remove selected object
+            </el-button>
+            <el-button type="text"
+                       @click="removeObject('ALL')">
+                Remove All objects
             </el-button>
         </el-form>
     </div>
@@ -287,10 +294,30 @@
                     this.setVal(val[0],"");
                 }
             },
-            removeObject(){
+            removeObject(all=""){
                 if(!this.canvas)  return;
+                if (all=="ALL" && confirm('Are you sure?')) {
+                    this.canvas.clear();
+                }
                 this.canvas.remove(this.canvas.getActiveObject())
-            }
+            },
+            shadowify () {
+                var obj = this.canvas.getActiveObject();
+                if (!obj) return;
+
+                if (obj.shadow) {
+                    obj.shadow = null;
+                }
+                else {
+                    obj.setShadow({
+                        color: 'rgba(0,0,0,0.3)',
+                        blur: 10,
+                        offsetX: 10,
+                        offsetY: 10
+                    });
+                }
+                this.canvas.renderAll();
+            },
         }
     }
 </script>

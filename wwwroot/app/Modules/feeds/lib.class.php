@@ -173,6 +173,8 @@ class lib
             ->select();
         foreach ($data as &$r){
             $r['mark_url']=url('feeds/'.self::FEED_MARKS_PRE.$r['id'].'.xml');
+            $r['mark_img_path']=str_replace(':8080','',url($r['mark_img_path']));
+            $r['mark_bgimg']=str_replace(':8080','',url("feeds/".self::FEED_IMAGE_PRE."{$r['fid']}.jpeg"));
         }
         return array('data'=>$data);
     }

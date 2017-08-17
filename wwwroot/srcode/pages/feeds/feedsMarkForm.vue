@@ -42,7 +42,7 @@
             <div class="canvas-view">
                 <div class="grid-content bg-purple" style="background-color:#cffffc;
                 padding:5px; ">
-                    <el-button type="primary" @click="addTextbox()" icon="edit">Add Text</el-button>
+                    <el-button type="primary" @click="addTextbox" icon="edit">Add Text</el-button>
                     <el-button type="primary" icon="picture">
                         Add Image
                     </el-button>
@@ -57,16 +57,16 @@
                             trigger="click">
                         <el-row :gutter="20" class="popover-shape">
                             <el-col :span="6">
-                                <el-button type="primary" @click="addShapeLine()">直 线</el-button>
+                                <el-button type="primary" @click="addShapeLine">直 线</el-button>
                             </el-col>
                             <el-col :span="6">
-                                <el-button type="primary" @click="addShapeRect()">四边形</el-button>
+                                <el-button type="primary" @click="addShapeRect">四边形</el-button>
                             </el-col>
                             <el-col :span="6">
-                                <el-button type="primary" @click="addShapeCircle()">圆 形</el-button>
+                                <el-button type="primary" @click="addShapeCircle">圆 形</el-button>
                             </el-col>
                             <el-col :span="6">
-                                <el-button type="primary" @click="addShapeTriangle()">三角形</el-button>
+                                <el-button type="primary" @click="addShapeTriangle">三角形</el-button>
                             </el-col>
                             <!--
                             <el-col :span="6"><el-button type="primary" @click="addTextbox(2)">女1</el-button></el-col>
@@ -256,12 +256,11 @@
                     left: getRandomInt(0, this.image.width/2),
                     top: getRandomInt(0, this.image.height/2),
                     fontFamily: 'helvetica',
-                    //angle: getRandomInt(-10, 10),
                     angle: 0,
                     fill: '#' + this.getRandomColor(),
                     fontWeight: '',
                     originX: 'left',
-                    width: this.image.width,
+                    width: parseInt(this.image.width/2),
                     hasRotatingPoint: true,
                     centerTransform: true
                 });

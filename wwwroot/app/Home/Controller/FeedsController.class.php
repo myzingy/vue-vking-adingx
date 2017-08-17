@@ -91,6 +91,10 @@ XML;
         list($image_hash,$mark_hash)=explode('-',$mark_img_hash);
         $image=$lib::PATH_FEED_IMAGE.$image_hash.'.jpg';
         if(!$mark_hash){
+            if(is_numeric($image_hash)){
+                $item=M('feeds_items')->where(['fid'=>$image_hash])->order('image_isdown desc,RAND() asc')->find();
+                die(file_get_contents($lib::PATH_FEED_IMAGE.$item['image_hash'].'.jpg'));
+            }
             die(file_get_contents($image));
         }
         $image_mark=$lib::PATH_FEED_MARKS.$mark_hash.'.png';
