@@ -25,6 +25,7 @@ class lib{
     function demon(){
         asyn_implement('apido/asyn.flushAssetVideoFile');
         asyn_implement('apido/asyn.flushAssetImageFile');
+        asyn_implement('apido/asyn.flushFeed');
         $time_s=getDayTime("07:59:00",0);
         $time_e=getDayTime("08:00:00",0);
         if(NOW_TIME > $time_s && NOW_TIME < $time_e) {

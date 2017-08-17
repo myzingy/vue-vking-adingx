@@ -87,9 +87,12 @@
                     </el-button>
                 </div>
                 <el-row :gutter="24">
-                    <el-col :span="10"><div class="grid-content bg-purple">
-                        <canvas :height="image.height" :width="image.width" :style="imageStyle" id="tu"></canvas>
-                    </div></el-col>
+                    <el-col :span="10">
+                        <div class="grid-content bg-purple">
+                            <canvas :height="image.height" :width="image.width" :style="imageStyle" id="tu"></canvas>
+                        </div>
+                        <el-button type="text" icon="caret-right" v-show="imageStyle" @click="flushImage">换个图看看效果</el-button>
+                    </el-col>
                     <el-col :span="14">
                         <div class="tab-content" style="height: 300px; padding: 5px; overflow-y: auto;">
                             <feedsMarkFormScope ref="feedsMarkFormScope" :canvas="canvas"></feedsMarkFormScope>
@@ -206,6 +209,10 @@
                         that.canvas.renderAll();
                     });
                 }
+            },
+            flushImage(){
+                this.form.mark_object=JSON.stringify(this.canvas);
+                vk.http(uri.getFeedsImageInfo, {fid: this.form.fid}, this.then);
             },
             getFormData(){
                 var flag = false;

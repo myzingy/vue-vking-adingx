@@ -15,7 +15,7 @@ use FacebookAds\Object\Fields\AdFields;
 
 class lib
 {
-    const FEED_UPTIME=86400;
+    const FEED_UPTIME=43200;//半天更新一次
     const ITEM_IMAGE_DOWN_NOK=0;
     const ITEM_IMAGE_DOWN_OK=1;
     const PATH_FEED_XML='uploads/feeds/xmls/';
@@ -42,6 +42,10 @@ class lib
         }
         if($id){
             $this->model->where(array('id'=>$id))->save($data);
+            $marks=M('feeds_marks')->field('id')->where(['fid'=>$id])->select();
+            foreach ($marks as $mark){
+                @unlink(self::PATH_FEED_XML.self::FEED_MARKS_PRE.$mark['id'].'.xml');
+            }
         }else{
             $data['addtime']=NOW_TIME;
             $id=$this->model->add($data);
@@ -65,7 +69,6 @@ class lib
             $xml=file_get_contents($feed['url']);
             mk(self::PATH_FEED_XML);
             file_put_contents(self::PATH_FEED_XML.$feed['id'].'.xml',$xml);
-            @unlink(self::PATH_FEED_XML.self::FEED_MARKS_PRE.$feed['id'].'.xml');
             asyn('apido/asyn.flushFeedParseXML',array('id'=>$feed['id']));
         }
     }
@@ -139,7 +142,7 @@ class lib
     }
     function getFeedsImageInfo(){
         $fid=I('request.fid');
-        $item=M('feeds_items')->where(['fid'=>$fid])->order('image_isdown desc')->find();
+        $item=M('feeds_items')->where(['fid'=>$fid])->order('image_isdown desc,RAND() asc')->find();
         if($item){
             $image=self::PATH_FEED_IMAGE.$item['image_hash'].'.jpg';
             if(file_exists($image)) {
@@ -192,6 +195,7 @@ class lib
             if($mark['mark_img_hash']!=$data['mark_img_hash']){
                 //保存图片信息
                 $this->__setFeedsMarkImage($data['mark_img_path']);
+                @unlink(self::PATH_FEED_XML.self::FEED_MARKS_PRE.$id.'.xml');
             }
             M('feeds_marks')->where(array('id'=>$id))->save($data);
         }else{
