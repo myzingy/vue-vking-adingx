@@ -41,7 +41,7 @@ class lib
             $data[$key]=I('request.'.$key);
         }
         if($id){
-            $data['addtime']=0;
+            $data['uptime']=0;
             $this->model->where(array('id'=>$id))->save($data);
             $marks=M('feeds_marks')->field('id')->where(['fid'=>$id])->select();
             foreach ($marks as $mark){
