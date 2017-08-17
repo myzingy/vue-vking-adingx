@@ -12,6 +12,7 @@ class FeedsController extends Controller {
 	    exit;
     }
     private function __xml($name){
+        header('Content-Type:application/xml');
         $lib=$this->lib;
         $filename=$lib::PATH_FEED_XML.$name;
         if(file_exists($filename)){
@@ -35,12 +36,12 @@ XML;
                 '{description}'=>$mark['description'],
             ));
         }
-        $data=M('feeds_items')->where(['fid'=>$mark['fid']])->order('g_id asc')->limit(10)->select();
+        $data=M('feeds_items')->where(['fid'=>$mark['fid']])->order('g_id asc')->select();
         foreach ($data as $r){
-            $r['g_description']=htmlentities($r['g_description']);
-            $r['g_title']=htmlentities($r['g_title']);
-            $r['g_brand']=htmlentities($r['g_brand']);
-            $r['g_google_product_category']=htmlentities($r['g_google_product_category']);
+            //$r['g_description']=htmlentities($r['g_description']);
+            //$r['g_title']=htmlentities($r['g_title']);
+            //$r['g_brand']=htmlentities($r['g_brand']);
+            //$r['g_google_product_category']=htmlentities($r['g_google_product_category']);
             $r['g_image_link']=url('feeds/'.$lib::FEED_IMAGE_PRE.$r['image_hash'].'-'.$mark['mark_img_hash'].'.jpeg');
             $r['g_link']=$r['g_link']
                 .(strpos($r['g_link'],'?')>0?'&':'?')
@@ -51,34 +52,24 @@ XML;
                     'utm_content'=>$mark['utm_content'],
                     'utm_term'=>$mark['utm_term'],
                 ));
-            $r['g_link']=htmlentities($r['g_link']);
+            //$r['g_link']=htmlentities($r['g_link']);
             $xml.=<<<XML
         <item>
-            <g:id>{$r['g_id']}</g:id>
-            <g:availability>{$r['g_availability']}</g:availability>
-            <g:condition>{$r['g_condition']}</g:condition>
-            <g:description>
-            {$r['g_description']}
-            </g:description>
-            <g:image_link>
-            {$r['g_image_link']}
-            </g:image_link>
-            <g:link>
-            {$r['g_link']}
-            </g:link>
-            <g:title>
-            {$r['g_title']}
-            </g:title>
-            <g:price>{$r['g_price']}</g:price>
-            <g:brand>{$r['g_brand']}</g:brand>
-            <g:google_product_category>
-            {$r['g_google_product_category']}
-            </g:google_product_category>
-            <g:custom_label_0>{$r['g_custom_label_0']}</g:custom_label_0>
-            <g:custom_label_1>{$r['g_custom_label_1']}</g:custom_label_1>
-            <g:custom_label_2>{$r['g_custom_label_2']}</g:custom_label_2>
-            <g:custom_label_3>{$r['g_custom_label_3']}</g:custom_label_3>
-            <g:custom_label_4>{$r['g_custom_label_4']}</g:custom_label_4>
+            <g:id><![CDATA[{$r['g_id']}]]></g:id>
+            <g:availability><![CDATA[{$r['g_availability']}]]></g:availability>
+            <g:condition><![CDATA[{$r['g_condition']}]]></g:condition>
+            <g:description><![CDATA[{$r['g_description']}]]></g:description>
+            <g:image_link><![CDATA[{$r['g_image_link']}]]></g:image_link>
+            <g:link><![CDATA[{$r['g_link']}]]></g:link>
+            <g:title><![CDATA[{$r['g_title']}]]></g:title>
+            <g:price><![CDATA[{$r['g_price']}]]></g:price>
+            <g:brand><![CDATA[{$r['g_brand']}]]></g:brand>
+            <g:google_product_category><![CDATA[{$r['g_google_product_category']}]]></g:google_product_category>
+            <g:custom_label_0><![CDATA[{$r['g_custom_label_0']}]]></g:custom_label_0>
+            <g:custom_label_1><![CDATA[{$r['g_custom_label_1']}]]></g:custom_label_1>
+            <g:custom_label_2><![CDATA[{$r['g_custom_label_2']}]]></g:custom_label_2>
+            <g:custom_label_3><![CDATA[{$r['g_custom_label_3']}]]></g:custom_label_3>
+            <g:custom_label_4><![CDATA[{$r['g_custom_label_4']}]]></g:custom_label_4>
         </item>
 XML;
         }
@@ -86,7 +77,7 @@ XML;
     </channel>
 </rss>
 XML;
-        header('Content-Type:application/xml');
+        file_put_contents($filename,$xml);
         die($xml);
     }
     private function __image($name){

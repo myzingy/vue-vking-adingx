@@ -19,6 +19,9 @@
     #text-cmd-overline {
         text-decoration: overline;
     }
+    .popover-shape div{
+        margin-bottom: 10px;
+    }
 </style>
 <template>
     <div>
@@ -47,6 +50,41 @@
                            @change="getFilePath" style="filter:alpha(opacity=0);opacity:0;width: 122px;
                            height: 25px;border:
                             1px solid #ccc; overflow: hidden; margin-left: -125px; position:relative; top:8px;"/>
+                    <el-popover
+                            ref="popover_shape"
+                            placement="bottom"
+                            width="400"
+                            trigger="click">
+                        <el-row :gutter="20" class="popover-shape">
+                            <el-col :span="6">
+                                <el-button type="primary" @click="addShapeLine()">直 线</el-button>
+                            </el-col>
+                            <el-col :span="6">
+                                <el-button type="primary" @click="addShapeRect()">四边形</el-button>
+                            </el-col>
+                            <el-col :span="6">
+                                <el-button type="primary" @click="addShapeCircle()">圆 形</el-button>
+                            </el-col>
+                            <el-col :span="6">
+                                <el-button type="primary" @click="addShapeTriangle()">三角形</el-button>
+                            </el-col>
+                            <!--
+                            <el-col :span="6"><el-button type="primary" @click="addTextbox(2)">女1</el-button></el-col>
+                            <el-col :span="6"><el-button type="primary" @click="addTextbox(141)">女2</el-button></el-col>
+                            <el-col :span="6"><el-button type="primary" @click="addTextbox(142)">女3</el-button></el-col>
+                            <el-col :span="6"><el-button type="primary" @click="addTextbox(140)">女4</el-button></el-col>
+                            <el-col :span="6"><el-button type="primary" @click="addTextbox(99)">分割线</el-button></el-col>
+                            <el-col :span="6"><el-button type="primary" @click="addTextbox(98)">分割线</el-button></el-col>
+                            <el-col :span="6"><el-button type="primary" @click="addTextbox(93)">分割线</el-button></el-col>
+                            <el-col :span="6"><el-button type="primary" @click="addTextbox(59)">彩带</el-button></el-col>
+                            <el-col :span="6"><el-button type="primary" @click="addTextbox(115)">花藤</el-button></el-col>
+                            <el-col :span="6"><el-button type="primary" @click="addTextbox(91)">曲线树</el-button></el-col>
+                            -->
+                        </el-row>
+                    </el-popover>
+                    <el-button type="primary" icon="star-on" v-popover:popover_shape>
+                        Add Shape
+                    </el-button>
                 </div>
                 <el-row :gutter="24">
                     <el-col :span="10"><div class="grid-content bg-purple">
@@ -268,6 +306,43 @@
                 };
                 reader.readAsDataURL(file);
 
+            },
+            addShapeRect() {
+                this.canvas.add(new fabric.Rect({
+                    left: 0,
+                    top: parseInt(this.canvas.height/3),
+                    fill: '#' + this.getRandomColor(),
+                    width: this.canvas.width,
+                    height: this.canvas.height/3,
+                    opacity: 1
+                }));
+            },
+            addShapeLine() {
+                this.canvas.add(new fabric.Line([ 0, parseInt(this.canvas.height/2), this.canvas.width, parseInt(this.canvas.height/2)], {
+                    left: 0,
+                    top: parseInt(this.canvas.height/2),
+                    stroke: '#' + this.getRandomColor(),
+                    strokeWidth:5,
+                }));
+            },
+            addShapeCircle() {
+                this.canvas.add(new fabric.Circle({
+                    left: 0,
+                    top: 0,
+                    fill: '#' + this.getRandomColor(),
+                    radius: parseInt(this.canvas.width/3),
+                    opacity: 1
+                }));
+            },
+            addShapeTriangle() {
+                this.canvas.add(new fabric.Triangle({
+                    left: parseInt(this.canvas.width/3),
+                    top: parseInt(this.canvas.height/3),
+                    fill: '#' + this.getRandomColor(),
+                    width: parseInt(this.canvas.width/3),
+                    height: parseInt(this.canvas.height/3),
+                    opacity: 1
+                }));
             },
         }
     }

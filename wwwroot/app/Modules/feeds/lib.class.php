@@ -65,6 +65,7 @@ class lib
             $xml=file_get_contents($feed['url']);
             mk(self::PATH_FEED_XML);
             file_put_contents(self::PATH_FEED_XML.$feed['id'].'.xml',$xml);
+            @unlink(self::PATH_FEED_XML.self::FEED_MARKS_PRE.$feed['id'].'.xml');
             asyn('apido/asyn.flushFeedParseXML',array('id'=>$feed['id']));
         }
     }

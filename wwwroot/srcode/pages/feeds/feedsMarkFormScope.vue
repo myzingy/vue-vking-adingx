@@ -45,7 +45,7 @@
                 <el-slider v-model="object.angle" :min="0" :max="360" :step="5"
                            @change="setValAngle"></el-slider>
             </el-form-item>
-            <div id="text-wrapper" class="">
+            <div id="text-wrapper" v-if="object.type=='textbox'">
                 <div id="text-controls">
                     <p>Text specific controls</p>
                     <el-input type="textarea" v-model="object.text" :autosize="{ minRows: 2, maxRows: 4}"
@@ -209,7 +209,7 @@
                 if(!this.canvas)  return;
                 var object=this.canvas.getActiveObject();
                 if(!object) return;
-                //console.log('getObjectAll',object);
+                console.log('canvas.getActiveObject',object);
                 for(var i in this.fields){
                     for(var j in this.fields[i]){
                         var key=this.fields[i][j];
@@ -217,6 +217,7 @@
                         this.object[key]=val || "";
                     }
                 }
+                this.object['type']=object.type;
                 console.log('this.object',this.object);
                 return this.object;
             },
