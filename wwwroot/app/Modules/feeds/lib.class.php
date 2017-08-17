@@ -41,6 +41,7 @@ class lib
             $data[$key]=I('request.'.$key);
         }
         if($id){
+            $data['addtime']=0;
             $this->model->where(array('id'=>$id))->save($data);
             $marks=M('feeds_marks')->field('id')->where(['fid'=>$id])->select();
             foreach ($marks as $mark){
@@ -50,7 +51,6 @@ class lib
             $data['addtime']=NOW_TIME;
             $id=$this->model->add($data);
         }
-        asyn('apido/asyn.flushFeed',array('id'=>$id));
     }
     //flushFeedDownXML
     function flushFeed(){
