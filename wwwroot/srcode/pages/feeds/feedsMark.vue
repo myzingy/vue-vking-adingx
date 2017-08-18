@@ -21,10 +21,8 @@
                             <el-table-column width="110" label="Thumb">
                                 <template scope="scope">
                                     <el-popover placement="right" title="" trigger="hover">
-                                        <div style="position: relative;" class="img-mark">
-                                            <img :src="scope.row.mark_bgimg"/>
-                                            <img :src="scope.row.mark_img_path"
-                                                 style="position:absolute;top:0;left:0;"/>
+                                        <div :style="getThumbStyle(scope.row)" class="img-mark">
+                                            <img :src="scope.row.mark_img_path"/>
                                         </div>
                                         <div style="position: relative;" slot="reference">
                                             <img height="100" :src="scope.row.mark_bgimg"/>
@@ -101,6 +99,7 @@
                         break;
                     case uri.setFeedsMark.code:
                         this.closeDialog();
+                        vk.setCache(uri.getFeedsMark,'');
                         this.getData();
                         break;
                 }
@@ -121,8 +120,8 @@
                 }
                 console.log('openDialog',this.form);
                 var that=this;
+                that.dialogTableVisible=true;
                 setTimeout(function(){
-                    that.dialogTableVisible=true;
                     that.$refs.feedsMarkForm.initPage();
                 },100);
 
@@ -143,6 +142,14 @@
                     return vk.date('MM-DD HH时',row.uptime);
                 }
                 return '-.-';
+            },
+            getThumbStyle(row,height,width){
+                return "height:"+(height||(row.background?row.background.image.height:200))+"px;"
+                        +"width:"+(width||(row.background?row.background.image.width:200))+"px;"
+                    +"background-image: url("+row.mark_bgimg+");"
+                    +"background-repeat: no-repeat;"
+                    +"background-size: "+(row.background?row.background.size:100)+"%;"
+                    +"background-position: "+(row.background?row.background.position.x:0)+"px "+(row.background?row.background.position.y:0)+"px;";
             },
         },
     }

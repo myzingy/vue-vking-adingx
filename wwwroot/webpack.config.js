@@ -85,6 +85,10 @@ module.exports = {
       '/apido': {
         target: 'http://www.vking.com/facebook_ads/wwwroot/',
         //secure: false
+      },
+      '/facebook_ads': {
+          target: 'http://www.vking.com/',
+          //secure: false
       }
     }
   },

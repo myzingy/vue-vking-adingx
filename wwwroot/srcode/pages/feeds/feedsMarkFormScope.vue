@@ -26,7 +26,7 @@
 </style>
 <template>
     <div>
-        <el-form label-position="left" ref="object" :model="object">
+        <el-form label-position="left" ref="object" :model="object" v-show="objectSelected">
             <label for="color">Fill / Stroke / Background:</label>
             <el-color-picker v-model="object.fill" @change="setValFill"></el-color-picker>
             <el-color-picker v-model="object.stroke" @change="setValStroke"></el-color-picker>
@@ -127,6 +127,20 @@
                 Remove All objects
             </el-button>
         </el-form>
+        <el-form label-position="left" ref="object" :model="background" v-show="!objectSelected && image.url">
+            <el-form-item label="背景图缩放">
+                <el-slider v-model="background.size" :min="50" :max="150" :step="5"
+                           @change="setBackground"></el-slider>
+            </el-form-item>
+            <el-form-item label="背景图水平位移">
+                <el-slider v-model="background.position.x" :min="-image.width/2" :max="image.width/2" :step="5"
+                           @change="setBackground"></el-slider>
+            </el-form-item>
+            <el-form-item label="背景图垂直位移">
+                <el-slider v-model="background.position.y" :min="-image.height/2" :max="image.height/2" :step="5"
+                           @change="setBackground"></el-slider>
+            </el-form-item>
+        </el-form>
     </div>
 </template>
 
@@ -151,20 +165,39 @@
         }
     }
     export default {
-        props:['canvas'],
+        props:['canvas','image'],
         data:function(){
             return {
                 fields: __fields,
                 object:__object,
+                objectSelected:false,
+                background:{
+                    size:100,
+                    position:{
+                        x:0,
+                        y:0,
+                    }
+                },
             }
         },
         mounted(){
             this.getObjectAll();
         },
         methods: {
-            initPage(){
-                console.log('feedsMarkFormScope.vue','initPage...',__objectInit);
+            initPage(background){
+                console.log('feedsMarkFormScope.vue','initPage...',background);
                 Object.assign(this.object,__objectInit);
+                if(background){
+                    this.background=background;
+                }else{
+                    this.background={
+                        size:100,
+                        position:{
+                            x:0,
+                            y:0,
+                        }
+                    };
+                }
             },
             updateScope() {
                 this.canvas.renderAll();
@@ -213,9 +246,14 @@
                 this.canvas.renderAll();
             },
             getObjectAll () {
+                console.log('getObjectAll....');
                 if(!this.canvas)  return;
                 var object=this.canvas.getActiveObject();
-                if(!object) return;
+                if(!object) {
+                    this.objectSelected=false;
+                    return;
+                }
+                this.objectSelected=true;
                 console.log('canvas.getActiveObject',object);
                 for(var i in this.fields){
                     for(var j in this.fields[i]){
@@ -318,6 +356,9 @@
                 }
                 this.canvas.renderAll();
             },
+            setBackground(){
+                this.$emit('setBackground');
+            }
         }
     }
 </script>

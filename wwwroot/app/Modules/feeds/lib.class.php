@@ -22,6 +22,7 @@ class lib
     const PATH_FEED_IMAGE='uploads/feeds/images/';
     const PATH_FEED_MARKS='uploads/feeds/marks/';
     const PATH_FEED_IMAGE_MARKS='uploads/feeds/images-marks/';
+    const PATH_FEED_IMAGE_BASE64='uploads/feeds/images-base64/';
     const FEED_MARKS_PRE='mark-';
     const FEED_IMAGE_PRE='img-';
 
@@ -148,7 +149,6 @@ class lib
             if(file_exists($image)) {
                 $arr = getimagesize($image);
                 $url=url("feeds/".self::FEED_IMAGE_PRE."{$item['image_hash']}.jpeg");
-                $url=str_replace(':8080','',$url);
                 return ['data'=>[
                     'width'=>$arr[0],
                     'height'=>$arr[1],
@@ -173,8 +173,10 @@ class lib
             ->select();
         foreach ($data as &$r){
             $r['mark_url']=url('feeds/'.self::FEED_MARKS_PRE.$r['id'].'.xml');
-            $r['mark_img_path']=str_replace(':8080','',url($r['mark_img_path']));
-            $r['mark_bgimg']=str_replace(':8080','',url("feeds/".self::FEED_IMAGE_PRE."{$r['fid']}.jpeg"));
+            $r['mark_img_path']=url($r['mark_img_path']);
+            $r['mark_bgimg']=url("feeds/".self::FEED_IMAGE_PRE."{$r['fid']}.jpeg");
+            $r['background']=json_decode($r['background'],true);
+            //$r['mark_object']=$r['mark_object']?$r['mark_object']:[];
         }
         return array('data'=>$data);
     }
@@ -183,17 +185,44 @@ class lib
         $image=explode(",",$image);
         file_put_contents($filename,base64_decode($image[1]));
     }
+    function __setFeedsMarkBase64Image(&$jsonstr){
+        if($jsonstr){
+            mk(self::PATH_FEED_IMAGE_BASE64);
+            $object=json_decode($jsonstr,true);
+            foreach ($object['objects'] as &$obj){
+                if($obj['type']=='image' && strpos($obj['src'],'base64,')>0){
+                    $image=explode(",",$obj['src']);
+                    $ext_flag=preg_match("/\/([^;]+);/",$image[0],$ext);
+                    if($ext_flag){
+                        $ext='.'.$ext[1];
+                    }else{
+                        $ext='.jpg';
+                    }
+                    $filename=self::PATH_FEED_IMAGE_BASE64.md5($obj['src']).$ext;
+                    if(!file_exists($filename)) {
+                        file_put_contents($filename,base64_decode($image[1]));
+                    }
+                    $obj['src']=url($filename);
+                }
+            }
+            $jsonstr=json_encode($object);
+        }
+    }
     function setFeedsMark(){
         mk(self::PATH_FEED_MARKS);
         $id=I('request.id');
         $data['fid']=I('request.fid');
         $data['name']=I('request.name');
         $data['mark_object']=I('request.json','','trim');
+        $data['background']=I('request.background','','trim');
         $data['mark_img_hash']=substr(md5($data['mark_object']),8,16);
         $data['mark_img_path']=self::PATH_FEED_MARKS.$data['mark_img_hash'].'.png';
-
+        $this->__setFeedsMarkBase64Image($data['mark_object']);
         if($id){
             $mark=M('feeds_marks')->find($id);
+            if($data['background']!=$mark['background']){
+                @unlink(self::PATH_FEED_XML.self::FEED_MARKS_PRE.$id.'.xml');
+            }
             if($mark['mark_img_hash']!=$data['mark_img_hash']){
                 //保存图片信息
                 $this->__setFeedsMarkImage($data['mark_img_path']);

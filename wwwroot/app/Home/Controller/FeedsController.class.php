@@ -99,10 +99,43 @@ XML;
         }
         $image_mark=$lib::PATH_FEED_MARKS.$mark_hash.'.png';
         mk($lib::PATH_FEED_IMAGE_MARKS);
-        $iii = new \Think\Image();
-        $iii->open($image)
-            ->water($image_mark,\Think\Image::IMAGE_WATER_CENTER,100)
-            ->save($filename,null,100);
+
+        
+        $background=M('feeds_marks')->where(['mark_img_hash'=>$mark_hash])->getField('background');
+        if($background){
+            $background=json_decode($background,true);
+            $im = imagecreatetruecolor($background['image']['width'], $background['image']['height']);
+            $cfff = imagecolorallocate($im, 255, 255, 255);
+            imagefill($im, 0, 0, $cfff);
+            //+bg
+            $bg_size=$background['size']/100;
+            $bg_width=ceil($background['image']['width']*$bg_size);
+            $bg_height=ceil($background['image']['height']*$bg_size);
+            $im2=new \Think\Image(\Think\Image::IMAGE_GD,$image);
+            $im_src=$im2->img->img;
+            //$im_src=imagecreatefromjpeg($image);
+            imagecopyresized($im,$im_src,$background['position']['x'],$background['position']['y']
+                ,0,0
+                ,$bg_width,$bg_height
+                ,$background['image']['width'],$background['image']['width']
+            );
+            imagedestroy($im_src);
+            //+mark
+            $im_src=imagecreatefrompng($image_mark);
+            imagecopy($im,$im_src,0,0
+                ,0,0
+                ,$background['image']['width'],$background['image']['width']
+            );
+            imagedestroy($im_src);
+            //+save
+            imagejpeg ($im,$filename,100);
+            imagedestroy($im);
+        }else{
+            $iii = new \Think\Image();
+            $iii->open($image)
+                ->water($image_mark,\Think\Image::IMAGE_WATER_CENTER,100)
+                ->save($filename,null,100);
+        }
         die(file_get_contents($filename));
     }
     public function _empty($name){

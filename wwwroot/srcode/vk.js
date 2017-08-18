@@ -76,6 +76,7 @@ let vk={
         var rules={
             10003:{timeout:86400},
             12001:{timeout:86400},
+            16000:{timeout:86400},//getFeeds
         };
         var line=rules[uri.code];
         if(line){

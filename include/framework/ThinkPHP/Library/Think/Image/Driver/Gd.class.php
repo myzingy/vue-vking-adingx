@@ -17,7 +17,7 @@ class Gd{
      * 图像资源对象
      * @var resource
      */
-    private $img;
+    public $img;
 
     /**
      * 图像信息，包括width,height,type,mime,size

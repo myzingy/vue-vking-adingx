@@ -39,7 +39,7 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <div class="canvas-view">
+            <div class="canvas-view" v-show="image.url">
                 <div class="grid-content bg-purple" style="background-color:#cffffc;
                 padding:5px; ">
                     <el-button type="primary" @click="addTextbox" icon="edit">Add Text</el-button>
@@ -95,7 +95,8 @@
                     </el-col>
                     <el-col :span="14">
                         <div class="tab-content" style="height: 300px; padding: 5px; overflow-y: auto;">
-                            <feedsMarkFormScope ref="feedsMarkFormScope" :canvas="canvas"></feedsMarkFormScope>
+                            <feedsMarkFormScope ref="feedsMarkFormScope" :canvas="canvas" :image="image"
+                                                @setBackground="setBackground"></feedsMarkFormScope>
                         </div>
                     </el-col>
                 </el-row>
@@ -140,6 +141,7 @@
                     url:"",
                 },
                 imageStyle:"",
+                background:{},
             }
         },
         mounted(){
@@ -166,6 +168,7 @@
                         this.image = json.data;
                         this.imageStyle = 'background-image: url(' + json.data.url + ');width:' + json.data.width + 'px;height:' + json.data.height + 'px;';
                         this.mountedInitCanvas(false);
+                        this.setBackground();
                         break;
                 }
             },
@@ -182,7 +185,8 @@
                 }else{
                     vk.http(uri.getFeedsImageInfo, {fid: this.form.fid}, this.then);
                 }
-                this.$refs.feedsMarkFormScope.initPage();
+                this.$refs.feedsMarkFormScope.initPage(this.form.background);
+
             },
             initCanvas(clear){
                 console.log('initCanvasInterval...');
@@ -223,6 +227,8 @@
                 });
                 this.form['json']=JSON.stringify(this.canvas);
                 this.form['image_base64']=this.toImage();
+                this.background.image=this.image;
+                this.form['background']=JSON.stringify(this.background);
                 if (flag) {
                     return this.form;
                 }
@@ -270,17 +276,19 @@
             watchCanvas() {
                 var that=this;
                 this.canvas
-                    .on('object:selected', this.$refs.feedsMarkFormScope.updateScope)
-                    .on('group:selected', this.$refs.feedsMarkFormScope.updateScope)
-                    .on('path:created', this.$refs.feedsMarkFormScope.updateScope)
-                    .on('selection:cleared', this.$refs.feedsMarkFormScope.updateScope);
+                    .on('mouse:up', this.$refs.feedsMarkFormScope.updateScope);
+//                    .on('object:selected', this.$refs.feedsMarkFormScope.updateScope)
+//                    .on('group:selected', this.$refs.feedsMarkFormScope.updateScope)
+//                    .on('path:created', this.$refs.feedsMarkFormScope.updateScope)
+//                    .on('selection:cleared', this.$refs.feedsMarkFormScope.updateScope)
+
             },
-            toImage () {
+            toImage (multiplier) {
                 if (!fabric.Canvas.supports('toDataURL')) {
                     vk.alert('This browser doesn\'t provide means to serialize canvas to an image');
                 }
                 else {
-                    var data = this.canvas.toDataURL({ multiplier: 1, format: 'png' });
+                    var data = this.canvas.toDataURL({ multiplier: multiplier, format: 'png' });
                     return data;
                 }
             },
@@ -305,7 +313,7 @@
                         image.set({
                             left: 0,
                             top: 0,
-                            angle: 0
+                            angle: 0,
                         }).scale(scale).setCoords();
                         that.canvas.add(image);
                     });
@@ -350,6 +358,15 @@
                     opacity: 1
                 }));
             },
+            setBackground(){
+                this.background=this.$refs.feedsMarkFormScope.background;
+                if(this.imageStyle){
+                    this.imageStyle+= 'background-repeat:no-repeat;'
+                        +'background-size:'+this.background.size+'%;'
+                        +'background-position-x:'+this.background.position.x+'px;'
+                        +'background-position-y:'+this.background.position.y+'px;'
+                }
+            }
         }
     }
 </script>

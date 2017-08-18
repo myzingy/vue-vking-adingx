@@ -46,7 +46,7 @@ class Image{
      * 图片资源
      * @var resource
      */
-    private $img;
+    public $img;
 
     /**
      * 构造方法，用于实例化一个图片处理对象
