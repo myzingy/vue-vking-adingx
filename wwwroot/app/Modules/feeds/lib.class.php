@@ -215,14 +215,11 @@ class lib
         $data['name']=I('request.name');
         $data['mark_object']=I('request.json','','trim');
         $data['background']=I('request.background','','trim');
-        $data['mark_img_hash']=substr(md5($data['mark_object']),8,16);
+        $data['mark_img_hash']=substr(md5($data['mark_object'].$data['background']),8,16);
         $data['mark_img_path']=self::PATH_FEED_MARKS.$data['mark_img_hash'].'.png';
         $this->__setFeedsMarkBase64Image($data['mark_object']);
         if($id){
             $mark=M('feeds_marks')->find($id);
-            if($data['background']!=$mark['background']){
-                @unlink(self::PATH_FEED_XML.self::FEED_MARKS_PRE.$id.'.xml');
-            }
             if($mark['mark_img_hash']!=$data['mark_img_hash']){
                 //保存图片信息
                 $this->__setFeedsMarkImage($data['mark_img_path']);
