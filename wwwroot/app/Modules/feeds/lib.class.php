@@ -171,12 +171,20 @@ class lib
             ->join('feeds F ON F.id=FM.fid','left')
             ->order('FM.id desc')
             ->select();
-        foreach ($data as &$r){
-            $r['mark_url']=url('feeds/'.self::FEED_MARKS_PRE.$r['id'].'.xml');
-            $r['mark_img_path']=url($r['mark_img_path']);
-            $r['mark_bgimg']=url("feeds/".self::FEED_IMAGE_PRE."{$r['fid']}.jpeg");
-            $r['background']=json_decode($r['background'],true);
-            //$r['mark_object']=$r['mark_object']?$r['mark_object']:[];
+        $image_hash=[];
+        if($data){
+            foreach ($data as &$r){
+                if(!$image_hash[$r['fid']]){
+                    $image_hash[$r['fid']]=M('feeds_items')->where(['fid'=>$data[0]['fid']])->order('image_isdown desc,RAND() asc')
+                        ->getField('image_hash');
+                }
+                $r['mark_url']=url('feeds/'.self::FEED_MARKS_PRE.$r['id'].'.xml');
+                //$r['mark_img_path']=url($r['mark_img_path']);
+                //$r['mark_bgimg']=url("feeds/".self::FEED_IMAGE_PRE."{$r['fid']}.jpeg");
+                $r['background']=json_decode($r['background'],true);
+                //$r['mark_object']=$r['mark_object']?$r['mark_object']:[];
+                $r['mark_img_path']=url("feeds/img-{$image_hash[$r['fid']]}-{$r['mark_img_hash']}.jpeg");
+            }
         }
         return array('data'=>$data);
     }

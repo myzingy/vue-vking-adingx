@@ -21,13 +21,11 @@
                             <el-table-column width="110" label="Thumb">
                                 <template scope="scope">
                                     <el-popover placement="right" title="" trigger="hover">
-                                        <div :style="getThumbStyle(scope.row)" class="img-mark">
+                                        <div class="img-mark">
                                             <img :src="scope.row.mark_img_path"/>
                                         </div>
-                                        <div style="position: relative;" slot="reference">
-                                            <img height="100" :src="scope.row.mark_bgimg"/>
-                                            <img height="100" :src="scope.row.mark_img_path"
-                                                 style="position:absolute;top:0; left:0;"/>
+                                        <div slot="reference">
+                                            <img height="100" :src="scope.row.mark_img_path"/>
                                         </div>
                                     </el-popover>
                                 </template>
@@ -47,6 +45,11 @@
                                                size="small">
                                         修改
                                     </el-button>
+                                    <el-button @click.native.prevent="viewImageDialog(scope.$index, rulesData)"
+                                               type="text"
+                                               size="small">
+                                        预览
+                                    </el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -62,6 +65,14 @@
                         <el-button type="primary" @click="updateDialog">确 定</el-button>
                       </span>
         </el-dialog>
+        <el-dialog title="View Feed Mark" :visible.sync="viewImageDialogVisible" :close-on-click-modal="false"
+                   :close-on-press-escape="false" size="full">
+            <viewImageDialog ref="viewImageDialog" :viewImages="viewImages"></viewImageDialog>
+            <span slot="footer" class="dialog-footer">
+                <el-button  @click="closeViewImageDialog">关 闭</el-button>
+                        <el-button type="primary" @click="viewImageDialog">换一批</el-button>
+                      </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -70,10 +81,12 @@
     import vk from '../../vk.js';
     import uri from '../../uri.js';
     import feedsMarkForm from './feedsMarkForm.vue';
+    import viewImageDialog from './viewImageDialog.vue';
 
     export default {
         components:{
             feedsMarkForm:feedsMarkForm,
+            viewImageDialog:viewImageDialog,
         },
         data:function(){
             return {
@@ -81,7 +94,9 @@
                 rulesData:[],
                 feeds:[],
                 dialogTableVisible:false,
+                viewImageDialogVisible:false,
                 form:{},
+                viewImages:[],
             }
         },
         mounted(){
@@ -143,13 +158,21 @@
                 }
                 return '-.-';
             },
-            getThumbStyle(row,height,width){
-                return "height:"+(height||(row.background?row.background.image.height:200))+"px;"
-                        +"width:"+(width||(row.background?row.background.image.width:200))+"px;"
-                    +"background-image: url("+row.mark_bgimg+");"
-                    +"background-repeat: no-repeat;"
-                    +"background-size: "+(row.background?row.background.size:100)+"%;"
-                    +"background-position: "+(row.background?row.background.position.x:0)+"px "+(row.background?row.background.position.y:0)+"px;";
+            viewImageDialog(index,data){
+                var list=[];
+                if(data){
+                    this.viewImagesSrc=data[index].mark_img_path.replace(/-[^\-]{32}-/,'-');
+                }
+                this.viewImages=[];
+                for (var i=0;i<100;i++){
+                    list.push(this.viewImagesSrc+'?'+Math.random());
+                }
+                this.viewImageDialogVisible=true;
+                var that=this;
+                setTimeout(function(){that.viewImages=list;},1000);
+            },
+            closeViewImageDialog(){
+                this.viewImageDialogVisible=false;
             },
         },
     }

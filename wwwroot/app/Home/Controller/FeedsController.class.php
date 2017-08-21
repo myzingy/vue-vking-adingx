@@ -80,7 +80,17 @@ XML;
         file_put_contents($filename,$xml);
         die($xml);
     }
+    private function __isRandMarkImage(&$name){
+        $lib=$this->lib;
+        $mark_hash=strtr($name,array($lib::FEED_IMAGE_PRE=>'','.jpeg'=>''));
+        if(strlen($mark_hash)==16){
+            $fid=M('feeds_marks')->where(['mark_img_hash'=>$mark_hash])->getField('fid');
+            $image_hash=M('feeds_items')->where(['fid'=>$fid])->order('image_isdown desc,RAND() asc')->getField('image_hash');
+            $name="$image_hash-$mark_hash.jpeg";
+        }
+    }
     private function __image($name){
+        $this->__isRandMarkImage($name);
         header('Content-Type:image/jpg');
         $lib=$this->lib;
         $filename=$lib::PATH_FEED_IMAGE_MARKS.$name;
