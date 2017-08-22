@@ -162,10 +162,12 @@
                 var list=[];
                 if(data){
                     this.viewImagesSrc=data[index].mark_img_path.replace(/-[^\-]{32}-/,'-');
+                    this.viewImagesCount=data[index].count_items;
                 }
                 this.viewImages=[];
-                for (var i=0;i<100;i++){
-                    list.push(this.viewImagesSrc+'?'+Math.random());
+                var max=parseInt(Math.random()*(this.viewImagesCount-100));
+                for (var i=max;i<max+100;i++){
+                    list.push(this.viewImagesSrc+'/q/'+i+'.jpeg');
                 }
                 this.viewImageDialogVisible=true;
                 var that=this;

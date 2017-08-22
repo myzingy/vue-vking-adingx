@@ -81,17 +81,36 @@ XML;
         die($xml);
     }
     private function __isRandMarkImage(&$name){
+        $q=I('request.q',0)+0;
         $lib=$this->lib;
         $mark_hash=strtr($name,array($lib::FEED_IMAGE_PRE=>'','.jpeg'=>''));
         if(strlen($mark_hash)==16){
             $fid=M('feeds_marks')->where(['mark_img_hash'=>$mark_hash])->getField('fid');
-            $image_hash=M('feeds_items')->where(['fid'=>$fid])->order('image_isdown desc,RAND() asc')->getField('image_hash');
+//            $image_hash=M('feeds_items')->where(['fid'=>$fid])
+//            ->order('image_isdown desc,RAND() asc')
+//            ->getField('image_hash');
+            $image_hash=M('feeds_items')->where(['fid'=>$fid])
+                ->field('image_hash')
+                ->order('g_id asc')
+                ->limit($q,1)
+                ->select();
+            $image_hash=$image_hash[0]['image_hash'];
             $name="$image_hash-$mark_hash.jpeg";
         }
     }
     private function __image($name){
         $this->__isRandMarkImage($name);
-        header('Content-Type:image/jpg');
+        if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])){
+            // if the browser has a cached version of this image, send 304
+            header('Last-Modified: '.$_SERVER['HTTP_IF_MODIFIED_SINCE'],true,304);
+            exit;
+        }
+        header ('Pragma: private');
+        header ("Last-Modified: " . gmdate ('r', NOW_TIME));
+        header ("Expires: " . gmdate ("r", (NOW_TIME + 86400)));
+        header ("Cache-Control: private, max-age=86400, pre-check=86400");
+        header ('Content-Type: image/jpeg');
+        
         $lib=$this->lib;
         $filename=$lib::PATH_FEED_IMAGE_MARKS.$name;
         if(file_exists($filename)){
