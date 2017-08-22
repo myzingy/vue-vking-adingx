@@ -100,20 +100,21 @@ XML;
     }
     private function __image($name){
         $this->__isRandMarkImage($name);
+        $cachetime=8640000;
+        header ('Content-Type: image/jpeg');
+        header ('Pragma: private');
+        header ("Cache-Control: private, max-age=$cachetime, pre-check=$cachetime");
         if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])){
             // if the browser has a cached version of this image, send 304
             header('Last-Modified: '.$_SERVER['HTTP_IF_MODIFIED_SINCE'],true,304);
             exit;
         }
-        header ('Pragma: private');
-        header ("Last-Modified: " . gmdate ('r', NOW_TIME));
-        header ("Expires: " . gmdate ("r", (NOW_TIME + 86400)));
-        header ("Cache-Control: private, max-age=86400, pre-check=86400");
-        header ('Content-Type: image/jpeg');
         
         $lib=$this->lib;
         $filename=$lib::PATH_FEED_IMAGE_MARKS.$name;
         if(file_exists($filename)){
+            header ("Expires: " . gmdate ("r", (filectime($filename) + $cachetime)));
+            header ("Last-Modified: " . gmdate ('r', filectime($filename)));
             die(file_get_contents($filename));
         }
         $mark_img_hash=strtr($name,array($lib::FEED_IMAGE_PRE=>'','.jpeg'=>''));
@@ -124,6 +125,8 @@ XML;
                 $item=M('feeds_items')->where(['fid'=>$image_hash])->order('image_isdown desc,RAND() asc')->find();
                 die(file_get_contents($lib::PATH_FEED_IMAGE.$item['image_hash'].'.jpg'));
             }
+            header ("Expires: " . gmdate ("r", (filectime($image) + $cachetime)));
+            header ("Last-Modified: " . gmdate ('r', filectime($image)));
             die(file_get_contents($image));
         }
         $image_mark=$lib::PATH_FEED_MARKS.$mark_hash.'.png';
@@ -165,6 +168,8 @@ XML;
                 ->water($image_mark,\Think\Image::IMAGE_WATER_CENTER,100)
                 ->save($filename,null,100);
         }
+        header ("Expires: " . gmdate ("r", (filectime($filename) + $cachetime)));
+        header ("Last-Modified: " . gmdate ('r', filectime($filename)));
         die(file_get_contents($filename));
     }
     public function _empty($name){
