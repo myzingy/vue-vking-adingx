@@ -132,7 +132,8 @@
             },
             openDialog(index,data,iscopy=false){
                 if(index>-1){
-                    var _d=data[index];
+                    var _d={};
+                    Object.assign(_d,data[index]);
                     if(iscopy){
                         _d.id="";
                         _d.name=_d.name+'-[copy]';
