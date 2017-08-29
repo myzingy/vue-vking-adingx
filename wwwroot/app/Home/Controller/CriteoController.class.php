@@ -52,8 +52,7 @@ class CriteoController extends Controller {
         $clientLogin->password = PASSWORD;
         $clientLogin->source = APP_SOURCE;
         $loginResponse = $soap_client->clientLogin($clientLogin);
-        $authToken = explode("e",strtolower($loginResponse->clientLoginResult));
-        $authToken = "".bcmul($authToken[0], bcpow(10, $authToken[1]));
+        $authToken = $loginResponse->clientLoginResult;
 
         var_dump([$loginResponse->clientLoginResult,$authToken]);
         $apiHeader = new \apiHeader();
