@@ -61,7 +61,18 @@ class lib
         if($status>-1){
             $where.=" and `status`={$status} ";
         }
-        $data=$this->model->order('id desc')->where($where)->select();
+        $data=$this->model->field('id,name,status,type')->order('id desc')->where($where)->select();
+        return array('data'=>$data);
+    }
+    function getRule($user){
+        $id=I('request.id');
+        $where=" `id`='{$id}' ";
+        if($user->group_id==\Modules\group\lib::GROUP_ID_ADMIN){
+            $where.=" and (root_id='".($user->root?$user->root:$user->id)."') ";
+        }else{
+            $where.=" and (user_id='{$user->id}' OR root_id='{$user->id}') ";
+        }
+        $data=$this->model->where($where)->find();
         return array('data'=>$data);
     }
     function getRulesLog(){

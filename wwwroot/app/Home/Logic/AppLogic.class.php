@@ -76,6 +76,10 @@ class AppLogic {
         $lib = new \Modules\rules\lib();
         return $lib -> getRulesData($this->user);
     }
+    function user__getRule(){
+        $lib = new \Modules\rules\lib();
+        return $lib -> getRule($this->user);
+    }
     function user__getRulesLog(){
         $lib = new \Modules\rules\lib();
         return $lib -> getRulesLog();

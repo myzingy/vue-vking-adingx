@@ -45,6 +45,11 @@
                                                size="small">
                                         修改
                                     </el-button>
+                                    <el-button @click.native.prevent="openDialog(scope.$index, rulesData,true)"
+                                               type="text"
+                                               size="small">
+                                        复制
+                                    </el-button>
                                     <el-button @click.native.prevent="viewImageDialog(scope.$index, rulesData)"
                                                type="text"
                                                size="small">
@@ -125,9 +130,15 @@
             editFeed(){
 
             },
-            openDialog(index,data){
+            openDialog(index,data,iscopy=false){
                 if(index>-1){
-                    this.form=data[index];
+                    var _d=data[index];
+                    if(iscopy){
+                        _d.id="";
+                        _d.name=_d.name+'-[copy]';
+                    }
+                    this.form=_d;
+
                 }else{
                     this.form={
                         fid:"",

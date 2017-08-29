@@ -114,9 +114,13 @@
         },
         methods:{
             then:function(json,code){
+                vk.loading(false);
                 switch(code){
 					case uri.getRulesData.code:
                         this.rulesData=json.data;
+                        break;
+                    case uri.getRule.code:
+                        this.$refs.rule.editInfo(json.data);
                         break;
 				}
 			},
@@ -130,7 +134,8 @@
             editRule:function(index,rulesData){
                 this.activeName= 'updateRule';
                 //console.log(index,rulesData[index].xml)
-				this.$refs.rule.editInfo(rulesData[index]);
+                vk.loading();
+                vk.http(uri.getRule,{id:rulesData[index].id},this.then);
 			},
             append:function(index,rulesData){
                 this.activeName= 'updateRule';
