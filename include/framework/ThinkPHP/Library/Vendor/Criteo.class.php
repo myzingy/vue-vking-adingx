@@ -1,41 +1,33 @@
 <?php
-
-class clientLogin
-{
+class clientLogin {
     public $username; // string
     public $password; // string
     public $source; // string
 }
 
-class clientLoginResponse
-{
+class clientLoginResponse {
     public $clientLoginResult; // long
 }
 
-class partnerLogin
-{
+class partnerLogin {
     public $appToken; // long
     public $username; // string
     public $password; // string
     public $source; // string
 }
 
-class partnerLoginResponse
-{
+class partnerLoginResponse {
     public $partnerLoginResult; // long
 }
 
-class getAccount
-{
+class getAccount {
 }
 
-class getAccountResponse
-{
+class getAccountResponse {
     public $getAccountResult; // AdvertiserAccount
 }
 
-class AdvertiserAccount
-{
+class AdvertiserAccount {
     public $advertiserName; // string
     public $email; // string
     public $currency; // string
@@ -43,48 +35,41 @@ class AdvertiserAccount
     public $country; // string
 }
 
-class apiHeader
-{
+class apiHeader {
     public $authToken; // long
     public $appToken; // long
     public $clientVersion; // string
 }
 
-class getCampaigns
-{
+class getCampaigns {
     public $campaignSelector; // CampaignSelectors
 }
 
-class CampaignSelectors
-{
+class CampaignSelectors {
     public $campaignIDs; // ArrayOfInt
     public $budgetIDs; // ArrayOfInt
     public $campaignStatus; // ArrayOfCampaignStatus
     public $biddingStrategy; // ArrayOfBiddingStrategy
 }
 
-class CampaignStatus
-{
+class CampaignStatus {
     const RUNNING = 'RUNNING';
     const DEAD = 'DEAD';
     const NOT_RUNNING = 'NOT_RUNNING';
 }
 
-class biddingStrategy
-{
+class biddingStrategy {
     const Cpm = 'Cpm';
     const Cpc = 'Cpc';
     const Cpa = 'Cpa';
     const Cpo = 'Cpo';
 }
 
-class getCampaignsResponse
-{
+class getCampaignsResponse {
     public $getCampaignsResult; // ArrayOfCampaign
 }
 
-class campaign
-{
+class campaign {
     public $campaignID; // int
     public $campaignName; // string
     public $endDate; // string
@@ -95,28 +80,24 @@ class campaign
     public $categoryBids; // ArrayOfCategoryBid
 }
 
-class bidInformation
-{
+class bidInformation {
     public $biddingStrategy; // biddingStrategy
     public $cpcBid; // CPCBid
     public $cpaBid; // CPABid
 }
 
-class CPCBid
-{
+class CPCBid {
     public $cpc; // double
 }
 
-class CPABid
-{
+class CPABid {
     public $postClick; // int
     public $postView; // int
     public $commission; // double
     public $percent; // double
 }
 
-class categoryBid
-{
+class categoryBid {
     public $campaignCategoryUID; // int
     public $campaignID; // int
     public $categoryID; // int
@@ -124,63 +105,53 @@ class categoryBid
     public $bidInformation; // bidInformation
 }
 
-class mutateCampaigns
-{
+class mutateCampaigns {
     public $listOfCampaignMutates; // ArrayOfCampaignMutate
 }
 
-class campaignMutate
-{
+class campaignMutate {
     public $campaign; // campaign
 }
 
-class mutate
-{
+class mutate {
     public $operationMutate; // OperationMutate
 }
 
-class OperationMutate
-{
+class OperationMutate {
     const ADD = 'ADD';
     const RESET = 'RESET';
     const SET = 'SET';
 }
 
-class mutateCampaignsResponse
-{
+class mutateCampaignsResponse {
     public $listOfJobResponse; // ArrayOfCampaignMutateJobResponse
 }
 
-class campaignMutateJobResponse
-{
+class campaignMutateJobResponse {
     public $campaignMutate; // campaignMutate
 }
 
-class JobResponse
-{
+class JobResponse {
     public $jobID; // long
     public $jobStatus; // JobStatus
     public $apiException; // ApiExceptionData
 }
 
-class JobStatus
-{
+class JobStatus {
     const Pending = 'Pending';
     const InProgress = 'InProgress';
     const Completed = 'Completed';
     const Failed = 'Failed';
 }
 
-class ApiExceptionData
-{
+class ApiExceptionData {
     public $errorCode; // ApiExceptionErrorCode
     public $errors; // ArrayOfApiError
     public $message; // string
     public $trigger; // string
 }
 
-class ApiExceptionErrorCode
-{
+class ApiExceptionErrorCode {
     const NoError = 'NoError';
     const BadAuthentification = 'BadAuthentification';
     const AuthTokenExpired = 'AuthTokenExpired';
@@ -197,8 +168,7 @@ class ApiExceptionErrorCode
     const AppTokenNotSupportedForPartnerLogin = 'AppTokenNotSupportedForPartnerLogin';
 }
 
-class apiError
-{
+class apiError {
     public $code; // ApiErrorCode
     public $detail; // string
     public $field; // string
@@ -209,8 +179,7 @@ class apiError
     public $trigger; // string
 }
 
-class ApiErrorCode
-{
+class ApiErrorCode {
     const NoError = 'NoError';
     const MissingMutateStructure = 'MissingMutateStructure';
     const MissingMutateObject = 'MissingMutateObject';
@@ -218,24 +187,20 @@ class ApiErrorCode
     const UnexpectedError = 'UnexpectedError';
 }
 
-class getCategories
-{
+class getCategories {
     public $categorySelector; // CategorySelectors
 }
 
-class CategorySelectors
-{
+class CategorySelectors {
     public $categoryIDs; // ArrayOfInt
     public $selected; // boolean
 }
 
-class getCategoriesResponse
-{
+class getCategoriesResponse {
     public $getCategoriesResult; // ArrayOfCategory
 }
 
-class category
-{
+class category {
     public $avgPrice; // double
     public $categoryID; // int
     public $categoryName; // string
@@ -243,43 +208,35 @@ class category
     public $selected; // boolean
 }
 
-class mutateCategories
-{
+class mutateCategories {
     public $listofCategoryMutates; // ArrayOfCategoryMutate
 }
 
-class categoryMutate
-{
+class categoryMutate {
     public $category; // category
 }
 
-class mutateCategoriesResponse
-{
+class mutateCategoriesResponse {
     public $listOfJobResponse; // ArrayOfCategoryMutateJobResponse
 }
 
-class categoryMutateJobResponse
-{
+class categoryMutateJobResponse {
     public $categoryMutate; // categoryMutate
 }
 
-class getBudgets
-{
+class getBudgets {
     public $budgetSelector; // BudgetSelectors
 }
 
-class BudgetSelectors
-{
+class BudgetSelectors {
     public $budgetIDs; // ArrayOfInt
 }
 
-class getBudgetsResponse
-{
+class getBudgetsResponse {
     public $getBudgetsResult; // ArrayOfBudget
 }
 
-class budget
-{
+class budget {
     public $budgetID; // int
     public $budgetName; // string
     public $totalAmount; // int
@@ -287,13 +244,11 @@ class budget
     public $remainingBudgetUpdated; // string
 }
 
-class scheduleReportJob
-{
+class scheduleReportJob {
     public $reportJob; // ReportJob
 }
 
-class ReportJob
-{
+class ReportJob {
     public $reportSelector; // ReportSelector
     public $reportType; // ReportType
     public $aggregationType; // AggregationType
@@ -303,28 +258,24 @@ class ReportJob
     public $isResultGzipped; // boolean
 }
 
-class ReportSelector
-{
+class ReportSelector {
     public $CategoryIDs; // ArrayOfInt
     public $CampaignIDs; // ArrayOfInt
     public $BannerIDs; // ArrayOfInt
 }
 
-class ReportType
-{
+class ReportType {
     const Campaign = 'Campaign';
     const Banner = 'Banner';
     const Category = 'Category';
 }
 
-class AggregationType
-{
+class AggregationType {
     const Hourly = 'Hourly';
     const Daily = 'Daily';
 }
 
-class ReportColumn
-{
+class ReportColumn {
     const clicks = 'clicks';
     const impressions = 'impressions';
     const ctr = 'ctr';
@@ -342,53 +293,43 @@ class ReportColumn
     const costPerOrder = 'costPerOrder';
 }
 
-class scheduleReportJobResponse
-{
+class scheduleReportJobResponse {
     public $jobResponse; // ReportJobResponse
 }
 
-class ReportJobResponse
-{
+class ReportJobResponse {
     public $reportJob; // ReportJob
 }
 
-class getJobStatus
-{
+class getJobStatus {
     public $jobID; // long
 }
 
-class getJobStatusResponse
-{
+class getJobStatusResponse {
     public $getJobStatusResult; // JobStatus
 }
 
-class getReportDownloadUrl
-{
+class getReportDownloadUrl {
     public $jobID; // long
 }
 
-class getReportDownloadUrlResponse
-{
+class getReportDownloadUrlResponse {
     public $jobURL; // string
 }
 
-class getStatisticsLastUpdate
-{
+class getStatisticsLastUpdate {
 }
 
-class getStatisticsLastUpdateResponse
-{
+class getStatisticsLastUpdateResponse {
     public $getStatisticsLastUpdateResult; // ArrayOfStatUpdate
 }
 
-class StatUpdate
-{
+class StatUpdate {
     public $Type; // StatType
     public $Date; // dateTime
 }
 
-class StatType
-{
+class StatType {
     const ClicksAndImpressions = 'ClicksAndImpressions';
     const Sales = 'Sales';
 }
@@ -403,8 +344,7 @@ class StatType
  * @copyright {copyright}
  * @package   {package}
  */
-class CriteoAdvertiserAPI extends SoapClient
-{
+class CriteoAdvertiserAPI extends SoapClient {
 
     private static $classmap = array(
         'clientLogin' => 'clientLogin',
@@ -467,10 +407,9 @@ class CriteoAdvertiserAPI extends SoapClient
         'StatType' => 'StatType',
     );
 
-    public function CriteoAdvertiserAPI($wsdl = "https://advertising.criteo.com/api/v201010/advertiserservice.asmx?wsdl", $options = array())
-    {
-        foreach (self::$classmap as $key => $value) {
-            if (!isset($options['classmap'][$key])) {
+    public function CriteoAdvertiserAPI($wsdl = "https://advertising.criteo.com/api/v201010/advertiserservice.asmx?wsdl", $options = array()) {
+        foreach(self::$classmap as $key => $value) {
+            if(!isset($options['classmap'][$key])) {
                 $options['classmap'][$key] = $value;
             }
         }
@@ -484,14 +423,12 @@ class CriteoAdvertiserAPI extends SoapClient
      * @param clientLogin $parameters
      * @return clientLoginResponse
      */
-    public function clientLogin(clientLogin $parameters)
-    {
-//        return $this->__soapCall('clientLogin', array($parameters), array(
-//                'uri' => 'https://advertising.criteo.com/API/v201010',
-//                'soapaction' => ''
-//            )
-//        );
-        
+    public function clientLogin(clientLogin $parameters) {
+        return $this->__soapCall('clientLogin', array($parameters),       array(
+                'uri' => 'https://advertising.criteo.com/API/v201010',
+                'soapaction' => ''
+            )
+        );
     }
 
     /**
@@ -501,9 +438,8 @@ class CriteoAdvertiserAPI extends SoapClient
      * @param partnerLogin $parameters
      * @return partnerLoginResponse
      */
-    public function partnerLogin(partnerLogin $parameters)
-    {
-        return $this->__soapCall('partnerLogin', array($parameters), array(
+    public function partnerLogin(partnerLogin $parameters) {
+        return $this->__soapCall('partnerLogin', array($parameters),       array(
                 'uri' => 'https://advertising.criteo.com/API/v201010',
                 'soapaction' => ''
             )
@@ -516,9 +452,8 @@ class CriteoAdvertiserAPI extends SoapClient
      * @param getAccount $parameters
      * @return getAccountResponse
      */
-    public function getAccount(getAccount $parameters)
-    {
-        return $this->__soapCall('getAccount', array($parameters), array(
+    public function getAccount(getAccount $parameters) {
+        return $this->__soapCall('getAccount', array($parameters),       array(
                 'uri' => 'https://advertising.criteo.com/API/v201010',
                 'soapaction' => ''
             )
@@ -531,9 +466,8 @@ class CriteoAdvertiserAPI extends SoapClient
      * @param getCampaigns $parameters
      * @return getCampaignsResponse
      */
-    public function getCampaigns(getCampaigns $parameters)
-    {
-        return $this->__soapCall('getCampaigns', array($parameters), array(
+    public function getCampaigns(getCampaigns $parameters) {
+        return $this->__soapCall('getCampaigns', array($parameters),       array(
                 'uri' => 'https://advertising.criteo.com/API/v201010',
                 'soapaction' => ''
             )
@@ -547,9 +481,8 @@ class CriteoAdvertiserAPI extends SoapClient
      * @param mutateCampaigns $parameters
      * @return mutateCampaignsResponse
      */
-    public function mutateCampaigns(mutateCampaigns $parameters)
-    {
-        return $this->__soapCall('mutateCampaigns', array($parameters), array(
+    public function mutateCampaigns(mutateCampaigns $parameters) {
+        return $this->__soapCall('mutateCampaigns', array($parameters),       array(
                 'uri' => 'https://advertising.criteo.com/API/v201010',
                 'soapaction' => ''
             )
@@ -562,9 +495,8 @@ class CriteoAdvertiserAPI extends SoapClient
      * @param getCategories $parameters
      * @return getCategoriesResponse
      */
-    public function getCategories(getCategories $parameters)
-    {
-        return $this->__soapCall('getCategories', array($parameters), array(
+    public function getCategories(getCategories $parameters) {
+        return $this->__soapCall('getCategories', array($parameters),       array(
                 'uri' => 'https://advertising.criteo.com/API/v201010',
                 'soapaction' => ''
             )
@@ -578,9 +510,8 @@ class CriteoAdvertiserAPI extends SoapClient
      * @param mutateCategories $parameters
      * @return mutateCategoriesResponse
      */
-    public function mutateCategories(mutateCategories $parameters)
-    {
-        return $this->__soapCall('mutateCategories', array($parameters), array(
+    public function mutateCategories(mutateCategories $parameters) {
+        return $this->__soapCall('mutateCategories', array($parameters),       array(
                 'uri' => 'https://advertising.criteo.com/API/v201010',
                 'soapaction' => ''
             )
@@ -593,9 +524,8 @@ class CriteoAdvertiserAPI extends SoapClient
      * @param getBudgets $parameters
      * @return getBudgetsResponse
      */
-    public function getBudgets(getBudgets $parameters)
-    {
-        return $this->__soapCall('getBudgets', array($parameters), array(
+    public function getBudgets(getBudgets $parameters) {
+        return $this->__soapCall('getBudgets', array($parameters),       array(
                 'uri' => 'https://advertising.criteo.com/API/v201010',
                 'soapaction' => ''
             )
@@ -608,9 +538,8 @@ class CriteoAdvertiserAPI extends SoapClient
      * @param scheduleReportJob $parameters
      * @return scheduleReportJobResponse
      */
-    public function scheduleReportJob(scheduleReportJob $parameters)
-    {
-        return $this->__soapCall('scheduleReportJob', array($parameters), array(
+    public function scheduleReportJob(scheduleReportJob $parameters) {
+        return $this->__soapCall('scheduleReportJob', array($parameters),       array(
                 'uri' => 'https://advertising.criteo.com/API/v201010',
                 'soapaction' => ''
             )
@@ -624,9 +553,8 @@ class CriteoAdvertiserAPI extends SoapClient
      * @param getJobStatus $parameters
      * @return getJobStatusResponse
      */
-    public function getJobStatus(getJobStatus $parameters)
-    {
-        return $this->__soapCall('getJobStatus', array($parameters), array(
+    public function getJobStatus(getJobStatus $parameters) {
+        return $this->__soapCall('getJobStatus', array($parameters),       array(
                 'uri' => 'https://advertising.criteo.com/API/v201010',
                 'soapaction' => ''
             )
@@ -639,9 +567,8 @@ class CriteoAdvertiserAPI extends SoapClient
      * @param getReportDownloadUrl $parameters
      * @return getReportDownloadUrlResponse
      */
-    public function getReportDownloadUrl(getReportDownloadUrl $parameters)
-    {
-        return $this->__soapCall('getReportDownloadUrl', array($parameters), array(
+    public function getReportDownloadUrl(getReportDownloadUrl $parameters) {
+        return $this->__soapCall('getReportDownloadUrl', array($parameters),       array(
                 'uri' => 'https://advertising.criteo.com/API/v201010',
                 'soapaction' => ''
             )
@@ -654,9 +581,8 @@ class CriteoAdvertiserAPI extends SoapClient
      * @param getStatisticsLastUpdate $parameters
      * @return getStatisticsLastUpdateResponse
      */
-    public function getStatisticsLastUpdate(getStatisticsLastUpdate $parameters)
-    {
-        return $this->__soapCall('getStatisticsLastUpdate', array($parameters), array(
+    public function getStatisticsLastUpdate(getStatisticsLastUpdate $parameters) {
+        return $this->__soapCall('getStatisticsLastUpdate', array($parameters),       array(
                 'uri' => 'https://advertising.criteo.com/API/v201010',
                 'soapaction' => ''
             )
@@ -664,5 +590,3 @@ class CriteoAdvertiserAPI extends SoapClient
     }
 
 }
-
-?>
