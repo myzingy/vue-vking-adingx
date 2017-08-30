@@ -257,7 +257,8 @@ END;
             $data=$mod->find();
             $fbapp=C('fbapp');
             $data=array_merge($data,$fbapp);
-            $data['access_tokens']=$data['access_tokens']?$data['access_tokens']:$data['token'];
+            //$data['access_tokens']=$data['access_tokens']?$data['access_tokens']:$data['token'];
+            $data['access_tokens']=$fbapp['robot_token'];
             unset($data['token']);
         }else{
             $offset=I('request.offset',0);
