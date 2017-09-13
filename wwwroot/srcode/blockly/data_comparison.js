@@ -63,6 +63,10 @@ export default {
                         "getCPC"
                     ],
                     [
+                        "购买成本（CPP）",
+                        "getCPP"
+                    ],
+                    [
                         "广告系列名（Campaign Name）",
                         "getCampaignName"
                     ],

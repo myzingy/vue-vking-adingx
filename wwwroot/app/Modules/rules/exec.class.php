@@ -241,6 +241,13 @@ class exec
         $date=$date>-1?$date:$this->date;
         return preg_replace("/[$,]+/","",$this->adx[$date]->CPC);
     }
+    function getCPP($date=0){//购买成本 =花费 除以 购买数量
+        $date=$date>-1?$date:$this->date;
+        $getPurchasesValue=$this->getPurchasesValue($date)+0;
+        $getPurchase=$this->getPurchase($date);
+        $getPurchase=$getPurchase<1?1:$getPurchase;
+        return $getPurchasesValue/$getPurchase;
+    }
     function  getAdName(){
         return $this->ad->AdName;
     }
