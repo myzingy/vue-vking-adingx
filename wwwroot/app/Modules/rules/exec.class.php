@@ -67,7 +67,7 @@ class exec
     function expression($date,$fun,$lt,$value){ //条件
         $this->date=$date;
         $this->expression_str="[".($date!=0?"last $date day":"今日").",$fun,$lt,$value]";
-        $firstValue=$this->$fun();
+        $firstValue=$this->$fun($date);
         if($this->debug){
             debug('expression-->'.$this->expression_str." PK ".$firstValue);
         }
