@@ -67,7 +67,12 @@ class exec
     function expression($date,$fun,$lt,$value){ //条件
         $this->date=$date;
         $this->expression_str="[".($date!=0?"last $date day":"今日").",$fun,$lt,$value]";
-        $firstValue=$this->$fun($date);
+        if($date!=0){
+            $di=['0'=>0,'7'=>2,'14'=>3];
+            $firstValue=$this->$fun($di[$date]);
+        }else{
+            $firstValue=$this->$fun();
+        }
         if($this->debug){
             debug('expression-->'.$this->expression_str." PK ".$firstValue);
         }
