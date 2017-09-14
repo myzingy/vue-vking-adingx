@@ -192,5 +192,6 @@ class lib{
         $ad=new AdSet($ad_id);
         $ad->configured_status=AdSet::STATUS_PAUSED;
         $ad->update();
+        return array('data'=>$ad);
     }
 }
