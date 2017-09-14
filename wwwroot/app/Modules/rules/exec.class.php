@@ -31,7 +31,7 @@ class exec
         };
         $this->adx=[];
         foreach ($this->ad->List as $list){
-            if($list['Type']==99) break;
+            if($list['Type']==99) continue;
             $this->adx[$list['Type']]=(object)$list;
         }
         if($this->debug){
@@ -67,12 +67,7 @@ class exec
     function expression($date,$fun,$lt,$value){ //条件
         $this->date=$date;
         $this->expression_str="[".($date!=0?"last $date day":"今日").",$fun,$lt,$value]";
-        if($date!=0){
-            $di=['0'=>0,'7'=>2,'14'=>3];
-            $firstValue=$this->$fun($di[$date]);
-        }else{
-            $firstValue=$this->$fun();
-        }
+        $firstValue=$this->$fun($date);
         if($this->debug){
             debug('expression-->'.$this->expression_str." PK ".$firstValue);
         }
