@@ -243,7 +243,7 @@ class exec
     }
     function getCPP($date=0){//购买成本 =花费 除以 购买数量
         $date=$date>-1?$date:$this->date;
-        return preg_replace("/[$,]+/","",$this->adx[$date]->CostperResult);
+        return preg_replace("/[$,]+/","",$this->adx[$date]->CostperResult)+0;
     }
     function  getAdName(){
         return $this->ad->AdName;
