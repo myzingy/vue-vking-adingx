@@ -109,7 +109,7 @@ class lib{
         //$insights=new \Modules\adsets\insights\lib();
         //$data=$insights->getAdsetsInsightsData($adset_id);
         $data=$this->getAdsetsData($adset_id);
-        $debug_ids=explode(',','debug_id1,debug_id2');
+        $debug_ids=C('debug_rule_adsets');
         $debug_flag=in_array($adset_id,$debug_ids);
         if($debug_flag){
             debug("debug.runRules.{$adset_id}########==>START");
