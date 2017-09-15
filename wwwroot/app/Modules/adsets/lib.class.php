@@ -191,6 +191,7 @@ class lib{
         $ad_id=I('request.ad_id');
         $ad=new AdSet($ad_id);
         $ad->configured_status=AdSet::STATUS_PAUSED;
+        $ad->status=AdSet::STATUS_PAUSED;
         $ad->update();
         return array('data'=>$ad->getData());
     }
