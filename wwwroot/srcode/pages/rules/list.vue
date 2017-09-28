@@ -107,6 +107,7 @@
             return {
                 activeName: 'updateRule',
                 rulesData:[],
+                updateRuleType:'edit',
 			}
 		},
         computed: mapState({ user: state => state.user }),
@@ -120,7 +121,11 @@
                         this.rulesData=json.data;
                         break;
                     case uri.getRule.code:
-                        this.$refs.rule.editInfo(json.data);
+                        if(this.updateRuleType=='append'){
+                            this.$refs.rule.appendXML(json.data.xml);
+                        }else{
+                            this.$refs.rule.editInfo(json.data);
+                        }
                         break;
 				}
 			},
@@ -133,14 +138,18 @@
 			},
             editRule:function(index,rulesData){
                 this.activeName= 'updateRule';
+                this.updateRuleType='edit';
                 //console.log(index,rulesData[index].xml)
                 vk.loading();
                 vk.http(uri.getRule,{id:rulesData[index].id},this.then);
 			},
             append:function(index,rulesData){
                 this.activeName= 'updateRule';
+                this.updateRuleType='append';
                 //console.log(index,rulesData[index].xml)
-                this.$refs.rule.appendXML(rulesData[index].xml);
+                vk.http(uri.getRule,{id:rulesData[index].id},this.then);
+                vk.loading();
+                //this.$refs.rule.appendXML(rulesData[index].xml);
             },
 			showRulesView:function(){
                 this.activeName='getRulesData';
