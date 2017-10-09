@@ -211,10 +211,20 @@ class AppLogic {
     }
     function cron__demonAcconutsPlatformInit(){
         $acs=FBC();
+        $day=I('request.day',40);
+        $ac_id=I('request.ac_id');
         if($acs){
-            for($i=0;$i<40;$i++) {
+            for($i=0;$i<$day;$i++) {
                 $date=date("Y-m-d",NOW_TIME-86400*$i);
-
+                if($ac_id){
+                    asyn('apido/asyn.flushAccountsInsights', array(
+                        'ac_id' => $ac_id,
+                        'active' => 'active',
+                        'breakdowns' => 'device_platform',
+                        'date' => $date,
+                    ), null, null, 0);
+                    continue;
+                }
                 foreach ($acs as $ac) {
                     asyn('apido/asyn.flushAccountsInsights', array(
                         'ac_id' => $ac['account_id'],
