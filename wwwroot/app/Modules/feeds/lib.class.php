@@ -67,10 +67,19 @@ class lib
             ))->find();
         }
         if($feed['id'] && $feed['url']){
-            $xml=file_get_contents($feed['url']);
+            //$xml=file_get_contents($feed['url']);
+            $xml=http($feed['url'],'',300);
             mk(self::PATH_FEED_XML);
             file_put_contents(self::PATH_FEED_XML.$feed['id'].'.xml',$xml);
             asyn('apido/asyn.flushFeedParseXML',array('id'=>$feed['id'],'time'=>date("YmdH")));
+        }
+    }
+    function __parseDataitem(&$item){
+        $keys='g_id,g_title,g_description,g_link,g_image_link,g_brand,g_availability,g_condition,g_price,g_custom_label_0,g_custom_label_1,g_custom_label_2,g_custom_label_3,g_custom_label_4,g_google_product_category';
+        foreach (explode(',',$keys) as $key){
+            if(empty($item[$key])){
+                $item[$key]="";
+            }
         }
     }
     function flushFeedParseXML(){
@@ -106,6 +115,7 @@ class lib
                             break;
                         }
                     }
+                    $this->__parseDataitem($data_item);
                     $data_item['fid']=$feed_id;
                     $data_item['image_isdown']=self::ITEM_IMAGE_DOWN_NOK;
                     $data_item['image_hash']=md5($data_item['g_image_link']);
@@ -134,9 +144,16 @@ class lib
         return ['data'=>$data];
     }
     function downFeedImage(){
+        set_time_limit(0);
         $url=urldecode(I('request.url'));
-        $cc=file_get_contents($url);
-        if($cc){
+//        $context['http'] = array(
+//            'timeout'=>120,
+//            'method' => 'GET',
+//            'content' => '',
+//        );
+//        $cc=file_get_contents($url,false, stream_context_create($context));
+        $cc=post($url,null,null,true);
+        if($cc && strlen($cc)>5000){
             file_put_contents(self::PATH_FEED_IMAGE.md5($url).'.jpg',$cc);
         }
 
@@ -175,7 +192,7 @@ class lib
         if($data){
             foreach ($data as &$r){
                 if(!$image_hash[$r['fid']]){
-                    $image_hash[$r['fid']]=M('feeds_items')->where(['fid'=>$data[0]['fid']])->order('image_isdown desc,RAND() asc')
+                    $image_hash[$r['fid']]=M('feeds_items')->where(['fid'=>$r['fid']])->order('image_isdown desc,RAND() asc')
                         ->getField('image_hash');
                 }
                 $r['mark_url']=url('feeds/'.self::FEED_MARKS_PRE.$r['id'].'.xml');
@@ -216,16 +233,43 @@ class lib
             $jsonstr=json_encode($object);
         }
     }
+    function __setFeedsMarkBackImage(&$data){
+        $image= I('request.bg_img_path','','trim');
+        if(!$image)return;
+        if(strpos($image,'base64')!==false){
+            $data['bg_img_hash']=substr(md5($image),8,16);
+            $image=explode(",",$image);
+            $ext_flag=preg_match("/\/([^;]+);/",$image[0],$ext);
+            if($ext_flag){
+                $ext='.'.$ext[1];
+            }else{
+                $ext='.jpg';
+            }
+            $data['bg_img_path']=self::PATH_FEED_MARKS.$data['bg_img_hash'].$ext;
+            if(!file_exists($data['bg_img_path'])) {
+                file_put_contents($data['bg_img_path'],base64_decode($image[1]));
+            }
+        }else{
+            $data['bg_img_path']=$image;
+            $data['bg_img_hash']=I('request.bg_img_hash','','trim');
+        }
+    }
     function setFeedsMark(){
         mk(self::PATH_FEED_MARKS);
         $id=I('request.id');
+        $data=[];
+        //background-img
+        $this->__setFeedsMarkBackImage($data);
+        
         $data['fid']=I('request.fid');
         $data['name']=I('request.name');
         $data['mark_object']=I('request.json','','trim');
         $data['background']=I('request.background','','trim');
-        $data['mark_img_hash']=substr(md5($data['mark_object'].$data['background']),8,16);
+        $data['mark_img_hash']=substr(md5($data['mark_object'].$data['background']
+            .($data['bg_img_hash']?$data['bg_img_hash']:"")),8,16);
         $data['mark_img_path']=self::PATH_FEED_MARKS.$data['mark_img_hash'].'.png';
         $this->__setFeedsMarkBase64Image($data['mark_object']);
+
         if($id){
             $mark=M('feeds_marks')->find($id);
             if($mark['mark_img_hash']!=$data['mark_img_hash']){

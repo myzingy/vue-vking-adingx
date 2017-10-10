@@ -1,10 +1,19 @@
 <style lang="stylus" rel="stylesheet/scss">
+    /*
     #text-controls {
         display: inline-block;
         vertical-align: top;
         border: 1px dotted #ccc;
         padding: 5%;
         width:88%;
+    }
+
+
+    */
+    .el-slider {
+        width: 90%;
+        margin-left: 0px;
+        max-width: 300px;
     }
     #text-cmd-italic {
         font-style: italic;
@@ -18,20 +27,19 @@
     #text-cmd-overline {
         text-decoration: overline;
     }
-    .el-slider {
-        float: right;
-        width: 65%;
-        margin-right: 2%;
-    }
 </style>
 <template>
     <div>
-        <el-form label-position="left" ref="object" :model="object" v-show="objectSelected">
-            <label for="color">Fill / Stroke / Background:</label>
-            <el-color-picker v-model="object.fill" @change="setValFill"></el-color-picker>
-            <el-color-picker v-model="object.stroke" @change="setValStroke"></el-color-picker>
-            <el-color-picker v-model="object.textBackgroundColor"
-                             @change="setValTextBackgroundColor"></el-color-picker>
+        <el-form label-position="top" ref="object" :model="object" v-show="objectSelected">
+            <el-form-item label="Fill / Stroke / Background">
+                <div>
+                    <el-color-picker v-model="object.fill" @change="setValFill"></el-color-picker>
+                    <el-color-picker v-model="object.stroke" @change="setValStroke"></el-color-picker>
+                    <el-color-picker v-model="object.textBackgroundColor"
+                                     @change="setValTextBackgroundColor"></el-color-picker>
+                </div>
+            </el-form-item>
+
             <el-form-item label="Opacity">
                 <el-slider v-model="object.opacity" :min="0.0" :max="1.0" :step="0.05"
                            :format-tooltip="formatOpacityTooltip"
@@ -45,6 +53,7 @@
                 <el-slider v-model="object.angle" :min="0" :max="360" :step="5"
                            @change="setValAngle"></el-slider>
             </el-form-item>
+
             <div id="text-wrapper" v-if="object.type=='textbox'">
                 <div id="text-controls">
                     <p>Text specific controls</p>
@@ -113,11 +122,10 @@
                             @click="toggleTextStyle('textDecoration:overline')">
                         Overline
                     </el-button>
+                    <el-button size="mini" type="primary" @click="shadowify">阴 影</el-button>
                 </div>
             </div>
-            <div>
-                <el-button type="primary" @click="shadowify">阴 影</el-button>
-            </div>
+
             <el-button type="text"
                        @click="removeObject()">
                 Remove selected object
@@ -126,17 +134,18 @@
                        @click="removeObject('ALL')">
                 Remove All objects
             </el-button>
+            
         </el-form>
-        <el-form label-position="left" ref="object" :model="background" v-show="!objectSelected && image.url">
-            <el-form-item label="背景图缩放">
+        <el-form label-position="top" ref="object" :model="background" v-show="!objectSelected && image.url">
+            <el-form-item label="素材图缩放">
                 <el-slider v-model="background.size" :min="50" :max="150" :step="5"
                            @change="setBackground"></el-slider>
             </el-form-item>
-            <el-form-item label="背景图水平位移">
+            <el-form-item label="素材图水平位移">
                 <el-slider v-model="background.position.x" :min="-image.width/2" :max="image.width/2" :step="5"
                            @change="setBackground"></el-slider>
             </el-form-item>
-            <el-form-item label="背景图垂直位移">
+            <el-form-item label="素材图垂直位移">
                 <el-slider v-model="background.position.y" :min="-image.height/2" :max="image.height/2" :step="5"
                            @change="setBackground"></el-slider>
             </el-form-item>

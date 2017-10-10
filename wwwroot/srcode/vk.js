@@ -8,8 +8,9 @@ let vk={
     isProduction:function(){
         return process.env.NODE_ENV === 'production';
     },
-    cgi:function(uri){
+    cgi:function(uri=""){
         var base_url=this.isProduction()?"/wwwroot/apido":"/apido";
+        if(typeof uri =='string') return base_url.replace('apido','')+uri;
         base_url+='/'+uri.act;
         console.log('isProduction',this.isProduction(),base_url);
         return base_url;

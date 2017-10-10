@@ -1,5 +1,5 @@
 <style lang="stylus" rel="stylesheet/scss">
-    .canvas-view{ border: 1px solid #ccc; overflow: hidden;}
+    .canvas-view{ border: 1px solid #ccc; overflow: hidden; position: relative;}
     .canvas-view-feeds .el-select{width:100%;}
     #text-controls {
         display: inline-block;
@@ -22,6 +22,24 @@
     .popover-shape div{
         margin-bottom: 10px;
     }
+    .right-controller{
+        position: absolute;
+        top:40px;
+        right:5px;
+        width:320px;
+        height: 384px;
+        background-color: #efefef;
+        overflow-y: auto;
+        padding: 8px;
+        border:1px solid #cccccc;
+    }
+    .right-controller-but,.right-controller-but:hover,.right-controller-but:focus,.right-controller-but:active{
+        float: right;
+        border:1px solid #cccccc;
+        background-color: #efefef;
+        color:#20a0ff;
+        border-radius: 0;
+    }
 </style>
 <template>
     <div>
@@ -43,13 +61,36 @@
                 <div class="grid-content bg-purple" style="background-color:#cffffc;
                 padding:5px; ">
                     <el-button type="primary" @click="addTextbox" icon="edit">Add Text</el-button>
-                    <el-button type="primary" icon="picture">
+                    <el-popover
+                            ref="popover_image"
+                            placement="bottom"
+                            width="220"
+                            trigger="click">
+                        <el-row :gutter="20" class="popover-shape">
+                            <el-col :span="12">
+                                <el-button type="primary" icon="picture">
+                                    前景图
+                                </el-button>
+                                <input type="file" id="file"
+                                       @change="getFilePath" style="filter:alpha(opacity=0);opacity:0;width: 100px;
+                           height: 25px;border:
+                            1px solid #ccc; overflow: hidden; position:relative; top:-30px;"/>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-button type="primary" icon="picture">
+                                    背景图
+                                </el-button>
+                                <input type="file" id="file_bg"
+                                       @change="getFilePath" style="filter:alpha(opacity=0);opacity:0;width: 100px;
+                           height: 25px;border:
+                            1px solid #ccc; overflow: hidden; position:relative; top:-30px;"/>
+                            </el-col>
+                        </el-row>
+                    </el-popover>
+                    <el-button type="primary" icon="star-on" v-popover:popover_image>
                         Add Image
                     </el-button>
-                    <input type="file" id="file"
-                           @change="getFilePath" style="filter:alpha(opacity=0);opacity:0;width: 122px;
-                           height: 25px;border:
-                            1px solid #ccc; overflow: hidden; margin-left: -125px; position:relative; top:8px;"/>
+
                     <el-popover
                             ref="popover_shape"
                             placement="bottom"
@@ -85,21 +126,30 @@
                     <el-button type="primary" icon="star-on" v-popover:popover_shape>
                         Add Shape
                     </el-button>
+                    <el-button class="right-controller-but" type="primary" icon="setting"
+                               @click="toggleRightController">
+                        {{rightController?'隐藏':'显示'}}
+                    </el-button>
                 </div>
-                <el-row :gutter="24">
-                    <el-col :span="10">
-                        <div class="grid-content bg-purple">
-                            <canvas :height="image.height" :width="image.width" :style="imageStyle" id="tu"></canvas>
+                <el-row :gutter="22">
+                    <el-col :span="22">
+                        <div class="grid-content bg-purple" style="min-height: 400px;">
+                            <div :height="image.height" :width="image.width" :style="backgroundImageStyle()">
+                                <canvas :height="image.height" :width="image.width" :style="imageStyle" id="tu"></canvas>
+                            </div>
+                            <div>
+                                <el-button type="text" icon="caret-right" v-show="imageStyle"
+                                           @click="flushImage">
+                                    换个素材看看效果</el-button>
+                            </div>
                         </div>
-                        <el-button type="text" icon="caret-right" v-show="imageStyle" @click="flushImage">换个图看看效果</el-button>
-                    </el-col>
-                    <el-col :span="14">
-                        <div class="tab-content" style="height: 300px; padding: 5px; overflow-y: auto;">
-                            <feedsMarkFormScope ref="feedsMarkFormScope" :canvas="canvas" :image="image"
-                                                @setBackground="setBackground"></feedsMarkFormScope>
-                        </div>
+
                     </el-col>
                 </el-row>
+                <div class="right-controller" v-show="rightController">
+                    <feedsMarkFormScope ref="feedsMarkFormScope" :canvas="canvas" :image="image"
+                                        @setBackground="setBackground"></feedsMarkFormScope>
+                </div>
             </div>
         </el-form>
     </div>
@@ -142,6 +192,8 @@
                 },
                 imageStyle:"",
                 background:{},
+                rightController:true,
+                background_base64:"",
             }
         },
         mounted(){
@@ -171,6 +223,19 @@
                         this.setBackground();
                         break;
                 }
+            },
+            backgroundImageStyle(){
+                var style='background-repeat: no-repeat;width:' + this.image.width + 'px;height:' +
+                    this.image.height + 'px;';
+                if(this.form.bg_img_path){
+                    if(this.form.bg_img_path.indexOf('base64')>-1){
+                        style+='background-image: url(' + this.form.bg_img_path + ');'
+                    }else{
+                        var url=vk.cgi(this.form.bg_img_path);
+                        style+='background-image: url(' + url + ');'
+                    }
+                }
+                return style;
             },
             initPage(){
                 console.log('feedsMarkForm.vue','initPage',this.form);
@@ -295,6 +360,7 @@
             getFilePath(input){
                 console.log(arguments);
                 input=input.target;
+                var isBG=input.id=='file_bg';
                 var file=input.files[0];
                 if(!file) return;
                 
@@ -302,21 +368,26 @@
                 var reader = new FileReader();
 
                 reader.onload=function(res){
-                    //console.log('reader.onload',res.target);
-                    fabric.Image.fromURL(res.target.result,function(image){
-                        //console.log('fabric.Image.fromURL.onload',image);
-                        if(image.width<1 || image.height<1) return;
-                        var scale=1;
-                        if(that.image.width<image.width){
-                            scale=that.image.width/image.width;
-                        }
-                        image.set({
-                            left: 0,
-                            top: 0,
-                            angle: 0,
-                        }).scale(scale).setCoords();
-                        that.canvas.add(image);
-                    });
+                    console.log('reader.onload',res.target);
+                    if(isBG){
+                        that.form.bg_img_path=res.target.result;
+                    }else{
+                        fabric.Image.fromURL(res.target.result,function(image){
+                            console.log('fabric.Image.fromURL.onload',image);
+                            if(image.width<1 || image.height<1) return;
+                            var scale=1;
+                            if(that.image.width<image.width){
+                                scale=that.image.width/image.width;
+                            }
+                            image.set({
+                                left: 0,
+                                top: 0,
+                                angle: 0,
+                            }).scale(scale).setCoords();
+                            that.canvas.add(image);
+                        });
+                    }
+
                 };
                 reader.readAsDataURL(file);
 
@@ -366,6 +437,9 @@
                         +'background-position-x:'+this.background.position.x+'px;'
                         +'background-position-y:'+this.background.position.y+'px;'
                 }
+            },
+            toggleRightController(){
+                this.rightController=!this.rightController;
             }
         }
     }

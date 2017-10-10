@@ -194,7 +194,7 @@ class common_lib {
 		}
 	}
     //简易请求
-    function http($url,$params='',$timeout=10,$type='GET'){
+    function http($url,$params='',$timeout=10,$type='GET',$retry=1){
         if(is_array($params)){
             $params=ksort($params);
             $params=http_build_query($params, '', '&');
@@ -203,8 +203,9 @@ class common_lib {
             'timeout'=>$timeout,
             'method' => $type,
             'content' => $params,
+            'header'=>'Connection: close\r\n',
         );
-        for($cnt=0;$cnt<4;$cnt++){
+        for($cnt=0;$cnt<$retry;$cnt++){
             $cc=file_get_contents($url, false, stream_context_create($context));
             if($cc!==false) return $cc;
         }

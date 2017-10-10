@@ -14,8 +14,8 @@ function url($path=""){
 function post($url, $param = "", $header = array(), $isGET = false){
 	return \Modules\common\common_lib::http_post($url, $param, $header, $isGET);
 }
-function http($url,$params='',$timeout=10,$type='GET'){
-	return \Modules\common\common_lib::http($url,$params,$timeout,$type);
+function http($url,$params='',$timeout=10,$type='GET',$retry=1){
+	return \Modules\common\common_lib::http($url,$params,$timeout,$type,$retry);
 }
 /*
  * 异步请求

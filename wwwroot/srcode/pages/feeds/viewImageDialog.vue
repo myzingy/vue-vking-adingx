@@ -4,6 +4,7 @@
         background-color:#99ccff;
         border: 1px dashed #999999;
         min-height: 265px;
+        width:100%;
     }
     img[lazy=loading] {
         /*your style here*/

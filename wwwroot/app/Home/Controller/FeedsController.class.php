@@ -133,30 +133,49 @@ XML;
         mk($lib::PATH_FEED_IMAGE_MARKS);
 
         
-        $background=M('feeds_marks')->where(['mark_img_hash'=>$mark_hash])->getField('background');
-        if($background){
+        $feeds_marks=M('feeds_marks')->field('background,bg_img_path')->where(['mark_img_hash'=>$mark_hash])->find();
+        $background=$feeds_marks['background'];
+        if($background || $feeds_marks['bg_img_path']){
             $background=json_decode($background,true);
             $im = imagecreatetruecolor($background['image']['width'], $background['image']['height']);
             $cfff = imagecolorallocate($im, 255, 255, 255);
             imagefill($im, 0, 0, $cfff);
             //+bg
+            if(file_exists($feeds_marks['bg_img_path'])){
+                list($width, $height, $type, $attr) = getimagesize($feeds_marks['bg_img_path']);
+                $im_bgb=new \Think\Image(\Think\Image::IMAGE_GD,$feeds_marks['bg_img_path']);
+                $im_bgb_src=$im_bgb->img->img;
+                imagecopy($im,$im_bgb_src,0,0
+                    ,0,0
+                    ,$width<$background['image']['width']?$width:$background['image']['width']
+                    ,$height<$background['image']['height']?$height:$background['image']['height']
+                );
+                imagedestroy($im_bgb_src);
+            }
+            //+bg - sucai
+            list($su_width, $su_height, $su_type, $su_attr) = getimagesize($image);
             $bg_size=$background['size']/100;
             $bg_width=ceil($background['image']['width']*$bg_size);
             $bg_height=ceil($background['image']['height']*$bg_size);
+            if($background['image']['width']==$su_width){
+                $su_width = $background['image']['width'];
+                $su_height = $background['image']['height'];
+            }
             $im2=new \Think\Image(\Think\Image::IMAGE_GD,$image);
             $im_src=$im2->img->img;
             //$im_src=imagecreatefromjpeg($image);
             imagecopyresized($im,$im_src,$background['position']['x'],$background['position']['y']
                 ,0,0
                 ,$bg_width,$bg_height
-                ,$background['image']['width'],$background['image']['width']
+                //,$background['image']['width'],$background['image']['height']
+                ,$su_width,$su_height
             );
             imagedestroy($im_src);
             //+mark
             $im_src=imagecreatefrompng($image_mark);
             imagecopy($im,$im_src,0,0
                 ,0,0
-                ,$background['image']['width'],$background['image']['width']
+                ,$background['image']['width'],$background['image']['height']
             );
             imagedestroy($im_src);
             //+save
