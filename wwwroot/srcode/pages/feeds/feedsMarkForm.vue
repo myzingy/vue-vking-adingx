@@ -47,6 +47,12 @@
             <el-form-item label="Mark Name" prop="name">
                 <el-input v-model="form.name"></el-input>
             </el-form-item>
+            <el-form-item label="画布尺寸" prop="canvas_size" class="canvas-view-feeds">
+                <el-select v-model="canvas_size" placeholder="画布尺寸" @change="canvasSizeChange">
+                    <el-option key="800x800" value="800x800" label="800x800"></el-option>
+                    <el-option key="1200x628" value="1200x628" label="1200x628"></el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item label="Feeds" prop="fid" class="canvas-view-feeds">
                 <el-select v-model="form.fid" placeholder="请选择Feed" @change="feedChange">
                     <el-option
@@ -57,7 +63,7 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <div class="canvas-view" v-show="image.url">
+            <div class="canvas-view" v-show="image.width">
                 <div class="grid-content bg-purple" style="background-color:#cffffc;
                 padding:5px; ">
                     <el-button type="primary" @click="addTextbox" icon="edit">Add Text</el-button>
@@ -182,18 +188,22 @@
                     name:[
                         { required: true, message: '请填写Mark Name', trigger: 'blur' }
                     ],
+                    canvas_size:[
+                        { required: true, message: '请选择画布尺寸', trigger: 'blur' }
+                    ],
                 },
                 canvas:null,
                 object:{text:""},
                 image:{
-                    width:200,
-                    height:200,
+                    width:0,
+                    height:0,
                     url:"",
                 },
                 imageStyle:"",
                 background:{},
                 rightController:true,
                 background_base64:"",
+                canvas_size:"",
             }
         },
         mounted(){
@@ -217,15 +227,17 @@
             then: function (json, code) {
                 switch (code) {
                     case uri.getFeedsImageInfo.code:
-                        this.image = json.data;
-                        this.imageStyle = 'background-image: url(' + json.data.url + ');width:' + json.data.width + 'px;height:' + json.data.height + 'px;';
+                        this.canvas_size=this.form.background.canvas_size||"";
+                        //this.image = json.data;
+                        this.image.url=json.data.url;
+                        this.imageStyle = 'background-image: url(' + json.data.url + ');width:' + this.image.width + 'px;height:' + this.image.height + 'px;';
                         this.mountedInitCanvas(false);
                         this.setBackground();
                         break;
                 }
             },
             backgroundImageStyle(){
-                var style='background-repeat: no-repeat;width:' + this.image.width + 'px;height:' +
+                var style='border: 1px solid #00f;overflow: hidden;background-repeat: no-repeat;width:' + this.image.width + 'px;height:' +
                     this.image.height + 'px;';
                 if(this.form.bg_img_path){
                     if(this.form.bg_img_path.indexOf('base64')>-1){
@@ -239,15 +251,17 @@
             },
             initPage(){
                 console.log('feedsMarkForm.vue','initPage',this.form);
+
                 if(!this.form.fid){
                     this.image = {
-                        width:200,
-                        height:200,
+                        width:0,
+                        height:0,
                         url:"",
                     };
                     this.imageStyle="";
                     this.mountedInitCanvas();
                 }else{
+                    this.canvas_size=this.form.background.canvas_size||"";
                     vk.http(uri.getFeedsImageInfo, {fid: this.form.fid}, this.then);
                 }
                 this.$refs.feedsMarkFormScope.initPage(this.form.background);
@@ -285,6 +299,7 @@
             },
             getFormData(){
                 var flag = false;
+                this.form['canvas_size']=this.canvas_size;
                 this.$refs['form'].validate((valid, err) => {
                     if (valid) {
                         flag = true;
@@ -293,6 +308,7 @@
                 this.form['json']=JSON.stringify(this.canvas);
                 this.form['image_base64']=this.toImage();
                 this.background.image=this.image;
+                this.background.canvas_size=this.canvas_size;
                 this.form['background']=JSON.stringify(this.background);
                 if (flag) {
                     return this.form;
@@ -303,6 +319,15 @@
             feedChange(fid){
                 if(!fid) return;
                 vk.http(uri.getFeedsImageInfo, {fid: fid}, this.then);
+            },
+            canvasSizeChange(vue){
+                vue=vue.split('x');
+                if(vue.length!=2) return;
+                this.image.width=vue[0];
+                this.image.height=vue[1];
+                this.imageStyle = 'background-image: url(' + this.image.url + ');width:' + this.image.width + 'px;height:' + this.image.height + 'px;';
+                this.mountedInitCanvas(false);
+                this.setBackground();
             },
             pad(str, length) {
                 while (str.length < length) {
@@ -432,8 +457,11 @@
             setBackground(){
                 this.background=this.$refs.feedsMarkFormScope.background;
                 if(this.imageStyle){
+                    var szie=this.background.size?this.background.size:100;
+                    var sw=parseInt(800*this.background.size/100);
                     this.imageStyle+= 'background-repeat:no-repeat;'
-                        +'background-size:'+this.background.size+'%;'
+                       //+'background-size:'+this.background.size+'%;'
+                        +'background-size:'+sw+'px '+sw+'px;'
                         +'background-position-x:'+this.background.position.x+'px;'
                         +'background-position-y:'+this.background.position.y+'px;'
                 }

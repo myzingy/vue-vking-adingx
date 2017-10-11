@@ -31,6 +31,8 @@
                                 </template>
                             </el-table-column>
                             <el-table-column prop="name" label="Mark Name" width="120"></el-table-column>
+                            <el-table-column prop="name" label="Img Size" width="120" :formatter="formatCanvasSize">
+                            </el-table-column>
                             <el-table-column prop="mark_url" label="Mark URL"></el-table-column>
                             <el-table-column label="Feed URL">
                                 <template scope="scope">
@@ -143,6 +145,12 @@
                 }else{
                     this.form={
                         fid:"",
+                        background:{
+                            position:{x:0,y:0},
+                            size:100,
+                            canvas_size:"",
+                        },
+
                     };
                 }
                 console.log('openDialog',this.form);
@@ -188,6 +196,14 @@
             closeViewImageDialog(){
                 this.viewImageDialogVisible=false;
             },
+            formatCanvasSize(row, column){
+                try{
+                    return row.background.canvas_size;
+                }catch(e){
+                    return "";
+                }
+
+            }
         },
     }
 </script>

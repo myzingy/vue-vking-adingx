@@ -21,14 +21,13 @@ class FeedsController extends Controller {
         $mark_img_hash=strtr($name,array($lib::FEED_MARKS_PRE=>'','.xml'=>''));
         $mark=M('feeds_marks')->alias('FM')->where(['FM.id'=>$mark_img_hash])->join('feeds F ON F.id=FM.fid','left')
             ->find();
-        $xml=<<<XML
-<rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
+        $xml=<<<XMLXML
+    <rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
     <channel>
     <title>{title}</title>
     <link>{link}</link>
     <description>{description}</description>
-
-XML;
+XMLXML;
         if($mark){
             $xml=strtr($xml,array(
                 '{title}'=>$mark['title'],
@@ -53,7 +52,7 @@ XML;
                     'utm_term'=>$mark['utm_term'],
                 ));
             //$r['g_link']=htmlentities($r['g_link']);
-            $xml.=<<<XML
+            $xml.=<<<XMLX
         <item>
             <g:id><![CDATA[{$r['g_id']}]]></g:id>
             <g:availability><![CDATA[{$r['g_availability']}]]></g:availability>
@@ -71,12 +70,12 @@ XML;
             <g:custom_label_3><![CDATA[{$r['g_custom_label_3']}]]></g:custom_label_3>
             <g:custom_label_4><![CDATA[{$r['g_custom_label_4']}]]></g:custom_label_4>
         </item>
-XML;
+XMLX;
         }
-        $xml.=<<<XML
+        $xml.=<<<XMLM
     </channel>
 </rss>
-XML;
+XMLM;
         file_put_contents($filename,$xml);
         die($xml);
     }
@@ -155,8 +154,10 @@ XML;
             //+bg - sucai
             list($su_width, $su_height, $su_type, $su_attr) = getimagesize($image);
             $bg_size=$background['size']/100;
-            $bg_width=ceil($background['image']['width']*$bg_size);
-            $bg_height=ceil($background['image']['height']*$bg_size);
+            //$bg_width=ceil($background['image']['width']*$bg_size);
+            //$bg_height=ceil($background['image']['height']*$bg_size);
+            $bg_width=ceil(800*$bg_size);
+            $bg_height=$bg_width;
             if($background['image']['width']==$su_width){
                 $su_width = $background['image']['width'];
                 $su_height = $background['image']['height'];
