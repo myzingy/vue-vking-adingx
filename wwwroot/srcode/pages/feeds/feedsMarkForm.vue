@@ -156,6 +156,9 @@
                     <feedsMarkFormScope ref="feedsMarkFormScope" :canvas="canvas" :image="image"
                                         @setBackground="setBackground"></feedsMarkFormScope>
                 </div>
+                <!--
+                <feedsMarkFormLayers ref="feedsMarkFormLayers" :canvas="canvas"></feedsMarkFormLayers>
+                -->
             </div>
         </el-form>
     </div>
@@ -166,6 +169,7 @@
     import vk from '../../vk.js';
     import uri from '../../uri.js';
     import feedsMarkFormScope from './feedsMarkFormScope.vue';
+    import feedsMarkFormLayers from './feedsMarkFormLayers.vue';
     (function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) return;
@@ -177,6 +181,7 @@
         props:['form','feeds'],
         components:{
             feedsMarkFormScope:feedsMarkFormScope,
+            feedsMarkFormLayers:feedsMarkFormLayers,
         },
         data:function(){
             return {
@@ -204,6 +209,7 @@
                 rightController:true,
                 background_base64:"",
                 canvas_size:"",
+                layers:[],
             }
         },
         mounted(){
@@ -419,10 +425,10 @@
             },
             addShapeRect() {
                 this.canvas.add(new fabric.Rect({
-                    left: 0,
+                    left: parseInt(this.canvas.width/3),
                     top: parseInt(this.canvas.height/3),
                     fill: '#' + this.getRandomColor(),
-                    width: this.canvas.width,
+                    width: this.canvas.width/3,
                     height: this.canvas.height/3,
                     opacity: 1
                 }));
@@ -440,7 +446,7 @@
                     left: 0,
                     top: 0,
                     fill: '#' + this.getRandomColor(),
-                    radius: parseInt(this.canvas.width/3),
+                    radius: parseInt(this.canvas.height/3),
                     opacity: 1
                 }));
             },

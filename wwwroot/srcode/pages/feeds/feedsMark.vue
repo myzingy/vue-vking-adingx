@@ -22,7 +22,7 @@
                                 <template scope="scope">
                                     <el-popover placement="right" title="" trigger="hover">
                                         <div class="img-mark">
-                                            <img :src="scope.row.mark_img_path"/>
+                                            <img :src="scope.row.mark_img_path" style="max-width: 500px;"/>
                                         </div>
                                         <div slot="reference">
                                             <img height="100" :src="scope.row.mark_img_path"/>
