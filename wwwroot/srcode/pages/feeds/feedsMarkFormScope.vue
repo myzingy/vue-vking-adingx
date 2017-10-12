@@ -142,11 +142,11 @@
                            @change="setBackground"></el-slider>
             </el-form-item>
             <el-form-item label="素材图水平位移">
-                <el-slider v-model="background.position.x" :min="-50" :max="image.width-200" :step="5"
+                <el-slider v-model="background.position.x" :min="-50" :max="image.width-0" :step="5"
                            @change="setBackground"></el-slider>
             </el-form-item>
             <el-form-item label="素材图垂直位移">
-                <el-slider v-model="background.position.y" :min="-50" :max="image.height-200" :step="5"
+                <el-slider v-model="background.position.y" :min="-50" :max="image.height-0" :step="5"
                            @change="setBackground"></el-slider>
             </el-form-item>
         </el-form>
