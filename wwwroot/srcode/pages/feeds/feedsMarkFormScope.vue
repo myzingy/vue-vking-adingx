@@ -31,7 +31,7 @@
 <template>
     <div>
         <el-form label-position="top" ref="object" :model="object" v-show="objectSelected">
-            <el-form-item label="Fill / Stroke / Background">
+            <el-form-item label="Fill / Stroke / Background" v-if="object.type!='image'">
                 <div>
                     <el-color-picker v-model="object.fill" @change="setValFill"></el-color-picker>
                     <el-color-picker v-model="object.stroke" @change="setValStroke"></el-color-picker>
@@ -45,7 +45,7 @@
                            :format-tooltip="formatOpacityTooltip"
                            @change="setValOpacity"></el-slider>
             </el-form-item>
-            <el-form-item label="Stroke width">
+            <el-form-item label="Stroke width" v-if="object.type!='image'">
                 <el-slider v-model="object.strokeWidth" :min="0" :max="20" :step="1"
                            @change="setValStrokeWidth"></el-slider>
             </el-form-item>
@@ -142,11 +142,11 @@
                            @change="setBackground"></el-slider>
             </el-form-item>
             <el-form-item label="素材图水平位移">
-                <el-slider v-model="background.position.x" :min="-image.width/2" :max="image.width/2" :step="5"
+                <el-slider v-model="background.position.x" :min="-50" :max="image.width-200" :step="5"
                            @change="setBackground"></el-slider>
             </el-form-item>
             <el-form-item label="素材图垂直位移">
-                <el-slider v-model="background.position.y" :min="-image.height/2" :max="image.height/2" :step="5"
+                <el-slider v-model="background.position.y" :min="-50" :max="image.height-200" :step="5"
                            @change="setBackground"></el-slider>
             </el-form-item>
         </el-form>
@@ -165,8 +165,8 @@
         for(var j in __fields[i]){
             var key=__fields[i][j];
             if(['opacity','strokeWidth','fontSize', 'lineHeight','charSpacing','angle'].indexOf(key)>-1){
-                __object[key]=1;
-                __objectInit[key]=1;
+                __object[key]=0;
+                __objectInit[key]=0;
             }else{
                 __object[key]="";
                 __objectInit[key]="";
@@ -268,7 +268,7 @@
                     for(var j in this.fields[i]){
                         var key=this.fields[i][j];
                         var val=(i=='prop')?this.getActiveProp(key):this.getActiveStyle(key);
-                        this.object[key]=val || "";
+                        this.object[key]=val || __objectInit[key];
                     }
                 }
                 this.object['type']=object.type;

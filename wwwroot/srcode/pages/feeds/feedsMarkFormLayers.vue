@@ -1,6 +1,6 @@
 <style lang="stylus" rel="stylesheet/scss">
-    .layer{
-        z-index: 9999;
+    .layer-menu{
+        z-index: 9998;
         position: absolute;
         right:5px;
         bottom: 5px;
@@ -9,54 +9,89 @@
         overflow: hidden;
         padding: 5px;
         background-color: #99ccff;
+        cursor: pointer;
         i{
             font-size: 30px;
             color:#fff;
         }
-        /*&.opened{*/
-            /*width:330px;*/
-            /*height:500px;*/
-        /*}*/
-        &:hover{
-            width:330px;
-            height:500px;
+    }
+    .layer{
+        z-index: 9999;
+        position: absolute;
+        right:0px;
+        bottom: 0px;
+        width:330px;
+        height:700px;
+        padding: 5px;
+        display: none;
+        overflow: hidden;
+        background-color: #99ccff;
+        cursor: pointer;
+        .layer-header{
+            font-size: 30px;
+            color:#fff;
+        }
+        .layer-content{
+            height: 620px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            background-color: #90c0f0;
+            padding-bottom: 8px;
+        }
+        &.opened,&:hover{
+            display: block;
         }
         .layer-footer{
             position: absolute;
             bottom: 0;
             display: none;
         }
-        ul{margin: 0;padding: 0; margin-top: 10px;}
-        li{ list-style: none; border: 1px solid #999999; padding:8px; margin-bottom: 6px;}
+        .layer-item{
+            background-color: #99ccff;
+            margin:8px 8px 0;
+            .image{
+                background-size: auto 100%;
+            }
+            *{padding:8px;}
+            max-height: 50px;
+            overflow: hidden;
+        }
     }
 </style>
 <template>
-    <div :class="layer_css" @mouseover="setLayers">
-        <div class="layer-header" @click="toggleLayer">
-            <i :class="layer_icon_css" title="layer"></i>
-            Layers
+    <div>
+        <div class="layer-menu" @click="toggleLayer('show')">
+            <i class="el-icon-menu" title="layer"></i>
         </div>
-        <div class="layer-content">
-            <ul>
-                <li class="layer-item"
-                        v-for="(layer,layer_id) in layers"
-                    v-dragging="{ item: layer, list: layers, group: 'layer' }"
-                        :key="layer_id"
-                >{{layer.type}},{{layer.fill}},{{layer.stroke}}
-                </li>
-            </ul>
-        </div>
-        <div class="layer-footer">
-            footer
+        <div :class="layer_css" @mouseover="toggleLayer('hide')" @mouseout="toggleLayer('hide')">
+            <div class="layer-header" @click="toggleLayer">
+                <i :class="layer_icon_css" title="layer"></i>
+                Layers
+            </div>
+            <div class="layer-content">
+                <draggable v-model="layers" @update="datadragEnd">
+                    <transition-group>
+                        <div class="layer-item" v-for="(layer,layer_id) in layers" :key="layer_id">
+                            <feedsMarkFormLayersItem :layer="layer"></feedsMarkFormLayersItem>    
+                        </div>
+                    </transition-group>
+                </draggable>
+            </div>
+            <div class="layer-footer">
+                footer
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import Vue from 'vue'
-    import VueDND from 'awe-dnd'
-    Vue.use(VueDND)
+    import draggable from 'vuedraggable'
+    import feedsMarkFormLayersItem from './feedsMarkFormLayersItem.vue';
     export default {
+        components: {
+            draggable,feedsMarkFormLayersItem
+        },
         props:['canvas'],
         data:function(){
             return {
@@ -67,42 +102,39 @@
         },
         mounted(){
             console.log('feedsMarkFormLayers.vue','mounted...',this.layers);
-            var that=this;
-            this.$dragging.$on('dragged', ({ value }) => {
-                console.log('this.$dragging.$on dragged',value.item,value.list)
-                var layers=[];
-                Object.assign(layers,value.list);
-                layers.reverse();
-                that.canvas.loadFromJSON(JSON.stringify({'objects':layers}), function(){
-                    that.canvas.renderAll();
-                });
-            })
-            this.$dragging.$on('dragend', () => {
-
-            })
         },
         methods: {
-            initPage(background){
-                console.log('feedsMarkFormLayers.vue','initPage...',background);
-                Object.assign(this.object,__objectInit);
-            },
-            toggleLayer(){
+            toggleLayer(type){
                 //el-icon-arrow-down
-                if(this.layer_css=='layer'){
+                if(type=='show'){
                     this.layer_css='layer opened';
-                    this.layer_icon_css='el-icon-close';
+                    this.setLayers();
                 }else{
                     this.layer_css='layer';
-                    this.layer_icon_css='el-icon-menu';
                 }
             },
             setLayers(){
+                this.isSetLayers=false;
                 var layers=[];
                 Object.assign(layers,this.canvas.getObjects());
                 layers.reverse();
                 this.layers=layers;
                 console.log('this.layers',this.layers);
-            }
+            },
+            datadragEnd(evt){
+                var layers=[];
+                Object.assign(layers,this.layers);
+                //layers[evt.oldIndex]=this.layers[evt.newIndex];
+                //layers[evt.newIndex]=this.layers[evt.oldIndex];
+                layers.reverse();
+                var that=this;
+                that.canvas.loadFromJSON(JSON.stringify({'objects':layers}), function(){
+                    that.canvas.renderAll();
+                });
+            },
+            getLayerView(layer){
+                return "<a>"+layer.type+"</a>"
+            },
 
         }
     }

@@ -156,9 +156,8 @@
                     <feedsMarkFormScope ref="feedsMarkFormScope" :canvas="canvas" :image="image"
                                         @setBackground="setBackground"></feedsMarkFormScope>
                 </div>
-                <!--
                 <feedsMarkFormLayers ref="feedsMarkFormLayers" :canvas="canvas"></feedsMarkFormLayers>
-                -->
+                
             </div>
         </el-form>
     </div>
