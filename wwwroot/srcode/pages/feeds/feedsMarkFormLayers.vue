@@ -41,13 +41,7 @@
         &.opened,&:hover{
             display: block;
         }
-        .layer-footer{
-            position: absolute;
-            bottom: 0;
-            font-size: 30px;
-            color:#fff;
-            display: none;
-        }
+
         .layer-item{
             background-color: #99ccff;
             margin:8px 8px 0;
@@ -57,6 +51,47 @@
             *{padding:8px;}
             max-height: 50px;
             overflow: hidden;
+        }
+        .layer-footer{
+            display: none;
+            position: absolute;
+            bottom: 0;
+            color:#99ccff;
+            overflow: hidden;
+            height: 40px;
+            line-height: 40px;
+            *{
+                float: left;
+            }
+            i{
+                width:100%;
+                height: 40px;
+                overflow: hidden;
+                display: block;
+                line-height: 40px;
+                vertical-align: text-top;
+                &:before{
+                    font-size: 30px;
+                    color:#fff;
+                }
+            }
+            &:hover{
+                color:#ff0000;
+                i{
+                    line-height: 40px;
+                    color:#ff0000;
+                    &:before{
+                        color:#ff0000;
+                    }
+                }
+            }
+            div.layer-item{
+                background-color: #990033;
+                margin:0;
+                *{padding:8px;}
+                max-height: 40px;
+                width: 200px;
+            }
         }
     }
 </style>
@@ -81,7 +116,13 @@
             </div>
             <div class="layer-footer">
                 <draggable :options="{group:'layers'}">
-                    <i class="el-icon-delete" title="layer"></i>
+                    <div>
+
+                    <i class="el-icon-delete" title="layer">
+                        拖放至此
+                    </i>
+                    </div>
+
                 </draggable>
             </div>
         </div>

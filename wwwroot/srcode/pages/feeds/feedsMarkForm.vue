@@ -365,14 +365,16 @@
                     hasRotatingPoint: true,
                     centerTransform: true
                 });
-
+                textSample.onKeyDown(function(){
+                    console.log('textSample-change',arguments);
+                });
                 this.canvas.add(textSample);
             },
             watchCanvas() {
                 var that=this;
                 this.canvas
-                    .on('mouse:up', this.$refs.feedsMarkFormScope.updateScope);
-//                    .on('object:selected', this.$refs.feedsMarkFormScope.updateScope)
+                    .on('mouse:up', this.$refs.feedsMarkFormScope.updateScope)
+                    .on('object:selected', this.$refs.feedsMarkFormScope.updateScope);
 //                    .on('group:selected', this.$refs.feedsMarkFormScope.updateScope)
 //                    .on('path:created', this.$refs.feedsMarkFormScope.updateScope)
 //                    .on('selection:cleared', this.$refs.feedsMarkFormScope.updateScope)

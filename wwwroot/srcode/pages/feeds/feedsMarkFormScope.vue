@@ -58,7 +58,7 @@
                 <div id="text-controls">
                     <p>Text specific controls</p>
                     <el-input type="textarea" v-model="object.text" :autosize="{ minRows: 2, maxRows: 4}"
-                              @change="setValText" @blur="setValText"></el-input>
+                              @change="setValText"></el-input>
                     <el-form-item label="Font family">
                         <el-select v-model="object.fontFamily" placeholder="请选择" @change="setValFontFamily">
                             <el-option value="arial">Arial</el-option>
@@ -327,6 +327,14 @@
                 this.setVal('charSpacing',val);
             },
             setValText(val){
+                try{
+                    if(typeof val!='string'){
+                        val=val.target.value;
+                    }
+                }catch(e){
+                    val="";
+                }
+                console.log(arguments);
                 this.setVal('text',val);
             },
             setValAngle(val){
