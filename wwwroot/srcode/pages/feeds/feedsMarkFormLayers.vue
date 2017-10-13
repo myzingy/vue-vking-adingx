@@ -44,6 +44,8 @@
         .layer-footer{
             position: absolute;
             bottom: 0;
+            font-size: 30px;
+            color:#fff;
             display: none;
         }
         .layer-item{
@@ -69,7 +71,7 @@
                 Layers
             </div>
             <div class="layer-content">
-                <draggable v-model="layers" @update="datadragEnd">
+                <draggable v-model="layers" :options="{group:'layers'}" @update="datadragEnd">
                     <transition-group>
                         <div class="layer-item" v-for="(layer,layer_id) in layers" :key="layer_id">
                             <feedsMarkFormLayersItem :layer="layer"></feedsMarkFormLayersItem>    
@@ -78,7 +80,9 @@
                 </draggable>
             </div>
             <div class="layer-footer">
-                footer
+                <draggable :options="{group:'layers'}">
+                    <i class="el-icon-delete" title="layer"></i>
+                </draggable>
             </div>
         </div>
     </div>

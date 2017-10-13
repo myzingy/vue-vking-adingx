@@ -128,11 +128,11 @@
 
             <el-button type="text"
                        @click="removeObject()">
-                Remove selected object
+                删除选中的图层
             </el-button>
             <el-button type="text"
                        @click="removeObject('ALL')">
-                Remove All objects
+                删除所有的图层
             </el-button>
             
         </el-form>
