@@ -9,7 +9,9 @@
             &nbsp;
         </div>
         <div v-if=" layer.type=='line' " :style="{color:'#fff','background-color':layer.stroke}">{{layer.type}}</div>
-        <div v-if=" layer.type=='triangle' " :style="{color:'#fff','background-color':layer.fill}">{{layer.type}}</div>
+        <div v-if=" layer.type=='triangle' || layer.type=='circle' || layer.type=='rect' "
+             :style="{color:'#fff','background-color':layer.fill}">{{layer
+            .type}}</div>
     </div>
 </template>
 
