@@ -94,6 +94,7 @@ class lib{
                     'ad_id' => $_campaigns_data['id'],
                     'ac_id'=>$ac_id
                 ));
+                if($ac_id=='909992302470836') continue;
                 asyn('apido/asyn.flushKeywordsInsight', array(
                     'ad_id' => $_campaigns_data['id'],
                     'ac_id'=>$ac_id
