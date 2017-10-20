@@ -290,8 +290,32 @@ class lib{
                 $xd['cpm']=($xd['cost']*10)/$xd['impressions'];
                 $xd['ctr']=($xd['link_click']/$xd['impressions'])*100;
                 unset($xd['__count']);
+                $this->setAcconutByOperatorPatch($xd);
             }
         }
         return ['data'=>$pdata];
+    }
+    function setAcconutByOperatorPatch(&$user_account){
+        $patch=array(
+            '杨超英|909992302470836|2017-10-17'=>array(
+                "fee_date"=> "2017-10-17",
+                "account_id"=> "909992302470836",
+                "account_name"=> "Xi'an Zhule -1212-3",
+                "username"=> "杨超英",
+                "cost"=> 494559,
+                "purchase"=> 56,
+                "add_to_cart"=> 2100,
+                "cpm"=> 8.23879149931449,
+                "ctr"=> 2.9889335161366,
+                "link_click"=> 17942,
+                "income"=> 662383,
+                "impressions"=> 600281,
+                "reach"=> 483780
+            )
+        );
+        $key=$user_account['username'].'|'.$user_account['account_id'].'|'.$user_account['fee_date'];
+        if(!empty($patch[$key])){
+            $user_account=$patch[$key];
+        }
     }
 }
