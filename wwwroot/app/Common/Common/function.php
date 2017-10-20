@@ -135,6 +135,16 @@ function getDayTime($his,$day_num=1){
     $format="Y-m-d $his";
     return strtotime("$day_num day", strtotime(date($format,NOW_TIME)));
 }
+function getSpaceTime($m=1){
+    list($h,$i)=explode(':',date("H:i",NOW_TIME));
+    $i+=($i%$m);
+    if($i>=60){
+        $h+=1;
+        $i=$i%60;
+    }
+    if($h>=24) getDayTime("00:00:00",1);
+    return getDayTime("$h:$i:00",0);
+}
 function FBC($ac_id=""){
     $lib=new \Modules\accounts\lib();
     $data=$lib->FBC($ac_id);

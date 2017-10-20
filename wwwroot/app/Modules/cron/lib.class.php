@@ -26,6 +26,7 @@ class lib{
         asyn_implement('apido/asyn.flushAssetVideoFile');
         asyn_implement('apido/asyn.flushAssetImageFile');
         asyn_implement('apido/asyn.flushFeed');
+        asyn('apido/asyn.flushProductsItem',[],null,getSpaceTime(5),-1);
         $time_s=getDayTime("07:59:00",0);
         $time_e=getDayTime("08:00:00",0);
         if(NOW_TIME > $time_s && NOW_TIME < $time_e) {

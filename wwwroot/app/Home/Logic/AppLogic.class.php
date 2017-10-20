@@ -188,6 +188,18 @@ class AppLogic {
         $lib = new \Modules\feeds\lib();
         return $lib->setFeedsMark();
     }
+    function user__getProducts(){
+        $lib = new \Modules\products\lib();
+        return $lib->getProducts();
+    }
+    function user__bindProductVideo(){
+        $lib = new \Modules\products\lib();
+        return $lib->bindProductVideo();
+    }
+    function user__unBindProductVideo(){
+        $lib = new \Modules\products\lib();
+        return $lib->unBindProductVideo();
+    }
 	############################################################
 	# 一些异步接口开始
 	############################################################
@@ -471,6 +483,15 @@ class AppLogic {
     function asyn__downFeedImage(){
         $lib = new \Modules\feeds\lib();
         return $lib -> downFeedImage();
+    }
+    //products
+    function asyn__flushProducts(){
+        $lib = new \Modules\products\lib();
+        return $lib -> flushProducts();
+    }
+    function asyn__flushProductsItem(){
+        $lib = new \Modules\products\lib();
+        return $lib -> flushProductsItem();
     }
 	############################################################
 	# 一些异步接口结束

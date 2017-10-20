@@ -45,4 +45,8 @@ export default {
     getFeedsMark:{act:'user.getFeedsMark',code:16003},
     setFeedsMark:{act:'user.setFeedsMark',code:16004},
 
+    //products
+    getProducts:{act:'user.getProducts',code:17000},
+    bindProductVideo:{act:'user.bindProductVideo',code:17001},
+    unBindProductVideo:{act:'user.unBindProductVideo',code:17002},
 }

@@ -10,6 +10,7 @@ use FacebookAds\Object\AdVideo;
 use FacebookAds\Object\Business;
 use FacebookAds\Object\CustomAudience;
 use FacebookAds\Object\Fields\AdAccountFields;
+use FacebookAds\Object\ProductSet;
 use FacebookAds\Object\Values\AdPreviewAdFormatValues;
 use Think\Controller;
 use Facebook\FacebookBatchRequest;
@@ -40,7 +41,7 @@ class TestController extends Controller {
         vendor("vendor.autoload");
         $app=C('fbapp');
         dump(array(date("Y-m-d H:i:s",NOW_TIME),$app));
-        $fba=Api::init($app['app_id'],$app['app_secret'],'EAABeuMl0aOwBAEf26Qx1SVwRSw9HZC1FUwHGuckdmNUm9hKw3mVAC0T9R0ESudBfG6i80ZAS3PZBqZAYS1KkqHDNZBRB76UmxSPGr6aDPqSmZB3wxNpmaDpLSXyemzUUEhQcN43aQrXBAt6jcpGOTqYHD1JP4T5UqNr3o9h0naYQZDZD');
+        $fba=Api::init($app['app_id'],$app['app_secret'],'EAABeuMl0aOwBAHMXmLq4eFLcPFlzci7r0Yn3UjcZClOpoQU3E4HsxaFLNWnAKXZBUzTpol50KZC0IC0RXHjjNbbZBbfjQGDf8Vec0HdhCvd8JYkJSZBsGZB9IsuqToOlG9UrZAMfLDy0WWY6T3O2ZA8sBsrAFKJ4ZBs7oHNrGymhFMUD7Yxhy14B0');
         $api = Api::instance();
 
         //dump($b);
@@ -265,10 +266,52 @@ END;
       ["unique_ctr"] => NULL
       ["unique_impressions"] => NULL
 END;
+        $str=<<<END
+        [`"age_group"] => string(0) ""
+          [`"availability"] => string(8) "in stock"
+          ["brand"] => string(6) "jeulia"
+          [`"category"] => string(112) "Engagement,Bridal Ring Sets,Flash Sale,WEDDING,Wedding Sets,Halo Ring Sets,TOP50,Affiliate,Affiliate Best Seller"
+          [`"condition"] => string(3) "new"
+          [`"currency"] => string(3) "USD"
+          [`"custom_data"] => array(0) 
+          ["custom_label_0"] => string(4) "4139"
+          ["custom_label_1"] => string(4) "4499"
+          ["custom_label_2"] => string(5) "1.087"
+          ["custom_label_3"] => string(3) "112"
+          ["custom_label_4"] => string(9) "RRG1231-6"
+          [`"description"] => string(189) "If you're looking for unique jewelry with reasonable price then you've come to the right place. Jeulia makes great diamond alternatives and most importantly is a financially smart decision."
+          [`"gender"] => string(0) ""
+          ["id"] => string(16) "1415645021883508"
+          ["image_url"] => string(142) "https://scontent.xx.fbcdn.net/v/t45.5328-4/18623764_1246470155465882_7788418665782706176_n.jpg?oh=2a048d214b3c1db3e52a195478bb93a5&oe=5A71084C"
+          ["name"] => string(67) "Jeulia Halo Princess Cut Created White Sapphire Wedding Set 2.05 CT"
+          [`"ordering_index"] => int(0)
+          ["price"] => string(7) "$139.95"
+          [`"product_catalog"] => array(2) 
+          [`"product_feed"] => array(3) 
+          ["retailer_id"] => string(4) "1276"
+          [`"retailer_product_group_id"] => string(0) ""
+          [`"review_status"] => string(8) "approved"
+          [`"shipping_weight_unit"] => string(0) ""
+          [`"shipping_weight_value"] => int(0)
+          ["url"] => string(160) "http://www.jeulia.com/vintage-milgrain-sculptural-halo-princess-cut-created-sapphire-rhodium-plated-925-sterling-silver-women-s-wedding-ring-set-bridal-set.html"
+          [`"visibility"] => string(9) "published"
+          ["video_ids"] => array(1)   
+END;
 
 
         preg_match_all("/\[\"(.*)\"\]/",$str,$match);
         $fields=$match[1];
+        $sql="CREATE TABLE `products` ( ";
+        $sql.=" `id` varchar(32) NOT NULL";
+        foreach ($fields as $key){
+            $sql.=" ,`{$key}` varchar(50) DEFAULT NULL ";
+        }
+        $sql.=" ,PRIMARY KEY (`id`)) ENGINE=INNODB DEFAULT CHARSET=utf8mb4";
+        echo $sql."<br>";
+        $ps=new ProductSet('1967716870107460');
+        $res=$ps->getProducts($fields,null);
+        dump($res);
+        reutrn;
         #$b=new Business('1594081490842802');
 //        $ac=new AdAccount('act_639275062920989');
 //        //$res=$ac->getAdImages($fields);

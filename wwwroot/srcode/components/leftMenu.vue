@@ -29,6 +29,8 @@
           <el-menu-item index="feedsMark"  ><i class="el-icon-document"></i>Feeds
             Mark
           </el-menu-item>
+          <el-menu-item index="products"  ><i class="el-icon-caret-right"></i>Products Video
+          </el-menu-item>
         </el-menu-item-group>
       </el-menu>
     </el-row>

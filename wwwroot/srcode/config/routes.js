@@ -68,6 +68,10 @@ export default [
                 component: resolve => require(['../pages/feeds/feedsMark.vue'], resolve)
             },
             {
+                path: 'products*', //登录
+                component: resolve => require(['../pages/products/products.vue'], resolve)
+            },
+            {
                 path: '*', //其他页面，强制跳转到登录页面
                 redirect: '/login'
             },
