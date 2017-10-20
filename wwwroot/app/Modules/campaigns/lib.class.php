@@ -299,7 +299,7 @@ class lib{
         $patch=array(
             '杨超英|909992302470836|2017-10-17'=>array(
                 "fee_date"=> "2017-10-17",
-                "account_id"=> "909992302470836",
+                "account_id"=> 909992302470836,
                 "account_name"=> "Xi'an Zhule -1212-3",
                 "username"=> "杨超英",
                 "cost"=> 494559,
