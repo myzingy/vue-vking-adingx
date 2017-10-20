@@ -154,6 +154,7 @@
             },
             onClearFormSearch(){
                 this.formSearch.keyword="";
+                this.formSearch.type="";
                 this.getData();
             },
 		}
