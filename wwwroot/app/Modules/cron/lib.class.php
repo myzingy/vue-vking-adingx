@@ -122,7 +122,26 @@ class lib{
         if($crontime>0){
             $cron_id=$cron->where("`hash`='{$hash}'")->getField('id');
         }else{
-            $cron_id=$cron->where("`hash`='{$hash}' and addtime>".(NOW_TIME-$CRON_RENEW_TIMEOUT))->getField('id');
+            //$cron_id=$cron->where("`hash`='{$hash}' and addtime>".(NOW_TIME-$CRON_RENEW_TIMEOUT))->getField('id');
+            $ex_cron=$cron->field('id,addtime,status')
+                ->where("`hash`='{$hash}'")
+                ->order('addtime desc')
+                ->find();
+            if($ex_cron){
+                $cron_id=$ex_cron['id'];
+                if(NOW_TIME-$ex_cron['addtime']>self::CRON_RENEW_TIMEOUT){
+                    if($ex_cron['status']==self::CRON_STATUS_RUN_OK){
+                        //可以新建任务
+                        $cron_id="";
+                    }elseif ($ex_cron['status']!=self::CRON_STATUS_RUN_FIL){
+                        //修复任务
+                        $cron->where(['id'=>$ex_cron['id']])->save([
+                            'retry'=>0,
+                            'priority'=>3,
+                        ]);
+                    }
+                }
+            }
         }
         if($cron_id) return;
         $cron->add(array(
