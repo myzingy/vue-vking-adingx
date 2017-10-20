@@ -209,18 +209,18 @@ END;
             }
             //其它Insights
             asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'yestoday','ac_id'=>$ac_id),null,
-                getDayTime("00:01:00"),0);
+                getDayTime("00:05:00"),0);
             asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_7day','ac_id'=>$ac_id),null,
-                getDayTime("00:01:00"),-1);
+                getDayTime("00:05:00"),0);
             asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_14day','ac_id'=>$ac_id),null,
-                getDayTime("00:01:00"),-2);
+                getDayTime("00:05:00"),0);
             asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'lifetime','ac_id'=>$ac_id),null,
-                getDayTime("06:01:00"),0);
+                getDayTime("00:05:00"),0);
 
         }
         if($ad_timespace=='lifetime'){
             if('909992302470836'!=$ac_id && '564914007023762'!=$ac_id){
-                asyn('apido/asyn.getAssetForAd',array('ad_id' => $ad_id,'ac_id'=>$ac_id));
+                asyn('apido/asyn.getAssetForAd',array('ad_id' => $ad_id,'ac_id'=>$ac_id),null,null,-3);
             }
         }
         return $campaigns_data;

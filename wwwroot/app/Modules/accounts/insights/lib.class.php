@@ -261,15 +261,18 @@ END;
         }
         if($ad_timespace=='today' && !$breakdowns && !$date) {
             //其它Insights
+//            asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>'yestoday','ac_id'=>$ac_id),null,
+//                getDayTime("00:30:00"),0);
             asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>'yestoday','ac_id'=>$ac_id),null,
-                getDayTime("00:30:00"),0);
-            asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>'yestoday','ac_id'=>$ac_id),null,
-                getDayTime("08:30:00"),0);
+                getDayTime("07:30:00"),0);
 
             //获取前天数据
-            $before_yesterday=date("Y-m-d",getDayTime("16:30:00",-2));
-            asyn('apido/asyn.flushAccountsInsights',array('date'=>$before_yesterday,'ac_id'=>$ac_id),null,
-                getDayTime("16:30:00",0),0);
+//            $before_yesterday=date("Y-m-d",getDayTime("16:30:00",-2));
+//            asyn('apido/asyn.flushAccountsInsights',array('date'=>$before_yesterday,'ac_id'=>$ac_id),null,
+//                getDayTime("16:30:00",0),0);
+            //明天刷新今天的数据
+            asyn('apido/asyn.flushAccountsInsights',array('date'=>date("Y-m-d",NOW_TIME),'ac_id'=>$ac_id),null,
+                getDayTime("20:00:00",1),0);
         }
         return $campaigns_data;
     }

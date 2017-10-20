@@ -184,11 +184,11 @@ END;
             }
             //其它Insights
             asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'yestoday','ac_id'=>$ac_id),null,
-                getDayTime("00:01:00"),0);
+                getDayTime("00:05:00"),0);
             asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'last_7day','ac_id'=>$ac_id),null,
-                getDayTime("00:01:00"),-1);
+                getDayTime("00:05:00"),0);
             asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'last_14day','ac_id'=>$ac_id),null,
-                getDayTime("00:01:00"),-2);
+                getDayTime("00:05:00"),0);
         }
         return $campaigns_data;
     }
