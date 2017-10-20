@@ -156,10 +156,14 @@ END;
     function getProducts(){
         $offset=I('request.offset',0);
         $limit=I('request.limit',30);
+        $type=I('request.type','');
         $where=" 1=1 ";
         $keyword=trim(I('request.keyword',''));
         if($keyword){
             $where.=" AND (name like '%$keyword%' OR ".self::PRODUCTS_SKU_FIELD." like '%$keyword%')";
+        }
+        if($type){
+            $where.=" AND video_ids ".($type=='yes'?'!':'')."= '[]' ";
         }
         $data=M('products')->where($where)->order('retailer_id asc')
             ->limit($offset,$limit)->select();
