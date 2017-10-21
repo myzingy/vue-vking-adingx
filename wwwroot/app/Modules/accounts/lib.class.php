@@ -276,13 +276,18 @@ END;
         $brands=$brands[$brand];
         if(!$brands) return "brand is error";
         $data=M('accounts_insights')
-            ->field('account_id,account_name,CLICK1D_DesktopSpend as pc_fee,CLICK1D_MobileSpend as mb_fee,CLICK1D_DesktopSpend+CLICK1D_MobileSpend as fee,date_start as date')
+            ->field('account_id,account_name,CLICK1D_DesktopSpend as pc_fee,CLICK1D_MobileSpend as mb_fee,date_start as date')
             ->where([
                 'date_start'=>$date,
                 'date_stop'=>$date,
                 'account_id'=>array('in',explode(',',$brands))
             ])
             ->select();
+        foreach ($data as &$x){
+            $x['pc_fee']+=0;
+            $x['mb_fee']+=0;
+            $x['fee']=$x['pc_fee']+$x['mb_fee'];
+        }
         return ['data'=>$data];
     }
     function getAcconutByCountry(){
