@@ -279,6 +279,10 @@ class AppLogic {
             }
         }
     }
+    function cron__removeAlikeCron(){
+        $lib = new \Modules\cron\lib();
+        return $lib -> removeAlikeCron();
+    }
     /**
      * <ok class="异步"/> 刷新广告系列
      * 参数

@@ -263,7 +263,7 @@ END;
             //其它Insights
 //            asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>'yestoday','ac_id'=>$ac_id),null,
 //                getDayTime("00:30:00"),0);
-            asyn('apido/asyn.flushAccountsInsights',array('ad_timespace'=>'yestoday','ac_id'=>$ac_id),null,
+            asyn('apido/asyn.flushAccountsInsights',array('date'=>date("Y-m-d",NOW_TIME),'ac_id'=>$ac_id),null,
                 getDayTime("07:30:00",1),0);
 
             //获取前天数据

@@ -180,4 +180,28 @@ class lib{
         $cron->message=$message;
         $cron->save();
     }
+
+    /**
+     * 移除任务列表中的相同任务
+     */
+    function removeAlikeCron(){
+        $cron=M('x_cron');
+        $where = '`status`='.self::CRON_STATUS_DEF;
+        $where .= ' and `crontime` <'.NOW_TIME;
+        //剔除重复
+        $where .= ' AND CONCAT(path,param) IN (
+                SELECT T.hkey FROM (
+                SELECT CONCAT(path,param) AS hkey FROM `x_cron` GROUP BY hkey HAVING COUNT( * ) >1 
+                ) T
+            ) ';
+        $where .= ' AND id NOT IN (
+            SELECT T.id FROM (
+            SELECT MAX(id) AS id FROM `x_cron` GROUP BY CONCAT(path,param)  HAVING COUNT( * ) >1 	
+            ) T
+        ) ';
+        $cron->where($where)->delete();
+        echo $cron->getLastSql();
+        $hour=date('H',NOW_TIME+3600);
+        asyn('apido/cron.removeAlikeCron',[],null,getDayTime("$hour:00:00",0),10);
+    }
 }
