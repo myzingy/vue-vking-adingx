@@ -148,7 +148,7 @@ END;
     function  flushProductsItem(){
 
         //$item=$this->model->where(['video_ids'=>'[]'])->order('rand()')->find();
-        $item=$this->model->where(['video_ids'=>'[]'])->order('retry asc')->find();
+        $item=$this->model->where(['video_ids'=>'[]'])->order('retry asc,RAND()')->find();
         if($item){
             $this->model->where("id='{$item['id']}'")->setInc('retry',1);
             $this->uploadBindVideo($item);
