@@ -312,7 +312,37 @@ class lib{
                 "income"=> 662383,
                 "impressions"=> 600281,
                 "reach"=> 483780
-            )
+            ),
+            '姚青|639275062920989|2017-10-19'=>array(
+                "fee_date"=> "2017-10-19",
+                "account_id"=> 639275062920989,
+                "account_name"=> "BF-YM-Zhule-0817-02",
+                "username"=> "姚青",
+                "cost"=> 130972,
+                "purchase"=> 21,
+                "add_to_cart"=> 445,
+                "cpm"=> 10.75224326609,
+                "ctr"=> 0.987611752826146,
+                "link_click"=> 1203,
+                "income"=> 315772,
+                "impressions"=> 121809,
+                "reach"=> 108947
+            ),
+            '姚青|639275062920989|2017-10-20'=>array(
+                "fee_date"=> "2017-10-20",
+                "account_id"=> 639275062920989,
+                "account_name"=> "BF-YM-Zhule-0817-02",
+                "username"=> "姚青",
+                "cost"=> 156481,
+                "purchase"=> 23,
+                "add_to_cart"=> 384,
+                "cpm"=> 10.406882012197,
+                "ctr"=> 0.95169689351769,
+                "link_click"=> 1433,
+                "income"=> 324896,
+                "impressions"=> 150363,
+                "reach"=> 136817
+            ),
         );
         $key=$user_account['username'].'|'.$user_account['account_id'].'|'.$user_account['fee_date'];
         if(!empty($patch[$key])){
