@@ -183,12 +183,16 @@ END;
                 asyn('apido/asyn.runRules', array('id' => $adset_id, 'type' => 'adset'),null,getDayTime($rule['exec_hour_minute'].':00',0));
             }
             //其它Insights
-            asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'yestoday','ac_id'=>$ac_id),null,
-                getDayTime("00:05:00"),0);
-            asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'last_7day','ac_id'=>$ac_id),null,
-                getDayTime("00:05:00"),0);
-            asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'last_14day','ac_id'=>$ac_id),null,
-                getDayTime("00:05:00"),0);
+//            asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'yestoday','ac_id'=>$ac_id),null,
+//                getDayTime("00:05:00"),0);
+//            asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'last_7day','ac_id'=>$ac_id),null,
+//                getDayTime("00:05:00"),0);
+//            asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'last_14day','ac_id'=>$ac_id),null,
+//                getDayTime("00:05:00"),0);
+            if($ac_id=='564914007023762' || $ac_id=='909992302470836'){
+                asyn('apido/asyn.flushAdsetsInsights',array('adset_id' => $adset_id,'adset_timespace'=>'last_7day','ac_id'=>$ac_id),null,
+                    getDayTime("00:05:00"),0);
+            }
         }
         return $campaigns_data;
     }

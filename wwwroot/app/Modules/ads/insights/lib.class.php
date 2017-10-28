@@ -208,12 +208,12 @@ END;
                 asyn('apido/asyn.runRules', array('id' => $ad_id, 'type' => 'ad'),null,getDayTime($rule['exec_hour_minute'].':00',0));
             }
             //其它Insights
-            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'yestoday','ac_id'=>$ac_id),null,
-                getDayTime("00:05:00"),0);
-            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_7day','ac_id'=>$ac_id),null,
-                getDayTime("00:05:00"),0);
-            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_14day','ac_id'=>$ac_id),null,
-                getDayTime("00:05:00"),0);
+//            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'yestoday','ac_id'=>$ac_id),null,
+//                getDayTime("00:05:00"),0);
+//            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_7day','ac_id'=>$ac_id),null,
+//                getDayTime("00:05:00"),0);
+//            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_14day','ac_id'=>$ac_id),null,
+//                getDayTime("00:05:00"),0);
 //            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'lifetime','ac_id'=>$ac_id),null,
 //                getDayTime("00:05:00"),0);
 
