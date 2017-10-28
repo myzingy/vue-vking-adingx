@@ -169,6 +169,9 @@ class lib{
     function getAcconutByOperator(){
         $date=I('request.date');
         if(!$date) return "param is null";
+        if($date > "2017-10-27"){
+            return $this->getAcconutByOperator1028();
+        }
         $ac_ids_rules=array(
             //jeulia
             '561910137324149'=>'戴婷',
@@ -350,5 +353,141 @@ class lib{
         if(!empty($patch[$key])){
             $user_account=$patch[$key];
         }
+    }
+    function getAcconutByOperator1028(){
+        $date=I('request.date');
+        if(!$date) return "param is null";
+        $ac_ids_rules=array(
+            //jeulia
+            '561910137324149'=>'戴婷',
+            '769185746596586'=>'戴婷',
+            '836196303228863'=>'权文娟',
+            '559461654235664'=>'武艳云',
+            '564914007023762'=>'王乐',
+            '909992302470836'=>'杨超英',
+            '639275062920989'=>'姚青',
+            '769185753263252'=>'李婷',
+            '673582062823622'=>'徐健',
+            '836196296562197'=>'李英',
+            '836196299895530'=>'葛芳',
+            '639275016254327'=>'DPA',
+            '1593565507558990'=>[
+                ['杨超英','Kelly'],['DPA','dpa']
+            ],
+        );
+        $brands=C('brand');
+        $brands=$brands['jeulia'];
+        $data=M('campaigns_insights')
+            ->field('account_id,account_name,date_start as date,campaign_name
+            ,CLICK1D_WebsiteAddstoCart,CLICK1D_WebsitePurchases,CLICK1D_CostperWebsiteAddtoCart
+            ,CLICK1D_CPC,CLICK1D_WebsiteAddstoCartConversionValue,CLICK1D_WebsitePurchasesConversionValue
+            ,spend,cpm,inline_link_click_ctr as ctr,inline_link_clicks as link_clicks,impressions,reach')
+            ->where([
+                'date_start'=>$date,
+                'date_stop'=>$date,
+                'type'=>99,
+                'account_id'=>'1593565507558990'
+            ])
+            ->select();
+        /////////////////////////
+        $data_accounts=M('accounts_insights')
+            ->field('account_id,account_name,date_start as date,campaign_name
+            ,CLICK1D_WebsiteAddstoCart,CLICK1D_WebsitePurchases,CLICK1D_CostperWebsiteAddtoCart
+            ,CLICK1D_CPC,CLICK1D_WebsiteAddstoCartConversionValue,CLICK1D_WebsitePurchasesConversionValue
+            ,spend,cpm,inline_link_click_ctr as ctr,inline_link_clicks as link_clicks,impressions,reach')
+            ->where([
+                'date_start'=>$date,
+                'date_stop'=>$date,
+                'type'=>99,
+                'account_id'=>array('neq','1593565507558990')
+            ])
+            ->select();
+        $data=array_merge($data,$data_accounts);
+        /////////////////////////
+        $pdata=[];
+        $fbc=FBC();
+        foreach ($fbc as $r){
+            $account_names[$r['account_id']]=$r['account_name'];
+        }
+        foreach ($ac_ids_rules as $acI=>$acU){
+            if(is_array($acU)){
+                foreach ($acU as $acU2){
+                    $acUx=$acU2[0];
+                    $pdata[$acUx]=$pdata[$acUx]?$pdata[$acUx]:[];
+                    $pdata[$acUx][$acI]=[
+                        'fee_date'=>$date,
+                        'account_id'=>$acI,
+                        'account_name'=>$account_names[$acI],
+                        'username'=>$acUx,
+                        'cost'=>0,
+                        'purchase'=>0,
+                        'add_to_cart'=>0,
+                        'cpm'=>0,
+                        'ctr'=>0,
+                        'link_click'=>0,
+                        'income'=>0,
+                        'impressions'=>1,
+                        'reach'=>1,
+                        '__count'=>0,
+                    ];
+                }
+            }else{
+                $pdata[$acU]=$pdata[$acU]?$pdata[$acU]:[];
+                $pdata[$acU][$acI]=[
+                    'fee_date'=>$date,
+                    'account_id'=>$acI,
+                    'account_name'=>$account_names[$acI],
+                    'username'=>$acU,
+                    'cost'=>0,
+                    'purchase'=>0,
+                    'add_to_cart'=>0,
+                    'cpm'=>0,
+                    'ctr'=>0,
+                    'link_click'=>0,
+                    'income'=>0,
+                    'impressions'=>1,
+                    'reach'=>1,
+                    '__count'=>0,
+                ];
+            }
+        }
+        foreach ($data as $r){
+            $ac_id=$r['account_id'];
+            $rule=$ac_ids_rules[$ac_id];
+            $day_click=getDayClick($r);
+            if(is_array($rule)){
+                $key=$ac_id;
+                foreach ($rule as $rl){
+                    if(stripos($r['campaign_name'],$rl[1])>-1){
+                        $key=$rl[0];
+                        break;
+                    }
+                }
+            }else{
+                $key=$rule?$rule:$ac_id;
+            }
+            if($key==$ac_id) continue;
+            $pdata[$key][$ac_id]['cost']+=$r['spend']*100;
+            $pdata[$key][$ac_id]['purchase']+=$day_click['WebsitePurchases'];
+            $pdata[$key][$ac_id]['add_to_cart']+=$day_click['WebsiteAddstoCart'];
+            $pdata[$key][$ac_id]['cpm']+=$r['cpm']*100;
+            $pdata[$key][$ac_id]['ctr']+=$r['ctr'];
+            $pdata[$key][$ac_id]['link_click']+=$r['link_clicks'];
+            $pdata[$key][$ac_id]['income']+=$day_click['WebsitePurchasesConversionValue']*100;
+            //$pdata[$key]['campaign_name'].=$r['campaign_name']." |||| ";
+            $pdata[$key][$ac_id]['impressions']+=$r['impressions'];
+            $pdata[$key][$ac_id]['reach']+=$r['reach'];
+            $pdata[$key][$ac_id]['__count']+=1;
+        }
+        foreach ($pdata as &$xxd){
+            foreach ($xxd as &$xd){
+                //$xd['cpm']=$xd['cpm']/$xd['__count']+0;
+                //$xd['ctr']=$xd['ctr']/$xd['__count']+0;
+                $xd['cpm']=($xd['cost']*10)/$xd['impressions'];
+                $xd['ctr']=($xd['link_click']/$xd['impressions'])*100;
+                unset($xd['__count']);
+            }
+        }
+        return ['data'=>$pdata,'act.do'=>'getAcconutByOperator1028'];
     }
 }
