@@ -214,8 +214,8 @@ END;
                 getDayTime("00:05:00"),0);
             asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'last_14day','ac_id'=>$ac_id),null,
                 getDayTime("00:05:00"),0);
-            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'lifetime','ac_id'=>$ac_id),null,
-                getDayTime("00:05:00"),0);
+//            asyn('apido/asyn.flushAdsInsights',array('ad_id' => $ad_id,'ad_timespace'=>'lifetime','ac_id'=>$ac_id),null,
+//                getDayTime("00:05:00"),0);
 
         }
         if($ad_timespace=='lifetime'){
