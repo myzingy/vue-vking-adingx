@@ -95,10 +95,10 @@ class lib{
                     'ac_id'=>$ac_id
                 ));
                 if($ac_id=='909992302470836') continue;
-                asyn('apido/asyn.flushKeywordsInsight', array(
-                    'ad_id' => $_campaigns_data['id'],
-                    'ac_id'=>$ac_id
-                ),null,getDayTime("15:00:00",0),-3);
+//                asyn('apido/asyn.flushKeywordsInsight', array(
+//                    'ad_id' => $_campaigns_data['id'],
+//                    'ac_id'=>$ac_id
+//                ),null,getDayTime("15:00:00",0),-3);
 //                asyn('apido/asyn.flushKeywordsInsight', array(
 //                    'ad_id' => $_campaigns_data['id'],
 //                    'ac_id'=>$ac_id,
@@ -113,7 +113,7 @@ class lib{
                     'ad_id' => $_campaigns_data['id'],
                     'ac_id'=>$ac_id,
                     'date'=>date("Y-m-d",NOW_TIME),
-                ),null,getDayTime("20:00:00",1),-3);
+                ),null,getDayTime("20:00:00",3),-3);
             //}
         }
         if(count($campaigns_data)>0){
