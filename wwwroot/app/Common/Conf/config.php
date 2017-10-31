@@ -18,6 +18,7 @@ $conf['erp_host']=array('erp_host'=>array(
 ));
 $conf['brand']=include(CONF_PATH.'brand_accounts.php');
 $conf['debug_rule_adsets']=include(CONF_PATH.'debug_rule_adsets.php');
+$conf['patch']=include(CONF_PATH.'operator.patch.php');
 $_conf=array();
 foreach ($conf as $_c) {
 	$_conf=array_merge($_conf,$_c);

@@ -221,27 +221,27 @@ class lib{
         }
         foreach ($ac_ids_rules as $acI=>$acU){
             if(is_array($acU)){
-                foreach ($acU as $acU2){
-                    $acUx=$acU2[0];
-                    $pdata[$acUx]=$pdata[$acUx]?$pdata[$acUx]:[];
-                    $pdata[$acUx][$acI]=[
-                        'fee_date'=>$date,
-                        'account_id'=>$acI,
-                        'account_name'=>$account_names[$acI],
-                        'username'=>$acUx,
-                        'cost'=>0,
-                        'purchase'=>0,
-                        'add_to_cart'=>0,
-                        'cpm'=>0,
-                        'ctr'=>0,
-                        'link_click'=>0,
-                        'income'=>0,
-                        'impressions'=>1,
-                        'reach'=>1,
-                        '__count'=>0,
-                    ];
-                }
-            }else{
+
+            }else{foreach ($acU as $acU2){
+                $acUx=$acU2[0];
+                $pdata[$acUx]=$pdata[$acUx]?$pdata[$acUx]:[];
+                $pdata[$acUx][$acI]=[
+                    'fee_date'=>$date,
+                    'account_id'=>$acI,
+                    'account_name'=>$account_names[$acI],
+                    'username'=>$acUx,
+                    'cost'=>0,
+                    'purchase'=>0,
+                    'add_to_cart'=>0,
+                    'cpm'=>0,
+                    'ctr'=>0,
+                    'link_click'=>0,
+                    'income'=>0,
+                    'impressions'=>1,
+                    'reach'=>1,
+                    '__count'=>0,
+                ];
+            }
                 $pdata[$acU]=$pdata[$acU]?$pdata[$acU]:[];
                 $pdata[$acU][$acI]=[
                     'fee_date'=>$date,
@@ -302,53 +302,7 @@ class lib{
         return ['data'=>$pdata];
     }
     function setAcconutByOperatorPatch(&$user_account){
-        $patch=array(
-            '杨超英|909992302470836|2017-10-17'=>array(
-                "fee_date"=> "2017-10-17",
-                "account_id"=> 909992302470836,
-                "account_name"=> "Xi'an Zhule -1212-3",
-                "username"=> "杨超英",
-                "cost"=> 494559,
-                "purchase"=> 56,
-                "add_to_cart"=> 2100,
-                "cpm"=> 8.23879149931449,
-                "ctr"=> 2.9889335161366,
-                "link_click"=> 17942,
-                "income"=> 662383,
-                "impressions"=> 600281,
-                "reach"=> 483780
-            ),
-            '姚青|639275062920989|2017-10-19'=>array(
-                "fee_date"=> "2017-10-19",
-                "account_id"=> 639275062920989,
-                "account_name"=> "BF-YM-Zhule-0817-02",
-                "username"=> "姚青",
-                "cost"=> 130972,
-                "purchase"=> 21,
-                "add_to_cart"=> 445,
-                "cpm"=> 10.75224326609,
-                "ctr"=> 0.987611752826146,
-                "link_click"=> 1203,
-                "income"=> 315772,
-                "impressions"=> 121809,
-                "reach"=> 108947
-            ),
-            '姚青|639275062920989|2017-10-20'=>array(
-                "fee_date"=> "2017-10-20",
-                "account_id"=> 639275062920989,
-                "account_name"=> "BF-YM-Zhule-0817-02",
-                "username"=> "姚青",
-                "cost"=> 156481,
-                "purchase"=> 23,
-                "add_to_cart"=> 384,
-                "cpm"=> 10.406882012197,
-                "ctr"=> 0.95169689351769,
-                "link_click"=> 1433,
-                "income"=> 324896,
-                "impressions"=> 150363,
-                "reach"=> 136817
-            ),
-        );
+        $patch=C('patch');
         $key=$user_account['username'].'|'.$user_account['account_id'].'|'.$user_account['fee_date'];
         if(!empty($patch[$key])){
             $user_account=$patch[$key];
