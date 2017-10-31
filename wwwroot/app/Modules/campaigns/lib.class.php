@@ -221,27 +221,27 @@ class lib{
         }
         foreach ($ac_ids_rules as $acI=>$acU){
             if(is_array($acU)){
-
-            }else{foreach ($acU as $acU2){
-                $acUx=$acU2[0];
-                $pdata[$acUx]=$pdata[$acUx]?$pdata[$acUx]:[];
-                $pdata[$acUx][$acI]=[
-                    'fee_date'=>$date,
-                    'account_id'=>$acI,
-                    'account_name'=>$account_names[$acI],
-                    'username'=>$acUx,
-                    'cost'=>0,
-                    'purchase'=>0,
-                    'add_to_cart'=>0,
-                    'cpm'=>0,
-                    'ctr'=>0,
-                    'link_click'=>0,
-                    'income'=>0,
-                    'impressions'=>1,
-                    'reach'=>1,
-                    '__count'=>0,
-                ];
-            }
+                foreach ($acU as $acU2){
+                    $acUx=$acU2[0];
+                    $pdata[$acUx]=$pdata[$acUx]?$pdata[$acUx]:[];
+                    $pdata[$acUx][$acI]=[
+                        'fee_date'=>$date,
+                        'account_id'=>$acI,
+                        'account_name'=>$account_names[$acI],
+                        'username'=>$acUx,
+                        'cost'=>0,
+                        'purchase'=>0,
+                        'add_to_cart'=>0,
+                        'cpm'=>0,
+                        'ctr'=>0,
+                        'link_click'=>0,
+                        'income'=>0,
+                        'impressions'=>1,
+                        'reach'=>1,
+                        '__count'=>0,
+                    ];
+                }
+            }else{
                 $pdata[$acU]=$pdata[$acU]?$pdata[$acU]:[];
                 $pdata[$acU][$acI]=[
                     'fee_date'=>$date,
