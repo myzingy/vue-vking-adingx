@@ -221,6 +221,40 @@ $__patch_json=<<<END
             "impressions": 155819,
             "reach": 108752
         }
+    },
+    {
+        "909992302470836":{
+            "fee_date": "2017-10-26",
+            "account_id": 909992302470836,
+            "account_name": "Xi'an Zhule -1212-3",
+            "username": "杨超英",
+            "cost": 492102,
+            "purchase": 49,
+            "add_to_cart": 1279,
+            "cpm": 11.548793023332,
+            "ctr": 3.5890130624774,
+            "link_click": 15294,
+            "income": 591996,
+            "impressions": 426108,
+            "reach": 360558
+        }
+    },
+    {
+        "909992302470836":{
+            "fee_date": "2017-10-27",
+            "account_id": 909992302470836,
+            "account_name": "Xi'an Zhule -1212-3",
+            "username": "杨超英",
+            "cost": 407018,
+            "purchase": 63,
+            "add_to_cart": 1273,
+            "cpm": 10.867085667295,
+            "ctr": 3.9845998579599,
+            "link_click": 14927,
+            "income": 736672,
+            "impressions": 374541,
+            "reach": 321506
+        }
     }
 ]
 END;
