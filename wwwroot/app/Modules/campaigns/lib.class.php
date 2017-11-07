@@ -110,7 +110,7 @@ class lib{
             array_push($campaigns_data,$_campaigns_data);
             $campaigns->next();
             //只获取 1593565507558990 的数据
-            if($ac_id!='1593565507558990') continue;
+            if($ac_id!='1593565507558990' && $ac_id!='564914007023762') continue;
             if(ArchivableCrudObjectEffectiveStatuses::ACTIVE==$_campaigns_data[CampaignFields::EFFECTIVE_STATUS]) {
 //                asyn('apido/asyn.flushAdsets',array(
 //                    'campaign_id'=>$_campaigns_data['id'],
