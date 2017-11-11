@@ -177,6 +177,8 @@ END;
             unset($campaigns_data['campaigns_insights_action_types']);
             $this->model->add($campaigns_data);
         }
+        //只获取 1593565507558990 的数据
+        if($ac_id!='1593565507558990') return $campaigns_data;
         if ($campaign_timespace == 'today' && !$date) {
             //其它Insights
             asyn('apido/asyn.flushCampaignsInsights', array('date'=>date("Y-m-d",NOW_TIME),'ac_id'=>$ac_id,'campaign_id' => $campaign_id),null,
