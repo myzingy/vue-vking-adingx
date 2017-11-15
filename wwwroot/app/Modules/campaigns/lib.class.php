@@ -438,6 +438,7 @@ class lib{
                 $xd['cpm']=($xd['cost']*10)/$xd['impressions'];
                 $xd['ctr']=($xd['link_click']/$xd['impressions'])*100;
                 unset($xd['__count']);
+                $this->setAcconutByOperatorPatch($xd);
             }
         }
         return ['data'=>$pdata,'act.do'=>'getAcconutByOperator1028'];
