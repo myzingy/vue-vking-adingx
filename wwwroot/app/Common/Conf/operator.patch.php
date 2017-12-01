@@ -476,6 +476,134 @@ $__patch_json=<<<END
             "impressions": 12625,
             "reach": 10590
         }    
+    },
+    {
+        "909992302470836": {
+            "fee_date": "2017-11-26",
+            "account_id": 909992302470836,
+            "account_name": "Xi'an Zhule -1212-3",
+            "username": "杨超英",
+            "cost": 694756,
+            "purchase": 74,
+            "add_to_cart": 1572,
+            "cpm": 11.158408685736,
+            "ctr": 4.04526,
+            "link_click": 25187,
+            "income": 830454,
+            "impressions": 622630,
+            "reach": 478766
+        },
+        "1593565507558990": {
+            "fee_date": "2017-11-26",
+            "account_id": 1593565507558990,
+            "account_name": "Jeulia",
+            "username": "杨超英",
+            "cost": 4290,
+            "purchase": 0,
+            "add_to_cart": 0,
+            "cpm": 19.724137931034,
+            "ctr": 2.3448275862069,
+            "link_click": 51,
+            "income": 0,
+            "impressions": 2175,
+            "reach": 2103
+        }
+    },
+    {
+        "909992302470836": {
+            "fee_date": "2017-11-25",
+            "account_id": 909992302470836,
+            "account_name": "Xi'an Zhule -1212-3",
+            "username": "杨超英",
+            "cost": 972238,
+            "purchase": 146,
+            "add_to_cart": 2471,
+            "cpm": 14.02542134487,
+            "ctr": 3.85301725195,
+            "link_click": 26709,
+            "income": 1641634,
+            "impressions": 693197,
+            "reach": 566348
+        },
+        "1593565507558990": {
+            "fee_date": "2017-11-25",
+            "account_id": 1593565507558990,
+            "account_name": "Jeulia",
+            "username": "杨超英",
+            "cost": 6893,
+            "purchase": 2,
+            "add_to_cart": 0,
+            "cpm": 25.710555762775,
+            "ctr": 2.4990675121223,
+            "link_click": 67,
+            "income": 13625,
+            "impressions": 2681,
+            "reach": 2588
+        }
+    },
+    {
+        "909992302470836": {
+            "fee_date": "2017-11-23",
+            "account_id": 909992302470836,
+            "account_name": "Xi'an Zhule -1212-3",
+            "username": "杨超英",
+            "cost": 619337,
+            "purchase": 92,
+            "add_to_cart": 1915,
+            "cpm": 10.784472490963,
+            "ctr": 3.5245627598888,
+            "link_click": 20241,
+            "income": 1005656,
+            "impressions": 574284,
+            "reach": 447439
+        },
+        "1593565507558990": {
+            "fee_date": "2017-11-23",
+            "account_id": 1593565507558990,
+            "account_name": "Jeulia",
+            "username": "杨超英",
+            "cost": 30012,
+            "purchase": 4,
+            "add_to_cart": 33,
+            "cpm": 24.485600065269,
+            "ctr": 2.9126213592233,
+            "link_click": 357,
+            "income": 41738,
+            "impressions": 12257,
+            "reach": 11216
+        }
+    },
+    {
+        "909992302470836": {
+            "fee_date": "2017-11-18",
+            "account_id": 909992302470836,
+            "account_name": "Xi'an Zhule -1212-3",
+            "username": "杨超英",
+            "cost": 731008,
+            "purchase": 108,
+            "add_to_cart": 1824,
+            "cpm": 10.923120601288,
+            "ctr": 3.4252797991722,
+            "link_click": 22923,
+            "income": 1099081,
+            "impressions": 669230,
+            "reach": 514010
+        },
+        "1593565507558990": {
+            "fee_date": "2017-11-18",
+            "account_id": 1593565507558990,
+            "account_name": "Jeulia",
+            "username": "杨超英",
+            "cost": 41121,
+            "purchase": 10,
+            "add_to_cart": 52,
+            "cpm": 29.60475161987,
+            "ctr": 3.7005039596832,
+            "link_click": 514,
+            "income": 100600,
+            "impressions": 13890,
+            "reach": 12573
+        }
     }
 ]
 END;
