@@ -170,8 +170,8 @@ class lib{
         if($date > "2017-10-27"){
             return $this->getAcconutByOperator1028();
         }
-        if($date > "2018-01-03"){
-            return $this->getAcconutByOperator0103();
+        if($date > "2018-01-01"){
+            return $this->getAcconutByOperator0101();
         }
         $ac_ids_rules=array(
             //jeulia
@@ -446,7 +446,7 @@ class lib{
         }
         return ['data'=>$pdata,'act.do'=>'getAcconutByOperator1028'];
     }
-    function getAcconutByOperator0103(){
+    function getAcconutByOperator0101(){
         $date=I('request.date');
         if(!$date) return "param is null";
         $ac_ids_rules=array(
@@ -580,6 +580,6 @@ class lib{
                 $this->setAcconutByOperatorPatch($xd);
             }
         }
-        return ['data'=>$pdata,'act.do'=>'getAcconutByOperator0103'];
+        return ['data'=>$pdata,'act.do'=>'getAcconutByOperator0101'];
     }
 }
