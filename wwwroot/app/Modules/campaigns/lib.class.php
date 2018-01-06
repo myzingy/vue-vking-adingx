@@ -167,11 +167,11 @@ class lib{
     function getAcconutByOperator(){
         $date=I('request.date');
         if(!$date) return "param is null";
+        if($date >= "2018-01-01"){
+            return $this->getAcconutByOperator0101();
+        }
         if($date > "2017-10-27"){
             return $this->getAcconutByOperator1028();
-        }
-        if($date > "2018-01-01"){
-            return $this->getAcconutByOperator0101();
         }
         $ac_ids_rules=array(
             //jeulia
