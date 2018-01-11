@@ -49,7 +49,7 @@ class lib{
                 ),null,null,3);
             }
         }
-
+        return ['data'=>$acs];
     }
 	function flushCampaigns(){
         $ac_id=I('request.ac_id');
