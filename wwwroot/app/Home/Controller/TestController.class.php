@@ -136,6 +136,32 @@ END;
         dump($insights);
 
     }
+    function campaignInsights(){
+        vendor("vendor.autoload");
+        $app=C('fbapp');
+        dump(array(date("Y-m-d H:i:s",NOW_TIME),$app));
+        $fba=Api::init($app['app_id'],$app['app_secret'],'EAABeuMl0aOwBAHMXmLq4eFLcPFlzci7r0Yn3UjcZClOpoQU3E4HsxaFLNWnAKXZBUzTpol50KZC0IC0RXHjjNbbZBbfjQGDf8Vec0HdhCvd8JYkJSZBsGZB9IsuqToOlG9UrZAMfLDy0WWY6T3O2ZA8sBsrAFKJ4ZBs7oHNrGymhFMUD7Yxhy14B0');
+        $api = Api::instance();
+
+        //dump($b);
+        $str=<<<END
+
+END;
+        preg_match_all("/\[\"(.*)\"\]/",$str,$match);
+        $fields=$match[1];
+        $campaign = new Campaign('23842610790400125');
+        $insights = $campaign->getInsights(
+            $fields,
+            array(
+                'time_range'=>array('since'=>'2018-01-10','until'=>'2018-01-10'),
+                'action_attribution_windows'=>['1d_click','1d_view'],
+                //'breakdowns'=> $breakdowns,
+                'action_breakdowns'=>['action_link_click_destination'],
+                'limit'=>300,
+            )
+        );
+        dump($insights);
+    }
     function index()
     {
         vendor("vendor.autoload");
