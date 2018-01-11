@@ -27,7 +27,7 @@ namespace FacebookAds\Object\Values;
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -51,4 +51,6 @@ class AdPreviewAdFormatValues extends AbstractEnum {
   const INSTANT_ARTICLE_STANDARD = 'INSTANT_ARTICLE_STANDARD';
   const INSTREAM_VIDEO_DESKTOP = 'INSTREAM_VIDEO_DESKTOP';
   const INSTREAM_VIDEO_MOBILE = 'INSTREAM_VIDEO_MOBILE';
+  const SUGGESTED_VIDEO_DESKTOP = 'SUGGESTED_VIDEO_DESKTOP';
+  const SUGGESTED_VIDEO_MOBILE = 'SUGGESTED_VIDEO_MOBILE';
 }

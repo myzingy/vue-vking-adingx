@@ -31,11 +31,13 @@ use FacebookAds\TypeChecker;
 use FacebookAds\Object\Fields\AdSetFields;
 use FacebookAds\Object\Values\AdActivityCategoryValues;
 use FacebookAds\Object\Values\AdAsyncRequestStatusesValues;
+use FacebookAds\Object\Values\AdCampaignDeliveryEstimateOptimizationGoalValues;
 use FacebookAds\Object\Values\AdDatePresetValues;
 use FacebookAds\Object\Values\AdLabelExecutionOptionsValues;
 use FacebookAds\Object\Values\AdSetBillingEventValues;
 use FacebookAds\Object\Values\AdSetConfiguredStatusValues;
 use FacebookAds\Object\Values\AdSetDatePresetValues;
+use FacebookAds\Object\Values\AdSetDestinationTypeValues;
 use FacebookAds\Object\Values\AdSetEffectiveStatusValues;
 use FacebookAds\Object\Values\AdSetExecutionOptionsValues;
 use FacebookAds\Object\Values\AdSetOperatorValues;
@@ -53,7 +55,7 @@ use FacebookAds\Object\Traits\AdLabelAwareCrudObjectTrait;
 use FacebookAds\Object\Traits\ObjectValidation;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -89,6 +91,7 @@ class AdSet extends AbstractArchivableCrudObject
     $ref_enums['OptimizationGoal'] = AdSetOptimizationGoalValues::getInstance()->getValues();
     $ref_enums['Status'] = AdSetStatusValues::getInstance()->getValues();
     $ref_enums['DatePreset'] = AdSetDatePresetValues::getInstance()->getValues();
+    $ref_enums['DestinationType'] = AdSetDestinationTypeValues::getInstance()->getValues();
     $ref_enums['ExecutionOptions'] = AdSetExecutionOptionsValues::getInstance()->getValues();
     $ref_enums['Operator'] = AdSetOperatorValues::getInstance()->getValues();
     return $ref_enums;
@@ -254,15 +257,45 @@ class AdSet extends AbstractArchivableCrudObject
     return $pending ? $request : $request->execute();
   }
 
+  public function getCopies(array $fields = array(), array $params = array(), $pending = false) {
+    $this->assureId();
+
+    $param_types = array(
+      'date_preset' => 'date_preset_enum',
+      'effective_status' => 'list<effective_status_enum>',
+      'is_completed' => 'bool',
+      'time_range' => 'Object',
+    );
+    $enums = array(
+      'date_preset_enum' => AdSetDatePresetValues::getInstance()->getValues(),
+      'effective_status_enum' => AdSetEffectiveStatusValues::getInstance()->getValues(),
+    );
+
+    $request = new ApiRequest(
+      $this->api,
+      $this->data['id'],
+      RequestInterface::METHOD_GET,
+      '/copies',
+      new AdSet(),
+      'EDGE',
+      AdSet::getFieldsEnum()->getValues(),
+      new TypeChecker($param_types, $enums)
+    );
+    $request->addParams($params);
+    $request->addFields($fields);
+    return $pending ? $request : $request->execute();
+  }
+
   public function getDeliveryEstimate(array $fields = array(), array $params = array(), $pending = false) {
     $this->assureId();
 
     $param_types = array(
-      'optimization_goal' => 'adcampaigndelivery_estimate_optimization_goal_enum_param',
+      'optimization_goal' => 'optimization_goal_enum',
       'promoted_object' => 'Object',
       'targeting_spec' => 'Targeting',
     );
     $enums = array(
+      'optimization_goal_enum' => AdCampaignDeliveryEstimateOptimizationGoalValues::getInstance()->getValues(),
     );
 
     $request = new ApiRequest(
@@ -270,9 +303,9 @@ class AdSet extends AbstractArchivableCrudObject
       $this->data['id'],
       RequestInterface::METHOD_GET,
       '/delivery_estimate',
-      new DeliveryEstimate(),
+      new AdCampaignDeliveryEstimate(),
       'EDGE',
-      DeliveryEstimate::getFieldsEnum()->getValues(),
+      AdCampaignDeliveryEstimate::getFieldsEnum()->getValues(),
       new TypeChecker($param_types, $enums)
     );
     $request->addParams($params);
@@ -303,6 +336,7 @@ class AdSet extends AbstractArchivableCrudObject
       'time_increment' => 'string',
       'time_range' => 'Object',
       'time_ranges' => 'list<Object>',
+      'use_account_attribution_setting' => 'bool',
     );
     $enums = array(
       'action_attribution_windows_enum' => AdsInsightsActionAttributionWindowsValues::getInstance()->getValues(),
@@ -353,6 +387,7 @@ class AdSet extends AbstractArchivableCrudObject
       'time_increment' => 'string',
       'time_range' => 'Object',
       'time_ranges' => 'list<Object>',
+      'use_account_attribution_setting' => 'bool',
     );
     $enums = array(
       'action_attribution_windows_enum' => AdsInsightsActionAttributionWindowsValues::getInstance()->getValues(),
@@ -462,6 +497,7 @@ class AdSet extends AbstractArchivableCrudObject
       'creative_sequence' => 'list<string>',
       'daily_budget' => 'unsigned int',
       'daily_imps' => 'unsigned int',
+      'destination_type' => 'destination_type_enum',
       'end_time' => 'datetime',
       'execution_options' => 'list<execution_options_enum>',
       'is_autobid' => 'bool',
@@ -482,6 +518,7 @@ class AdSet extends AbstractArchivableCrudObject
     );
     $enums = array(
       'billing_event_enum' => AdSetBillingEventValues::getInstance()->getValues(),
+      'destination_type_enum' => AdSetDestinationTypeValues::getInstance()->getValues(),
       'execution_options_enum' => AdSetExecutionOptionsValues::getInstance()->getValues(),
       'optimization_goal_enum' => AdSetOptimizationGoalValues::getInstance()->getValues(),
       'status_enum' => AdSetStatusValues::getInstance()->getValues(),

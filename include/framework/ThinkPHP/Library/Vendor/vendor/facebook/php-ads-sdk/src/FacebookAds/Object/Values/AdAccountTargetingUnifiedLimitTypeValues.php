@@ -27,7 +27,7 @@ namespace FacebookAds\Object\Values;
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -91,7 +91,6 @@ class AdAccountTargetingUnifiedLimitTypeValues extends AbstractEnum {
   const EFFECTIVE_AUDIENCE_NETWORK_POSITIONS = 'effective_audience_network_positions';
   const EXCLUDED_PUBLISHER_CATEGORIES = 'excluded_publisher_categories';
   const EXCLUDED_PUBLISHER_LIST_IDS = 'excluded_publisher_list_ids';
-  const EXCLUDED_PUBLISHER_DOMAINS = 'excluded_publisher_domains';
   const PUBLISHER_VISIBILITY_CATEGORIES = 'publisher_visibility_categories';
   const USER_DEVICE = 'user_device';
   const MOBILE_DEVICE_MODEL = 'mobile_device_model';
@@ -116,6 +115,7 @@ class AdAccountTargetingUnifiedLimitTypeValues extends AbstractEnum {
   const MOMS = 'moms';
   const OFFICE_TYPE = 'office_type';
   const TARGETING_OPTIMIZATION = 'targeting_optimization';
+  const DIRECT_INSTALL_DEVICES = 'direct_install_devices';
   const ENGAGEMENT_SPECS = 'engagement_specs';
   const EXCLUDED_ENGAGEMENT_SPECS = 'excluded_engagement_specs';
   const PRODUCT_AUDIENCE_SPECS = 'product_audience_specs';
@@ -128,4 +128,14 @@ class AdAccountTargetingUnifiedLimitTypeValues extends AbstractEnum {
   const FB_DEAL_ID = 'fb_deal_id';
   const INTEREST_DEFAULTS_SOURCE = 'interest_defaults_source';
   const ALTERNATE_AUTO_TARGETING_OPTION = 'alternate_auto_targeting_option';
+  const CONTEXTUAL_TARGETING_CATEGORIES = 'contextual_targeting_categories';
+  const TOPIC = 'topic';
+  const FORMAT = 'format';
+  const TRENDING = 'trending';
+  const GATEKEEPERS = 'gatekeepers';
+  const FOLLOW_PROFILES = 'follow_profiles';
+  const FOLLOW_PROFILES_NEGATIVE = 'follow_profiles_negative';
+  const LOCATION_CATEGORIES = 'location_categories';
+  const USER_PAGE_THREADS = 'user_page_threads';
+  const USER_PAGE_THREADS_EXCLUDED = 'user_page_threads_excluded';
 }

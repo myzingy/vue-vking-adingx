@@ -27,7 +27,7 @@ namespace FacebookAds\Object\Fields;
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -76,9 +76,9 @@ class AdImageFields extends AbstractEnum {
       'url' => 'string',
       'url_128' => 'string',
       'width' => 'unsigned int',
-      'bytes' => 'string',
+      'bytes' => 'Object',
       'copy_from' => 'Object',
-      'zipbytes' => 'string',
+      'zipbytes' => 'Object',
       'filename' => 'file',
     );
   }

@@ -27,7 +27,7 @@ namespace FacebookAds\Object\Fields;
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -47,6 +47,7 @@ class TransactionFields extends AbstractEnum {
   const CREDENTIAL_ID = 'credential_id';
   const FATURA_ID = 'fatura_id';
   const ID = 'id';
+  const IS_BUSINESS_EC_CHARGE = 'is_business_ec_charge';
   const PAYMENT_OPTION = 'payment_option';
   const PRODUCT_TYPE = 'product_type';
   const PROVIDER_AMOUNT = 'provider_amount';
@@ -66,6 +67,7 @@ class TransactionFields extends AbstractEnum {
       'credential_id' => 'string',
       'fatura_id' => 'unsigned int',
       'id' => 'string',
+      'is_business_ec_charge' => 'bool',
       'payment_option' => 'string',
       'product_type' => 'ProductType',
       'provider_amount' => 'TransactionCurrencyAmount',

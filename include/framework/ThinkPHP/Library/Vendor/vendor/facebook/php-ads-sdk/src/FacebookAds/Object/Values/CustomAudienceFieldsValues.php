@@ -27,7 +27,7 @@ namespace FacebookAds\Object\Values;
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -54,6 +54,7 @@ class CustomAudienceFieldsValues extends AbstractEnum {
   const PIXEL_ID = 'pixel_id';
   const RETENTION_DAYS = 'retention_days';
   const RULE = 'rule';
+  const RULE_AGGREGATION = 'rule_aggregation';
   const SUBTYPE = 'subtype';
   const TIME_CONTENT_UPDATED = 'time_content_updated';
   const TIME_CREATED = 'time_created';

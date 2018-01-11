@@ -27,7 +27,7 @@ namespace FacebookAds\Object\Fields;
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -48,11 +48,13 @@ class AdsActionStatsFields extends AbstractEnum {
   const ACTION_CAROUSEL_CARD_NAME = 'action_carousel_card_name';
   const ACTION_DESTINATION = 'action_destination';
   const ACTION_DEVICE = 'action_device';
+  const ACTION_LINK_CLICK_DESTINATION = 'action_link_click_destination';
   const ACTION_REACTION = 'action_reaction';
   const ACTION_TARGET_ID = 'action_target_id';
   const ACTION_TYPE = 'action_type';
   const ACTION_VIDEO_SOUND = 'action_video_sound';
   const ACTION_VIDEO_TYPE = 'action_video_type';
+  const INLINE = 'inline';
   const VALUE = 'value';
 
   public function getFieldTypes() {
@@ -68,11 +70,13 @@ class AdsActionStatsFields extends AbstractEnum {
       'action_carousel_card_name' => 'string',
       'action_destination' => 'string',
       'action_device' => 'string',
+      'action_link_click_destination' => 'string',
       'action_reaction' => 'string',
       'action_target_id' => 'string',
       'action_type' => 'string',
       'action_video_sound' => 'string',
       'action_video_type' => 'string',
+      'inline' => 'string',
       'value' => 'string',
     );
   }

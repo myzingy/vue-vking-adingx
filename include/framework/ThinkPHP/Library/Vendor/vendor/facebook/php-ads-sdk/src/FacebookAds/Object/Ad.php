@@ -49,7 +49,7 @@ use FacebookAds\Object\Values\AdsInsightsSummaryValues;
 use FacebookAds\Object\Traits\AdLabelAwareCrudObjectTrait;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -187,6 +187,7 @@ class Ad extends AbstractArchivableCrudObject
       'time_increment' => 'string',
       'time_range' => 'Object',
       'time_ranges' => 'list<Object>',
+      'use_account_attribution_setting' => 'bool',
     );
     $enums = array(
       'action_attribution_windows_enum' => AdsInsightsActionAttributionWindowsValues::getInstance()->getValues(),
@@ -237,6 +238,7 @@ class Ad extends AbstractArchivableCrudObject
       'time_increment' => 'string',
       'time_range' => 'Object',
       'time_ranges' => 'list<Object>',
+      'use_account_attribution_setting' => 'bool',
     );
     $enums = array(
       'action_attribution_windows_enum' => AdsInsightsActionAttributionWindowsValues::getInstance()->getValues(),
@@ -316,6 +318,7 @@ class Ad extends AbstractArchivableCrudObject
 
     $param_types = array(
       'ad_format' => 'ad_format_enum',
+      'dynamic_creative_spec' => 'Object',
       'end_date' => 'datetime',
       'height' => 'unsigned int',
       'locale' => 'string',

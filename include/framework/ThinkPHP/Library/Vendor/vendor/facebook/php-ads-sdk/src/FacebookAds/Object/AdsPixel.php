@@ -32,7 +32,7 @@ use FacebookAds\Object\Fields\AdsPixelFields;
 use FacebookAds\Object\Values\AdsPixelStatsResultAggregationValues;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -66,6 +66,7 @@ class AdsPixel extends AbstractCrudObject {
     $this->assureId();
 
     $param_types = array(
+      'ad_account' => 'string',
     );
     $enums = array(
     );

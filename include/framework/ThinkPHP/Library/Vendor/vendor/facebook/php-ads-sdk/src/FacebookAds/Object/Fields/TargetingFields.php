@@ -27,7 +27,7 @@ namespace FacebookAds\Object\Fields;
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -46,11 +46,13 @@ class TargetingFields extends AbstractEnum {
   const CITIES = 'cities';
   const COLLEGE_YEARS = 'college_years';
   const CONNECTIONS = 'connections';
+  const CONTEXTUAL_TARGETING_CATEGORIES = 'contextual_targeting_categories';
   const COUNTRIES = 'countries';
   const COUNTRY = 'country';
   const COUNTRY_GROUPS = 'country_groups';
   const CUSTOM_AUDIENCES = 'custom_audiences';
   const DEVICE_PLATFORMS = 'device_platforms';
+  const DIRECT_INSTALL_DEVICES = 'direct_install_devices';
   const DYNAMIC_AUDIENCE_IDS = 'dynamic_audience_ids';
   const EDUCATION_MAJORS = 'education_majors';
   const EDUCATION_SCHOOLS = 'education_schools';
@@ -72,7 +74,6 @@ class TargetingFields extends AbstractEnum {
   const EXCLUDED_MOBILE_DEVICE_MODEL = 'excluded_mobile_device_model';
   const EXCLUDED_PRODUCT_AUDIENCE_SPECS = 'excluded_product_audience_specs';
   const EXCLUDED_PUBLISHER_CATEGORIES = 'excluded_publisher_categories';
-  const EXCLUDED_PUBLISHER_DOMAINS = 'excluded_publisher_domains';
   const EXCLUDED_PUBLISHER_LIST_IDS = 'excluded_publisher_list_ids';
   const EXCLUDED_USER_DEVICE = 'excluded_user_device';
   const EXCLUSIONS = 'exclusions';
@@ -100,7 +101,6 @@ class TargetingFields extends AbstractEnum {
   const MOMS = 'moms';
   const NET_WORTH = 'net_worth';
   const OFFICE_TYPE = 'office_type';
-  const PAGE_TYPES = 'page_types';
   const PLACE_PAGE_SET_IDS = 'place_page_set_ids';
   const POLITICAL_VIEWS = 'political_views';
   const POLITICS = 'politics';
@@ -133,11 +133,13 @@ class TargetingFields extends AbstractEnum {
       'cities' => 'list<IDName>',
       'college_years' => 'list<unsigned int>',
       'connections' => 'list<IDName>',
+      'contextual_targeting_categories' => 'list<IDName>',
       'countries' => 'list<string>',
       'country' => 'list<string>',
       'country_groups' => 'list<string>',
       'custom_audiences' => 'list<IDName>',
       'device_platforms' => 'list<DevicePlatforms>',
+      'direct_install_devices' => 'bool',
       'dynamic_audience_ids' => 'list<string>',
       'education_majors' => 'list<IDName>',
       'education_schools' => 'list<IDName>',
@@ -159,7 +161,6 @@ class TargetingFields extends AbstractEnum {
       'excluded_mobile_device_model' => 'list<string>',
       'excluded_product_audience_specs' => 'list<TargetingProductAudienceSpec>',
       'excluded_publisher_categories' => 'list<string>',
-      'excluded_publisher_domains' => 'list<string>',
       'excluded_publisher_list_ids' => 'list<string>',
       'excluded_user_device' => 'list<string>',
       'exclusions' => 'FlexibleTargeting',
@@ -187,7 +188,6 @@ class TargetingFields extends AbstractEnum {
       'moms' => 'list<IDName>',
       'net_worth' => 'list<IDName>',
       'office_type' => 'list<IDName>',
-      'page_types' => 'list<string>',
       'place_page_set_ids' => 'list<string>',
       'political_views' => 'list<unsigned int>',
       'politics' => 'list<IDName>',

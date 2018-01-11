@@ -27,7 +27,7 @@ namespace FacebookAds\Object\Fields;
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -69,6 +69,7 @@ class AdReportRunFields extends AbstractEnum {
   const TIME_INCREMENT = 'time_increment';
   const TIME_RANGE = 'time_range';
   const TIME_RANGES = 'time_ranges';
+  const USE_ACCOUNT_ATTRIBUTION_SETTING = 'use_account_attribution_setting';
 
   public function getFieldTypes() {
     return array(
@@ -104,6 +105,7 @@ class AdReportRunFields extends AbstractEnum {
       'time_increment' => 'string',
       'time_range' => 'Object',
       'time_ranges' => 'list<Object>',
+      'use_account_attribution_setting' => 'bool',
     );
   }
 }

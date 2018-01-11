@@ -27,7 +27,7 @@ namespace FacebookAds\Object\Values;
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -44,7 +44,7 @@ class CustomConversionCustomEventTypeValues extends AbstractEnum {
   const CONTENT_VIEW = 'CONTENT_VIEW';
   const INITIATED_CHECKOUT = 'INITIATED_CHECKOUT';
   const LEAD = 'LEAD';
-  const OTHER = 'OTHER';
   const PURCHASE = 'PURCHASE';
   const SEARCH = 'SEARCH';
+  const OTHER = 'OTHER';
 }

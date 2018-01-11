@@ -27,7 +27,7 @@ namespace FacebookAds\Object\Values;
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -47,12 +47,18 @@ class CustomAudienceDataSourceSubTypeValues extends AbstractEnum {
   const MULTI_HASHES = 'MULTI_HASHES';
   const TOKENS = 'TOKENS';
   const EXTERNAL_IDS_MIX = 'EXTERNAL_IDS_MIX';
+  const HOUSEHOLD_EXPANSION = 'HOUSEHOLD_EXPANSION';
   const WEB_PIXEL_HITS = 'WEB_PIXEL_HITS';
   const MOBILE_APP_EVENTS = 'MOBILE_APP_EVENTS';
   const MOBILE_APP_COMBINATION_EVENTS = 'MOBILE_APP_COMBINATION_EVENTS';
   const VIDEO_EVENTS = 'VIDEO_EVENTS';
   const WEB_PIXEL_COMBINATION_EVENTS = 'WEB_PIXEL_COMBINATION_EVENTS';
   const PLATFORM = 'PLATFORM';
+  const MULTI_DATA_EVENTS = 'MULTI_DATA_EVENTS';
+  const IG_BUSINESS_EVENTS = 'IG_BUSINESS_EVENTS';
+  const STORE_VISIT_EVENTS = 'STORE_VISIT_EVENTS';
+  const INSTANT_ARTICLE_EVENTS = 'INSTANT_ARTICLE_EVENTS';
+  const FB_EVENT_SIGNALS = 'FB_EVENT_SIGNALS';
   const ENGAGEMENT_EVENT_USERS = 'ENGAGEMENT_EVENT_USERS';
   const CUSTOM_AUDIENCE_USERS = 'CUSTOM_AUDIENCE_USERS';
   const PAGE_FANS = 'PAGE_FANS';
@@ -75,8 +81,11 @@ class CustomAudienceDataSourceSubTypeValues extends AbstractEnum {
   const PAGE_SMART_AUDIENCE = 'PAGE_SMART_AUDIENCE';
   const MULTICOUNTRY_COMBINATION = 'MULTICOUNTRY_COMBINATION';
   const PLATFORM_USERS = 'PLATFORM_USERS';
+  const MULTI_EVENT_SOURCE = 'MULTI_EVENT_SOURCE';
+  const SMART_AUDIENCE = 'SMART_AUDIENCE';
   const MAIL_CHIMP_EMAIL_HASHES = 'MAIL_CHIMP_EMAIL_HASHES';
   const CONSTANT_CONTACTS_EMAIL_HASHES = 'CONSTANT_CONTACTS_EMAIL_HASHES';
   const COPY_PASTE_EMAIL_HASHES = 'COPY_PASTE_EMAIL_HASHES';
   const CONTACT_IMPORTER = 'CONTACT_IMPORTER';
+  const DATA_FILE = 'DATA_FILE';
 }

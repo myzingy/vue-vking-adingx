@@ -27,7 +27,7 @@ namespace FacebookAds\Object\Values;
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -37,8 +37,10 @@ use FacebookAds\Enum\AbstractEnum;
  */
 class CustomAudienceContentTypeValues extends AbstractEnum {
 
+  const AUTO_OFFER = 'AUTO_OFFER';
   const DESTINATION = 'DESTINATION';
   const FLIGHT = 'FLIGHT';
-  const HOTEL = 'HOTEL';
   const HOME_LISTING = 'HOME_LISTING';
+  const HOTEL = 'HOTEL';
+  const VEHICLE = 'VEHICLE';
 }

@@ -27,7 +27,7 @@ namespace FacebookAds\Object\Fields;
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -41,6 +41,7 @@ class ProductFeedScheduleFields extends AbstractEnum {
   const DAY_OF_WEEK = 'day_of_week';
   const HOUR = 'hour';
   const INTERVAL = 'interval';
+  const INTERVAL_COUNT = 'interval_count';
   const MINUTE = 'minute';
   const TIMEZONE = 'timezone';
   const URL = 'url';
@@ -52,6 +53,7 @@ class ProductFeedScheduleFields extends AbstractEnum {
       'day_of_week' => 'DayOfWeek',
       'hour' => 'unsigned int',
       'interval' => 'Interval',
+      'interval_count' => 'unsigned int',
       'minute' => 'unsigned int',
       'timezone' => 'string',
       'url' => 'string',

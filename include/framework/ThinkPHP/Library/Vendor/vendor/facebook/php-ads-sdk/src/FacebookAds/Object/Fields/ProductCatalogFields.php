@@ -27,7 +27,7 @@ namespace FacebookAds\Object\Fields;
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -42,11 +42,13 @@ class ProductCatalogFields extends AbstractEnum {
   const DEFAULT_IMAGE_URL = 'default_image_url';
   const FALLBACK_IMAGE_URL = 'fallback_image_url';
   const FEED_COUNT = 'feed_count';
+  const FLIGHT_CATALOG_SETTINGS = 'flight_catalog_settings';
   const ID = 'id';
   const IMAGE_PADDING_LANDSCAPE = 'image_padding_landscape';
   const IMAGE_PADDING_SQUARE = 'image_padding_square';
   const NAME = 'name';
   const PRODUCT_COUNT = 'product_count';
+  const QUALIFIED_PRODUCT_COUNT = 'qualified_product_count';
   const VERTICAL = 'vertical';
 
   public function getFieldTypes() {
@@ -56,11 +58,13 @@ class ProductCatalogFields extends AbstractEnum {
       'default_image_url' => 'string',
       'fallback_image_url' => 'list<string>',
       'feed_count' => 'int',
+      'flight_catalog_settings' => 'Object',
       'id' => 'string',
       'image_padding_landscape' => 'bool',
       'image_padding_square' => 'bool',
       'name' => 'string',
       'product_count' => 'int',
+      'qualified_product_count' => 'unsigned int',
       'vertical' => 'string',
     );
   }

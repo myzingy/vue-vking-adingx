@@ -38,7 +38,7 @@ use FacebookAds\Object\Values\ProductItemShippingWeightUnitValues;
 use FacebookAds\Object\Values\ProductItemVisibilityValues;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -198,7 +198,7 @@ class ProductItem extends AbstractCrudObject {
       'start_date' => 'string',
       'url' => 'string',
       'visibility' => 'visibility_enum',
-      'windows_phone_app_id' => 'unsigned int',
+      'windows_phone_app_id' => 'string',
       'windows_phone_app_name' => 'string',
       'windows_phone_url' => 'string',
     );

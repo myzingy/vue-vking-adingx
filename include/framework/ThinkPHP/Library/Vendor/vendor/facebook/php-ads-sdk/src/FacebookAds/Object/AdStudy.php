@@ -33,7 +33,7 @@ use FacebookAds\Object\Values\AdStudyObjectiveTypeValues;
 use FacebookAds\Object\Values\AdStudyTypeValues;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -70,9 +70,10 @@ class AdStudy extends AbstractCrudObject {
     $param_types = array(
       'adspixels' => 'list<Object>',
       'applications' => 'list<Object>',
+      'customconversions' => 'list<Object>',
       'is_primary' => 'bool',
       'name' => 'string',
-      'offlinefeeds' => 'list<Object>',
+      'offline_conversion_data_sets' => 'list<Object>',
       'offsitepixels' => 'list<Object>',
       'type' => 'type_enum',
     );

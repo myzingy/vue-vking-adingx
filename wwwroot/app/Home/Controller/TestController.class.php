@@ -36,6 +36,106 @@ class TestController extends Controller {
 		parent::__construct();
 		$this->api_lib=D('App','Logic');
 	}
+	function accountInsights(){
+        vendor("vendor.autoload");
+        $app=C('fbapp');
+        dump(array(date("Y-m-d H:i:s",NOW_TIME),$app));
+        $fba=Api::init($app['app_id'],$app['app_secret'],'EAABeuMl0aOwBAHMXmLq4eFLcPFlzci7r0Yn3UjcZClOpoQU3E4HsxaFLNWnAKXZBUzTpol50KZC0IC0RXHjjNbbZBbfjQGDf8Vec0HdhCvd8JYkJSZBsGZB9IsuqToOlG9UrZAMfLDy0WWY6T3O2ZA8sBsrAFKJ4ZBs7oHNrGymhFMUD7Yxhy14B0');
+        $api = Api::instance();
+        $str=<<<END
+        ["account_currency"] => NULL
+      ["account_id"] => NULL
+      ["account_name"] => NULL
+      ["action_values"] => NULL
+      ["actions"] => NULL
+      ["ad_id"] => NULL
+      ["ad_name"] => NULL
+      ["adset_id"] => NULL
+      ["adset_name"] => NULL
+      ["buying_type"] => NULL
+      ["call_to_action_clicks"] => NULL
+      ["campaign_id"] => NULL
+      ["campaign_name"] => NULL
+      ["canvas_avg_view_percent"] => NULL
+      ["canvas_avg_view_time"] => NULL
+      ["canvas_component_avg_pct_view"] => NULL
+      ["clicks"] => NULL
+      ["cost_per_10_sec_video_view"] => NULL
+      ["cost_per_action_type"] => NULL
+      ["cost_per_estimated_ad_recallers"] => NULL
+      ["cost_per_inline_link_click"] => NULL
+      ["cost_per_inline_post_engagement"] => NULL
+      ["cost_per_outbound_click"] => NULL
+      ["cost_per_total_action"] => NULL
+      ["cost_per_unique_action_type"] => NULL
+      ["cost_per_unique_click"] => NULL
+      ["cost_per_unique_inline_link_click"] => NULL
+      ["cost_per_unique_outbound_click"] => NULL
+      ["cpc"] => NULL
+      ["cpm"] => NULL
+      ["cpp"] => NULL
+      ["ctr"] => NULL
+      ["date_start"] => NULL
+      ["date_stop"] => NULL
+      ["estimated_ad_recall_rate"] => NULL
+      ["estimated_ad_recallers"] => NULL
+      ["frequency"] => NULL
+      ["impressions"] => NULL
+      ["inline_link_click_ctr"] => NULL
+      ["inline_link_clicks"] => NULL
+      ["inline_post_engagement"] => NULL
+      ["mobile_app_purchase_roas"] => NULL
+      ["objective"] => NULL
+      ["outbound_clicks"] => NULL
+      ["outbound_clicks_ctr"] => NULL
+      ["place_page_name"] => NULL
+      ["reach"] => NULL
+      ["relevance_score"] => NULL
+      ["social_clicks"] => NULL
+      ["social_impressions"] => NULL
+      ["social_reach"] => NULL
+      ["social_spend"] => NULL
+      ["spend"] => NULL
+      ["total_action_value"] => NULL
+      ["total_actions"] => NULL
+      ["total_unique_actions"] => NULL
+      ["unique_actions"] => NULL
+      ["unique_clicks"] => NULL
+      ["unique_ctr"] => NULL
+      ["unique_inline_link_click_ctr"] => NULL
+      ["unique_inline_link_clicks"] => NULL
+      ["unique_link_clicks_ctr"] => NULL
+      ["unique_outbound_clicks"] => NULL
+      ["unique_outbound_clicks_ctr"] => NULL
+      ["unique_social_clicks"] => NULL
+      ["video_10_sec_watched_actions"] => NULL
+      ["video_30_sec_watched_actions"] => NULL
+      ["video_avg_percent_watched_actions"] => NULL
+      ["video_avg_time_watched_actions"] => NULL
+      ["video_p100_watched_actions"] => NULL
+      ["video_p25_watched_actions"] => NULL
+      ["video_p50_watched_actions"] => NULL
+      ["video_p75_watched_actions"] => NULL
+      ["video_p95_watched_actions"] => NULL
+      ["website_ctr"] => NULL
+      ["website_purchase_roas"] => NULL
+END;
+        preg_match_all("/\[\"(.*)\"\]/",$str,$match);
+        $fields=$match[1];
+        $account=new AdAccount('act_639275062920989');
+        $insights = $account->getInsights(
+            $fields,
+            array(
+                'time_range'=>array('since'=>'2018-01-10','until'=>'2018-01-10'),
+                'action_attribution_windows'=>['1d_click','1d_view'],
+                //'breakdowns'=> $breakdowns,
+                'action_breakdowns'=>['action_link_click_destination'],
+                'limit'=>300,
+            )
+        );
+        dump($insights);
+
+    }
     function index()
     {
         vendor("vendor.autoload");

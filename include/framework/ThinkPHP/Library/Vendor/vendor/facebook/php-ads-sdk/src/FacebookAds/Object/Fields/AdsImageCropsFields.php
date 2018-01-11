@@ -27,7 +27,7 @@ namespace FacebookAds\Object\Fields;
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -43,6 +43,7 @@ class AdsImageCropsFields extends AbstractEnum {
   const FIELD_400X150 = '400x150';
   const FIELD_400X500 = '400x500';
   const FIELD_600X360 = '600x360';
+  const FIELD_90X160 = '90x160';
 
   public function getFieldTypes() {
     return array(
@@ -52,6 +53,7 @@ class AdsImageCropsFields extends AbstractEnum {
       '400x150' => 'list<list>',
       '400x500' => 'list<list>',
       '600x360' => 'list<list>',
+      '90x160' => 'list<list>',
     );
   }
 }

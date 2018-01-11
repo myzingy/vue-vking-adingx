@@ -27,7 +27,7 @@ namespace FacebookAds\Object\Values;
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -42,6 +42,7 @@ class AdsInsightsSummaryActionBreakdownsValues extends AbstractEnum {
   const ACTION_CAROUSEL_CARD_NAME = 'action_carousel_card_name';
   const ACTION_DESTINATION = 'action_destination';
   const ACTION_DEVICE = 'action_device';
+  const ACTION_LINK_CLICK_DESTINATION = 'action_link_click_destination';
   const ACTION_REACTION = 'action_reaction';
   const ACTION_TARGET_ID = 'action_target_id';
   const ACTION_TYPE = 'action_type';

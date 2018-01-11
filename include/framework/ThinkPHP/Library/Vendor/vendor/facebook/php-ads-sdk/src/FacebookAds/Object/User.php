@@ -32,7 +32,7 @@ use FacebookAds\Object\Fields\UserFields;
 use FacebookAds\Object\Values\ProfilePictureSourceTypeValues;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -109,6 +109,7 @@ class User extends AbstractCrudObject {
     $this->assureId();
 
     $param_types = array(
+      'page_id' => 'string',
       'query' => 'string',
     );
     $enums = array(
@@ -184,7 +185,9 @@ class User extends AbstractCrudObject {
     $this->assureId();
 
     $param_types = array(
+      'include_past_events' => 'bool',
       'is_page_event' => 'bool',
+      'page_id' => 'unsigned int',
     );
     $enums = array(
     );

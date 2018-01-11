@@ -27,7 +27,7 @@ namespace FacebookAds\Object\Fields;
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * This class is auto-genereated.
+ * This class is auto-generated.
  *
  * For any issues or feature requests related to this class, please let us know
  * on github and we'll fix in our codegen framework. We'll not be able to accept
@@ -51,16 +51,15 @@ class AdSetFields extends AbstractEnum {
   const CREATED_TIME = 'created_time';
   const CREATIVE_SEQUENCE = 'creative_sequence';
   const DAILY_BUDGET = 'daily_budget';
+  const DESTINATION_TYPE = 'destination_type';
   const EFFECTIVE_STATUS = 'effective_status';
   const END_TIME = 'end_time';
-  const FREQUENCY_CAP = 'frequency_cap';
-  const FREQUENCY_CAP_RESET_PERIOD = 'frequency_cap_reset_period';
   const FREQUENCY_CONTROL_SPECS = 'frequency_control_specs';
   const ID = 'id';
+  const INSTAGRAM_ACTOR_ID = 'instagram_actor_id';
   const IS_AUTOBID = 'is_autobid';
   const IS_AVERAGE_PRICE_PACING = 'is_average_price_pacing';
   const LIFETIME_BUDGET = 'lifetime_budget';
-  const LIFETIME_FREQUENCY_CAP = 'lifetime_frequency_cap';
   const LIFETIME_IMPS = 'lifetime_imps';
   const NAME = 'name';
   const OPTIMIZATION_GOAL = 'optimization_goal';
@@ -70,6 +69,8 @@ class AdSetFields extends AbstractEnum {
   const RECURRING_BUDGET_SEMANTICS = 'recurring_budget_semantics';
   const RF_PREDICTION_ID = 'rf_prediction_id';
   const RTB_FLAG = 'rtb_flag';
+  const SOURCE_ADSET = 'source_adset';
+  const SOURCE_ADSET_ID = 'source_adset_id';
   const START_TIME = 'start_time';
   const STATUS = 'status';
   const TARGETING = 'targeting';
@@ -98,16 +99,15 @@ class AdSetFields extends AbstractEnum {
       'created_time' => 'datetime',
       'creative_sequence' => 'list<string>',
       'daily_budget' => 'string',
+      'destination_type' => 'string',
       'effective_status' => 'EffectiveStatus',
       'end_time' => 'datetime',
-      'frequency_cap' => 'unsigned int',
-      'frequency_cap_reset_period' => 'unsigned int',
       'frequency_control_specs' => 'list<Object>',
       'id' => 'string',
+      'instagram_actor_id' => 'string',
       'is_autobid' => 'bool',
       'is_average_price_pacing' => 'bool',
       'lifetime_budget' => 'string',
-      'lifetime_frequency_cap' => 'unsigned int',
       'lifetime_imps' => 'int',
       'name' => 'string',
       'optimization_goal' => 'OptimizationGoal',
@@ -117,6 +117,8 @@ class AdSetFields extends AbstractEnum {
       'recurring_budget_semantics' => 'bool',
       'rf_prediction_id' => 'string',
       'rtb_flag' => 'bool',
+      'source_adset' => 'AdSet',
+      'source_adset_id' => 'string',
       'start_time' => 'datetime',
       'status' => 'Status',
       'targeting' => 'Targeting',
