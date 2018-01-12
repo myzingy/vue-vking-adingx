@@ -48,7 +48,7 @@ class lib{
         ["ad_name"] => NULL
         ["adset_id"] => string(13) "6034369558164"
         ["adset_name"] => NULL
-        ["app_store_clicks"] => NULL
+        [`"app_store_clicks"] => NULL
         ["buying_type"] => NULL
         ["call_to_action_clicks"] => NULL
         ["campaign_id"] => string(13) "6033795518964"
@@ -72,7 +72,7 @@ class lib{
         ["ctr"] => NULL
         ["date_start"] => string(10) "2017-05-26"
         ["date_stop"] => string(10) "2017-05-26"
-        ["deeplink_clicks"] => NULL
+        [`"deeplink_clicks"] => NULL
         ["estimated_ad_recall_rate"] => NULL
         ["estimated_ad_recallers"] => NULL
         ["frequency"] => NULL
@@ -101,7 +101,7 @@ class lib{
         ["unique_link_clicks_ctr"] => NULL
         ["unique_social_clicks"] => NULL
         ["video_10_sec_watched_actions"] => NULL
-        ["video_15_sec_watched_actions"] => NULL
+        [`"video_15_sec_watched_actions"] => NULL
         ["video_30_sec_watched_actions"] => NULL
         ["video_avg_percent_watched_actions"] => NULL
         ["video_avg_time_watched_actions"] => NULL
@@ -110,7 +110,7 @@ class lib{
         ["video_p50_watched_actions"] => NULL
         ["video_p75_watched_actions"] => NULL
         ["video_p95_watched_actions"] => NULL
-        ["website_clicks"] => NULL
+        [`"website_clicks"] => NULL
         ["website_ctr"] => NULL
 END;
         preg_match_all("/\[\"(.*)\"\]/",$fields_str,$match);
@@ -126,6 +126,7 @@ END;
                 array(
                     'time_range'=>array('since'=>$today,'until'=>$today),
                     'action_attribution_windows'=>['1d_click','1d_view'],
+                    'action_breakdowns'=>['action_link_click_destination'],
                 )
             );
         }elseif($ad_timespace=='lifetime'){
@@ -134,6 +135,7 @@ END;
                 array(
                     'date_preset'=>'lifetime',
                     'action_attribution_windows'=>['1d_click','1d_view'],
+                    'action_breakdowns'=>['action_link_click_destination'],
                 )
             );
         }else{
@@ -142,9 +144,20 @@ END;
                 array(
                     'time_range'=>array('since'=>$$ad_timespace,'until'=>$yestoday),
                     'action_attribution_windows'=>['1d_click','1d_view'],
+                    'action_breakdowns'=>['action_link_click_destination'],
                 )
             );
         }
+        $upkeys=[
+            'actions'=>[
+                'fields'=>[
+                    'click_to_app_store'=>'app_store_clicks',
+                    'click_to_app_deeplink'=>'deeplink_clicks',
+                    'click_to_website'=>'website_clicks',
+                ],
+                'vs'=>'action_link_click_destination'
+            ],
+        ];
         while ($adsets->valid()) {
             $campaigns_data['ads_insights_action_types']=array();
             $_d=$adsets->current()->getData();
@@ -163,6 +176,18 @@ END;
                     }
                 }else{
                     $campaigns_data[$fk]=$_d[$fk];
+                }
+            }
+            foreach ($upkeys as $k=>$ck){
+                if($_d[$k]){
+                    foreach ($_d[$k] as $item){
+                        if($item['action_type'])
+                            $_upnkey=$item[$ck['vs']];
+                        //dump([$ck['vs'],$_upnkey]);
+                        if($oldk=$ck['fields'][$_upnkey]){
+                            $campaigns_data[$oldk]=$item['value'];
+                        }
+                    }
                 }
             }
             switch($campaigns_data['date_start']){

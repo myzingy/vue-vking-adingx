@@ -50,7 +50,6 @@ class lib{
             AdSetFields::CREATED_TIME,
             AdSetFields::DAILY_BUDGET,
             AdSetFields::EFFECTIVE_STATUS,
-            AdSetFields::FREQUENCY_CAP_RESET_PERIOD,
             AdSetFields::ID,
             AdSetFields::IS_AUTOBID,
             AdSetFields::IS_AVERAGE_PRICE_PACING,

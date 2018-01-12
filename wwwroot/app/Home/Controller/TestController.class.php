@@ -145,7 +145,56 @@ END;
 
         //dump($b);
         $str=<<<END
-
+        ["account_id"] => string(16) "1593565507558990"
+        ["account_name"] => NULL
+        ["action_values"] => NULL
+        ["actions"] => NULL
+        [`"app_store_clicks"] => NULL
+        ["buying_type"] => NULL
+        ["call_to_action_clicks"] => NULL
+        ["campaign_id"] => string(13) "6032660080764"
+        ["campaign_name"] => NULL
+        ["clicks"] => NULL
+        ["cost_per_action_type"] => NULL
+        ["cost_per_estimated_ad_recallers"] => NULL
+        ["cost_per_inline_link_click"] => NULL
+        ["cost_per_inline_post_engagement"] => NULL
+        ["cost_per_total_action"] => NULL
+        ["cost_per_unique_action_type"] => NULL
+        ["cost_per_unique_click"] => NULL
+        ["cost_per_unique_inline_link_click"] => NULL
+        ["cpc"] => NULL
+        ["cpm"] => NULL
+        ["cpp"] => NULL
+        ["ctr"] => NULL
+        ["date_start"] => string(10) "2017-05-01"
+        ["date_stop"] => string(10) "2017-05-01"
+        [`"deeplink_clicks"] => NULL
+        ["estimated_ad_recall_rate"] => NULL
+        ["frequency"] => NULL
+        ["impressions"] => string(3) "133"
+        ["inline_link_click_ctr"] => NULL
+        ["inline_link_clicks"] => NULL
+        ["inline_post_engagement"] => NULL
+        ["objective"] => NULL
+        ["reach"] => NULL
+        ["social_clicks"] => NULL
+        ["social_impressions"] => NULL
+        ["social_reach"] => NULL
+        ["social_spend"] => NULL
+        ["spend"] => string(4) "1.25"
+        ["total_action_value"] => NULL
+        ["total_actions"] => NULL
+        ["total_unique_actions"] => NULL
+        ["unique_actions"] => NULL
+        ["unique_clicks"] => NULL
+        ["unique_ctr"] => NULL
+        ["unique_inline_link_click_ctr"] => NULL
+        ["unique_inline_link_clicks"] => NULL
+        ["unique_link_clicks_ctr"] => NULL
+        ["unique_social_clicks"] => NULL
+        [`"website_clicks"] => NULL
+        ["website_ctr"] => NULL
 END;
         preg_match_all("/\[\"(.*)\"\]/",$str,$match);
         $fields=$match[1];
@@ -156,8 +205,8 @@ END;
                 'time_range'=>array('since'=>'2018-01-10','until'=>'2018-01-10'),
                 'action_attribution_windows'=>['1d_click','1d_view'],
                 //'breakdowns'=> $breakdowns,
-                'action_breakdowns'=>['action_link_click_destination'],
-                'limit'=>300,
+                //'action_breakdowns'=>['action_link_click_destination'],
+                //'limit'=>300,
             )
         );
         dump($insights);
