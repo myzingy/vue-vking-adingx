@@ -130,7 +130,7 @@ class lib{
             if($ex_cron){
                 $cron_id=$ex_cron['id'];
                 if(NOW_TIME-$ex_cron['addtime']>self::CRON_RENEW_TIMEOUT){
-                    if($ex_cron['status']==self::CRON_STATUS_RUN_OK){
+                    if($ex_cron['status']==self::CRON_STATUS_RUN_OK || $ex_cron['status']==self::CRON_STATUS_RUN_FIL){
                         //可以新建任务
                         $cron_id="";
                     }elseif ($ex_cron['status']!=self::CRON_STATUS_RUN_FIL){
