@@ -33,7 +33,7 @@ class lib{
         $fields_str=<<<END
             [`"age_group"] => string(0) ""
             [`"availability"] => string(8) "in stock"
-            ["brand"] => string(6) "jeulia"
+            ["brand"] => string(6) "vkingx"
             [`"category"] => string(112) "Engagement,Bridal Ring Sets,Flash Sale,WEDDING,Wedding Sets,Halo Ring Sets,TOP50,Affiliate,Affiliate Best Seller"
             [`"condition"] => string(3) "new"
             [`"currency"] => string(3) "USD"
@@ -43,11 +43,11 @@ class lib{
             ["custom_label_2"] => string(5) "1.087"
             ["custom_label_3"] => string(3) "112"
             ["custom_label_4"] => string(9) "RRG1231-6"
-            [`"description"] => string(189) "If you're looking for unique jewelry with reasonable price then you've come to the right place. Jeulia makes great diamond alternatives and most importantly is a financially smart decision."
+            [`"description"] => string(189) "If you're looking for unique jewelry with reasonable price then you've come to the right place. vkingx makes great diamond alternatives and most importantly is a financially smart decision."
             [`"gender"] => string(0) ""
             ["id"] => string(16) "1415645021883508"
             ["image_url"] => string(142) "https://scontent.xx.fbcdn.net/v/t45.5328-4/18623764_1246470155465882_7788418665782706176_n.jpg?oh=2a048d214b3c1db3e52a195478bb93a5&oe=5A71084C"
-            ["name"] => string(67) "Jeulia Halo Princess Cut Created White Sapphire Wedding Set 2.05 CT"
+            ["name"] => string(67) "vkingx Halo Princess Cut Created White Sapphire Wedding Set 2.05 CT"
             [`"ordering_index"] => int(0)
             ["price"] => string(7) "$139.95"
             [`"product_catalog"] => array(2) 
@@ -57,7 +57,7 @@ class lib{
             [`"review_status"] => string(8) "approved"
             [`"shipping_weight_unit"] => string(0) ""
             [`"shipping_weight_value"] => int(0)
-            ["url"] => string(160) "http://www.jeulia.com/vintage-milgrain-sculptural-halo-princess-cut-created-sapphire-rhodium-plated-925-sterling-silver-women-s-wedding-ring-set-bridal-set.html"
+            ["url"] => string(160) "http://www.vkingx.com/vintage-milgrain-sculptural-halo-princess-cut-created-sapphire-rhodium-plated-925-sterling-silver-women-s-wedding-ring-set-bridal-set.html"
             [`"visibility"] => string(9) "published"
             ["video_ids"] => array(1)  
 END;

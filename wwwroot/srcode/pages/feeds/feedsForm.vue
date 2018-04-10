@@ -48,7 +48,7 @@
 //                    url:"",
 //                },
                 brands: {
-                    jeulia: {label: "Jeulia", value: "jeulia"},
+                    vkingx: {label: "vkingx", value: "vkingx"},
                     gnoce: {label: "Gnoce", value: "gnoce"},
                     amarley: {label: "Amarley",value: "amarley"},
                 },

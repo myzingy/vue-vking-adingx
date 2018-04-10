@@ -453,7 +453,7 @@
             this.editor=location.hash.indexOf('editor')>0;
             var brands= {
                 all:{label: "全部品牌", value: ""},
-                jeulia: {label: "Jeulia", value: "jeulia"},
+                vkingx: {label: "vkingx", value: "vkingx"},
                 gnoce: {label: "Gnoce", value: "gnoce"},
                 amarley: {label: "Amarley",value: "amarley"},
             };

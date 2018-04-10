@@ -174,7 +174,7 @@ class lib{
             return $this->getAcconutByOperator1028();
         }
         $ac_ids_rules=array(
-            //jeulia
+            //vkingx
             '561910137324149'=>'戴婷',
             '836196303228863'=>'权文娟',
             '559461654235664'=>[
@@ -202,7 +202,7 @@ class lib{
             //'769185763263251'=>'员燕子',
         );
         $brands=C('brand');
-        $brands=$brands['jeulia'];
+        $brands=$brands['vkingx'];
         $data=M('campaigns_insights')
             ->field('account_id,account_name,date_start as date,campaign_name
             ,CLICK1D_WebsiteAddstoCart,CLICK1D_WebsitePurchases,CLICK1D_CostperWebsiteAddtoCart
@@ -313,7 +313,7 @@ class lib{
         $date=I('request.date');
         if(!$date) return "param is null";
         $ac_ids_rules=array(
-            //jeulia
+            //vkingx
             '561910137324149'=>'戴婷',
             '769185746596586'=>'戴婷',
             '836196303228863'=>'权文娟',
@@ -331,7 +331,7 @@ class lib{
             ],
         );
         $brands=C('brand');
-        $brands=$brands['jeulia'];
+        $brands=$brands['vkingx'];
         $data=M('campaigns_insights')
             ->field('account_id,account_name,date_start as date,campaign_name
             ,CLICK1D_WebsiteAddstoCart,CLICK1D_WebsitePurchases,CLICK1D_CostperWebsiteAddtoCart
@@ -450,7 +450,7 @@ class lib{
         $date=I('request.date');
         if(!$date) return "param is null";
         $ac_ids_rules=array(
-            //jeulia
+            //vkingx
             '561910137324149'=>'戴婷',
             '769185746596586'=>'戴婷',
             '836196303228863'=>'权文娟',
@@ -467,7 +467,7 @@ class lib{
             ],
         );
         $brands=C('brand');
-        $brands=$brands['jeulia'];
+        $brands=$brands['vkingx'];
         $data=M('campaigns_insights')
             ->field('account_id,account_name,date_start as date,campaign_name
             ,CLICK1D_WebsiteAddstoCart,CLICK1D_WebsitePurchases,CLICK1D_CostperWebsiteAddtoCart

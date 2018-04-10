@@ -13,7 +13,7 @@ $conf['think']=array(
 );
 $conf['erp_host']=array('erp_host'=>array(
         'http://54.199.246.177/',//测试环境
-        'http://52.199.219.172/',//jeulia 正式
+        'http://52.199.219.172/',//vkingx 正式
         'http://54.64.69.216/',//gnoce  正式
 ));
 $conf['brand']=include(CONF_PATH.'brand_accounts.php');
